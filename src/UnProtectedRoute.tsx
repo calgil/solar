@@ -4,21 +4,23 @@ import { useAuth } from "./firebase/auth/auth.provider";
 
 /* eslint-disable react/react-in-jsx-scope */
 
-const redirectToLogin = (navigate: NavigateFunction) => {
-  navigate("/login");
-};
-export const ProtectedRoute = ({
+// const redirectToRoot = (navigate: NavigateFunction) => {
+//   navigate("/");
+// };
+export const UnProtectedRoute = ({
   children,
 }: {
   children: JSX.Element | JSX.Element[];
 }) => {
   const { user } = useAuth();
+  console.log("ahhh!", user);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
-      return redirectToLogin(navigate);
+    if (user) {
+      return navigate("/");
     }
   }, []);
-  return <>{user ? children : null}</>;
+  return <>{children}</>;
 };

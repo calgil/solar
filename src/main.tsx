@@ -7,6 +7,7 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import Root from "./pages/root";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { UnProtectedRoute } from "./UnProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -24,17 +25,22 @@ const router = createBrowserRouter([
                 <div>Dashboard</div>
               </ProtectedRoute>
             ),
-            // protected route
           },
           {
             path: "login",
-            element: <Login />,
-            // unprotected route
+            element: (
+              <UnProtectedRoute>
+                <Login />
+              </UnProtectedRoute>
+            ),
           },
           {
             path: "register",
-            element: <Register />,
-            // unprotected route
+            element: (
+              <UnProtectedRoute>
+                <Register />
+              </UnProtectedRoute>
+            ),
           },
         ],
       },

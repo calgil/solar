@@ -7,6 +7,5 @@ export const getUserById = async (id: string) => {
   if (!docSnap.exists()) {
     return null;
   }
-  console.log("Document data:", docSnap.data());
   return docSnap.data();
 };
