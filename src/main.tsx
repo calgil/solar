@@ -1,13 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from "./App";
+import { AuthProvider } from "./firebase/auth/auth.provider";
 import "./index.css";
+import Dashboard from "./pages/dashboard";
+import Login from "./pages/login";
+import Register from "./pages/register";
+import Root from "./pages/root";
+import { ProtectedRoute } from "./ProtectedRoute";
+import { UnProtectedRoute } from "./UnProtectedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Root />,
     errorElement: <div>Error!!</div>,
     children: [
       {
@@ -15,18 +21,27 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/",
-            // element dashboard
-            // protected route
+            element: (
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "login",
-            // element login
-            // unprotected route
+            element: (
+              <UnProtectedRoute>
+                <Login />
+              </UnProtectedRoute>
+            ),
           },
           {
             path: "register",
-            // element register
-            // unprotected route
+            element: (
+              <UnProtectedRoute>
+                <Register />
+              </UnProtectedRoute>
+            ),
           },
         ],
       },
@@ -36,6 +51,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );
