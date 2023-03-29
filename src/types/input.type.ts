@@ -4,6 +4,7 @@ export type Input = {
   type: "email" | "password" | "text";
   name: string;
   value: string;
+  placeholder: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   autoComplete: "on" | "off";
 };

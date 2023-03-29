@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./firebase/auth/auth.provider";
-import "./index.css";
+import "./styles/globals.scss";
 import Dashboard from "./pages/dashboard";
 import Login from "./pages/login";
 import Register from "./pages/register";
