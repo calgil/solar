@@ -1,0 +1,23 @@
+@use "../abstracts" as a;
+
+.inputContainer {
+  margin-bottom: 10px;
+
+  .label {
+    display: block;
+    color: a.$solarMain;
+    font-family: a.$linkFont;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .input {
+    width: 100%;
+    color: a.$solarMain;
+    border: 1px solid a.$solarMain;
+    border-radius: 4px;
+    line-height: 1.5;
+    padding: 10px;
+  }
+}

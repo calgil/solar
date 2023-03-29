@@ -15,19 +15,21 @@ export default function Login() {
   const inputData: Input[] = [
     {
       id: "email",
-      labelText: "Email:",
+      labelText: "Email",
       type: "email",
       name: "email",
       value: emailInput,
+      placeholder: "Email",
       onChange: (e) => setEmailInput(e.target.value),
       autoComplete: "off",
     },
     {
       id: "password",
-      labelText: "Password:",
+      labelText: "Password",
       type: "password",
       name: "password",
       value: passwordInput,
+      placeholder: "Password",
       onChange: (e) => setPasswordInput(e.target.value),
       autoComplete: "off",
     },
@@ -46,9 +48,10 @@ export default function Login() {
   return (
     <AuthForm
       inputData={inputData}
-      btnText="Login"
+      title="Sign In"
+      btnText="Sign In"
       onSubmit={login}
-      linkText="No account? Create one"
+      linkText="Create Account"
       linkURL="/register"
     />
   );

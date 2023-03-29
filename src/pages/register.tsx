@@ -16,28 +16,31 @@ export default function Register() {
   const inputData: Input[] = [
     {
       id: "username",
-      labelText: "Username:",
+      labelText: "Username",
       type: "text",
       name: "username",
       value: usernameInput,
+      placeholder: "Username",
       onChange: (e) => setUsernameInput(e.target.value),
       autoComplete: "off",
     },
     {
       id: "email",
-      labelText: "Email:",
+      labelText: "Email",
       type: "email",
       name: "email",
       value: emailInput,
+      placeholder: "Email",
       onChange: (e) => setEmailInput(e.target.value),
       autoComplete: "off",
     },
     {
       id: "password",
-      labelText: "Password:",
+      labelText: "Password",
       type: "password",
       name: "password",
       value: passwordInput,
+      placeholder: "Password",
       onChange: (e) => setPasswordInput(e.target.value),
       autoComplete: "off",
     },
@@ -57,9 +60,10 @@ export default function Register() {
   return (
     <AuthForm
       inputData={inputData}
+      title="Create Account"
       btnText="Create New User"
       onSubmit={registerNewUser}
-      linkText="Already have an account? Login here"
+      linkText="Sign In"
       linkURL="/login"
     />
   );

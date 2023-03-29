@@ -1,0 +1,18 @@
+@use "./abstracts" as a;
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: a.$primaryFont;
+  color: a.$primaryText;
+}
+
+img {
+  width: 100%;
+}
