@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthForm } from "../components/AuthForm";
 import { useAuth } from "../firebase/auth/auth.provider";
 import { Input } from "../types/input.type";
@@ -9,6 +10,8 @@ export default function Register() {
   const [usernameInput, setUsernameInput] = useState<string>("");
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const inputData: Input[] = [
     {
@@ -49,6 +52,7 @@ export default function Register() {
     setUsernameInput("");
     setEmailInput("");
     setPasswordInput("");
+    navigate("/");
   };
   return (
     <AuthForm

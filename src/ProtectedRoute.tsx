@@ -19,6 +19,6 @@ export const ProtectedRoute = ({
     if (!user) {
       return redirectToLogin(navigate);
     }
-  }, []);
+  }, [user]);
   return <>{user ? children : null}</>;
 };

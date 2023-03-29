@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthForm } from "../components/AuthForm";
 import { useAuth } from "../firebase/auth/auth.provider";
 import { Input } from "../types/input.type";
@@ -8,6 +9,9 @@ export default function Login() {
   const { loginUser } = useAuth();
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
+
+  const navigate = useNavigate();
+
   const inputData: Input[] = [
     {
       id: "email",
@@ -29,12 +33,13 @@ export default function Login() {
     },
   ];
 
-  const login = (e: React.FormEvent<HTMLFormElement>) => {
+  const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!emailInput || !passwordInput) {
       return console.log("must enter email and password");
     }
     loginUser(emailInput, passwordInput);
+    navigate("/");
     setEmailInput("");
     setPasswordInput("");
   };

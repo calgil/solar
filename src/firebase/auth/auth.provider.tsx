@@ -63,7 +63,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
   };
 
-  const logout = async () => await signOut(auth);
+  const logout = async () => {
+    setUser(null);
+    await signOut(auth);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
