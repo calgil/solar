@@ -1,0 +1,30 @@
+@use "../abstracts" as a;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 16px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-bottom: 16px;
+
+  .company {
+    display: flex;
+    align-items: center;
+    gap: 31px;
+
+    .companyName {
+      text-transform: uppercase;
+      max-width: 23ch;
+    }
+  }
+
+  .username {
+    font-family: a.$secondaryFont;
+  }
+}
+
+.downArrow {
+  transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+}

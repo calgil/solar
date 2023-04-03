@@ -1,0 +1,19 @@
+@use "../layouts";
+
+.container {
+  @extend .container;
+}
+
+.title {
+  font-size: 1.5625rem;
+  font-weight: 600;
+  line-height: 33px;
+}
+
+.adminActions {
+  margin-top: 50px;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}

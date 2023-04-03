@@ -1,0 +1,16 @@
+.actionContainer {
+  cursor: pointer;
+  position: relative;
+
+  .dropdownBtn {
+    margin-left: 15px;
+  }
+
+  .actionsDropdown {
+    position: absolute;
+    top: 25px;
+    right: 0;
+    background-color: lightgrey;
+    padding: 20px;
+  }
+}
