@@ -1,17 +1,18 @@
 /* eslint-disable react/react-in-jsx-scope */
 
+import { AdminDashboard } from "../components/dashboards/AdminDashboard";
+import { ApprenticeDashboard } from "../components/dashboards/ApprenticeDashboard";
+import { SupervisorDashboard } from "../components/dashboards/SupervisorDashboard";
 import { useAuth } from "../firebase/auth/auth.provider";
 
 export default function Dashboard() {
-  const { logout } = useAuth();
+  const { user } = useAuth();
 
-  const logoutUser = () => {
-    logout();
-  };
   return (
-    <div>
-      <h4>Dashboard</h4>
-      <button onClick={logoutUser}>Logout</button>
-    </div>
+    <>
+      {user?.role === "apprentice" && <ApprenticeDashboard />}
+      {user?.role === "supervisor" && <SupervisorDashboard />}
+      {user?.role === "admin" && <AdminDashboard />}
+    </>
   );
 }
