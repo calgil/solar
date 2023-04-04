@@ -1,15 +1,18 @@
 /* eslint-disable react/react-in-jsx-scope */
 import {
   createUserWithEmailAndPassword,
+  getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from "@firebase/auth";
-import { doc, getDoc, setDoc } from "@firebase/firestore";
+import { deleteDoc, doc, DocumentData, setDoc } from "@firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getUserById } from "../../fetch/auth/getUserById";
 import { User } from "../../types/user.type";
 import { auth, db } from "../config";
+import { isEmailPending } from "../pendingUsers/isEmailPending";
 
 type AuthContextType = {
   user: User | null;
@@ -32,20 +35,53 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       .then(async (userCred) => {
         const user = userCred.user;
         if (user) {
-          console.log("change auth.provider before adding more users");
+          const pendingUser = await isEmailPending(email);
+          if (!pendingUser) {
+            return console.log("Email not found in pending users collection.");
+          }
+          const data = {
+            name: username,
+            role: pendingUser.role,
+          };
+          await Promise.all([
+            setDoc(doc(db, "users", user.uid), data),
+            // setCustomUserClaims(user.uid, { role: pendingUser.role }), // set custom user claim for role
+            deleteDoc(doc(db, "pending users", pendingUser.id)),
+            // setCustomUserClaims(user.uid, { role: pendingUser.role }), // set custom user claim for role
+          ]);
+          // console.log("User created and role set:", data.role); // this breaks shit
 
-          // const data = {
-          //   name: username,
-          //   role: "admin",
-          // };
-
-          // await setDoc(doc(db, "users", user.uid), data);
+          const currentUser = (await getUserById(user.uid)) as User;
+          if (!currentUser) {
+            return console.log("no user");
+          }
+          setUser(currentUser);
         }
-        // console.log({ user });
       })
       .catch((err) => {
         console.error(err);
       });
+
+    // this works don't fuck it up
+
+    // createUserWithEmailAndPassword(auth, email, password)
+    //   .then(async (userCred) => {
+    //     const user = userCred.user;
+    //     if (user) {
+    //       console.log("change auth.provider before adding more users");
+
+    //       // const data = {
+    //       //   name: username,
+    //       //   role: "admin",
+    //       // };
+
+    //       // await setDoc(doc(db, "users", user.uid), data);
+    //     }
+    //     // console.log({ user });
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
   };
 
   const loginUser = async (email: string, password: string) => {
@@ -78,7 +114,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         //  or https://medium.com/swlh/using-firestore-with-typescript-65bd2a602945
         setUser(currentUser);
       }
-      // console.log("auth state changed", user);
+      console.log("auth state changed", user);
     });
     return () => {
       unsubscribe();
