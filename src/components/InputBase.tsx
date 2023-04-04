@@ -1,9 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 import s from "../styles/components/InputBase.module.scss";
-import { Input } from "../types/input.type";
+import { InputType } from "../types/input.type";
 
 type InputProps = {
-  input: Input;
+  input: InputType;
 };
 
 export const InputBase = ({ input }: InputProps) => {

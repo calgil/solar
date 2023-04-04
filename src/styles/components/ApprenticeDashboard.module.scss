@@ -1,0 +1,12 @@
+@use "../abstracts" as a;
+
+.overview {
+  background-color: a.$backgroundGrey;
+  padding: 25px 50px;
+
+  .totals {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+}

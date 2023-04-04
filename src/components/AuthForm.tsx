@@ -1,12 +1,12 @@
 import s from "../styles/components/AuthForm.module.scss";
 import { Link } from "react-router-dom";
-import { Input } from "../types/input.type";
+import { InputType } from "../types/input.type";
 import { InputBase } from "./InputBase";
 import titleBg from "../assets/REJATC-1.png";
 
 /* eslint-disable react/react-in-jsx-scope */
 type AuthFormProps = {
-  inputData: Input[];
+  inputData: InputType[];
   title: string;
   btnText: string;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;

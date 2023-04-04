@@ -1,4 +1,4 @@
-export type Input = {
+export type InputType = {
   id: string;
   labelText: string;
   type: "email" | "password" | "text";
