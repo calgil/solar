@@ -1,13 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 import {
   createUserWithEmailAndPassword,
-  getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
-  updateProfile,
 } from "@firebase/auth";
-import { deleteDoc, doc, DocumentData, setDoc } from "@firebase/firestore";
+import { deleteDoc, doc, setDoc } from "@firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getUserById } from "../../fetch/auth/getUserById";
 import { User } from "../../types/user.type";
@@ -31,57 +29,42 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     email: string,
     password: string
   ) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCred) => {
-        const user = userCred.user;
-        if (user) {
-          const pendingUser = await isEmailPending(email);
-          if (!pendingUser) {
-            return console.log("Email not found in pending users collection.");
-          }
-          const data = {
-            name: username,
-            role: pendingUser.role,
-          };
-          await Promise.all([
-            setDoc(doc(db, "users", user.uid), data),
-            // setCustomUserClaims(user.uid, { role: pendingUser.role }), // set custom user claim for role
-            deleteDoc(doc(db, "pending users", pendingUser.id)),
-            // setCustomUserClaims(user.uid, { role: pendingUser.role }), // set custom user claim for role
-          ]);
-          // console.log("User created and role set:", data.role); // this breaks shit
+    try {
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCred.user;
 
-          const currentUser = (await getUserById(user.uid)) as User;
-          if (!currentUser) {
-            return console.log("no user");
-          }
-          setUser(currentUser);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      if (!user) {
+        throw new Error("Failed to create user.");
+      }
 
-    // this works don't fuck it up
+      const pendingUser = await isEmailPending(email);
+      console.log({ pendingUser });
 
-    // createUserWithEmailAndPassword(auth, email, password)
-    //   .then(async (userCred) => {
-    //     const user = userCred.user;
-    //     if (user) {
-    //       console.log("change auth.provider before adding more users");
+      const data = {
+        name: username,
+        role: pendingUser.user.role,
+      };
 
-    //       // const data = {
-    //       //   name: username,
-    //       //   role: "admin",
-    //       // };
+      await setDoc(doc(db, "users", user.uid), data);
+      await deleteDoc(doc(db, "pending users", pendingUser.id));
 
-    //       // await setDoc(doc(db, "users", user.uid), data);
-    //     }
-    //     // console.log({ user });
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
+      console.log(pendingUser.id);
+
+      const currentUser = (await getUserById(user.uid)) as User;
+
+      if (!currentUser) {
+        throw new Error("Failed to get user by id.");
+      }
+
+      setUser(currentUser);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to create user.");
+    }
   };
 
   const loginUser = async (email: string, password: string) => {
