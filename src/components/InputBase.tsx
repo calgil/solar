@@ -12,17 +12,18 @@ export const InputBase = ({ input }: InputProps) => {
     <div className={s.inputContainer}>
       <label className={s.label} htmlFor={input.id}>
         {input.labelText}
+
+        <input
+          className={s.input}
+          id={id}
+          type={type}
+          name={name}
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          autoComplete={autoComplete}
+        />
       </label>
-      <input
-        className={s.input}
-        id={id}
-        type={type}
-        name={name}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-        autoComplete={autoComplete}
-      />
     </div>
   );
 };

@@ -1,9 +1,22 @@
+@use "../abstracts" as a;
+
 .actionContainer {
   cursor: pointer;
   position: relative;
+  display: flex;
+  align-items: center;
 
   .dropdownBtn {
     margin-left: 15px;
+    background-color: a.$backgroundWhite;
+    border: none;
+    font-size: 20px;
+    font-weight: 100;
+    padding-top: 4px;
+  }
+
+  .dropdownBtn.down {
+    transform: scaleY(-1);
   }
 
   .actionsDropdown {

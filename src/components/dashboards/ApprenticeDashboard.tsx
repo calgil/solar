@@ -3,6 +3,7 @@ import { useAuth } from "../../firebase/auth/auth.provider";
 import { useState } from "react";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
+import { capitalizeName } from "../../utils/capitalizeName";
 
 /* eslint-disable react/react-in-jsx-scope */
 export const ApprenticeDashboard = () => {
@@ -14,7 +15,7 @@ export const ApprenticeDashboard = () => {
   return (
     <div>
       <div className={s.overview}>
-        <h2>{user?.name}&apos;s Dashboard</h2>
+        <h2>{capitalizeName(user?.name)}&apos;s Dashboard</h2>
         <div className={s.totals}>
           <div>Hours</div>
           <div>Certs and Education</div>
@@ -26,7 +27,7 @@ export const ApprenticeDashboard = () => {
           Hours
           <button onClick={() => setIsModalOpen(true)}>Add hours</button>
           <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
-            <AddHours />
+            {user && <AddHours user={user} />}
           </Modal>
         </div>
       </div>
