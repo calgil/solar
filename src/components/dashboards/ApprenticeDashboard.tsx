@@ -4,6 +4,9 @@ import { useState } from "react";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
 import { capitalizeName } from "../../utils/capitalizeName";
+import { mprType } from "../../types/mpr.type";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../../firebase/config";
 
 /* eslint-disable react/react-in-jsx-scope */
 export const ApprenticeDashboard = () => {
@@ -11,6 +14,32 @@ export const ApprenticeDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const closeModal = () => setIsModalOpen(false);
+
+  const [userMprs, setUserMprs] = useState<mprType[]>([]);
+
+  const fetchMprs = async () => {
+    const mprsQuery = query(
+      collection(db, "mprs"),
+      where("userId", "==", user?.id)
+    );
+    const unsubscribe = onSnapshot(mprsQuery, (mprsSnapshot) => {
+      const mprsData = mprsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as mprType[];
+      setUserMprs(mprsData);
+    });
+    return () => unsubscribe;
+  };
+
+  if (user?.id && !userMprs.length) {
+    const unsubscribePromise = fetchMprs();
+    unsubscribePromise.then((unsubscribe) => {
+      return () => {
+        unsubscribe();
+      };
+    });
+  }
 
   return (
     <div>
@@ -29,6 +58,14 @@ export const ApprenticeDashboard = () => {
           <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
             {user && <AddHours user={user} />}
           </Modal>
+        </div>
+        <div className={s.allMprs}>
+          {userMprs.map((mpr) => (
+            <div key={mpr.id}>
+              <p>{mpr.date}</p>
+              <p>{mpr.totalHours}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

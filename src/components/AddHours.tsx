@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
+import { createMpr } from "../firebase/mpr/createMpr";
 // import { createMpr } from "../firebase/mpr/createMpr";
 import { uploadMprPhoto } from "../firebase/mpr/uploadMprPhoto";
 import s from "../styles/components/AddHours.module.scss";
@@ -19,13 +20,19 @@ type AddHoursProps = {
 export const AddHours = ({ user }: AddHoursProps) => {
   const [month, setMonth] = useState<number | string>("");
   const [year, setYear] = useState<number | string>(new Date().getFullYear());
+  const date = `${month}-${year}`;
 
-  const [psHours, setPsHours] = useState<number | string>("");
-  const [resHours, setResHours] = useState<number | string>("");
-  const [bosHours, setBosHours] = useState<number | string>("");
-  const [otherHours, setOtherHours] = useState<number | string>("");
+  const [psHours, setPsHours] = useState(0);
+  const [resHours, setResHours] = useState(0);
+  const [bosHours, setBosHours] = useState(0);
+  const [otherHours, setOtherHours] = useState(0);
+  const totalHours = [psHours, resHours, bosHours, otherHours].reduce(
+    (acc, val) => acc + val,
+    0
+  );
 
-  //   const [mprPhoto, setMprPhoto] = useState<File | null>(null);
+  const [apprenticeSignature, setApprenticeSignature] = useState(false);
+
   const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | null>(null);
 
   const months: Month[] = [
@@ -51,7 +58,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
       name: "PS",
       value: psHours,
       placeholder: "0",
-      onChange: (e) => setPsHours(e.target.value),
+      onChange: (e) => setPsHours(Number(e.target.value)),
       autoComplete: "off",
     },
     {
@@ -61,7 +68,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
       name: "RES",
       value: resHours,
       placeholder: "0",
-      onChange: (e) => setResHours(e.target.value),
+      onChange: (e) => setResHours(Number(e.target.value)),
       autoComplete: "off",
     },
     {
@@ -71,7 +78,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
       name: "BOS",
       value: bosHours,
       placeholder: "0",
-      onChange: (e) => setBosHours(e.target.value),
+      onChange: (e) => setBosHours(Number(e.target.value)),
       autoComplete: "off",
     },
     {
@@ -81,7 +88,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
       name: "Other",
       value: otherHours,
       placeholder: "0",
-      onChange: (e) => setOtherHours(e.target.value),
+      onChange: (e) => setOtherHours(Number(e.target.value)),
       autoComplete: "off",
     },
   ];
@@ -108,6 +115,11 @@ export const AddHours = ({ user }: AddHoursProps) => {
     }
   };
 
+  const deletePhoto = () => {
+    setUploadPhotoUrl(null);
+    // delete photo from bucket
+  };
+
   const uploadMPR = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -115,24 +127,54 @@ export const AddHours = ({ user }: AddHoursProps) => {
       return console.log("enter month");
     }
 
-    // console.log("upload mpr", psHours, bosHours, resHours, otherHours);
+    if (!uploadPhotoUrl) {
+      return console.log("upload photo");
+    }
+
+    if (!totalHours) {
+      return console.log("add hours");
+    }
+
+    if (!apprenticeSignature) {
+      return console.log("sign the mpr");
+    }
+
+    createMpr({
+      userId: user.id,
+      username: user.name,
+      date: date,
+      photoUrl: uploadPhotoUrl,
+      psHours,
+      resHours,
+      bosHours,
+      otherHours,
+      totalHours,
+      apprenticeSignature,
+      supervisorSignature: false,
+    });
+
     console.log("upload");
   };
 
   return (
     <form className={s.addHours} onSubmit={uploadMPR}>
       <div>
-        <input
-          type="file"
-          name="mprPhoto"
-          accept="image/*"
-          required
-          onChange={handleFileChange}
-        />
+        {!uploadPhotoUrl && (
+          <input
+            type="file"
+            name="mprPhoto"
+            accept="image/*"
+            required
+            onChange={handleFileChange}
+          />
+        )}
         {uploadPhotoUrl && (
-          <div className={s.uploadContainer}>
-            <img src={uploadPhotoUrl} alt="user selected photo" />
-          </div>
+          <>
+            <div className={s.uploadContainer}>
+              <img src={uploadPhotoUrl} alt="user selected photo" />
+            </div>
+            <button onClick={deletePhoto}>Remove File</button>
+          </>
         )}
       </div>
       <div className={s.rightCol}>
@@ -143,6 +185,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
               name="month"
               id="month"
               onChange={(e) => setMonth(e.target.value)}
+              autoFocus
             >
               <option value="">-Choose a month</option>
               {months.map((month) => (
@@ -170,6 +213,13 @@ export const AddHours = ({ user }: AddHoursProps) => {
             <InputBase key={input.id} input={input} />
           ))}
         </div>
+        <label>
+          Apprentice has signed
+          <input
+            type="checkbox"
+            onChange={() => setApprenticeSignature(!apprenticeSignature)}
+          />
+        </label>
         <input className={s.submitBtn} type="submit" value="Upload" />
       </div>
     </form>

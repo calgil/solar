@@ -42,7 +42,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const pendingUser = await isEmailPending(email);
-      console.log({ pendingUser });
 
       const data = {
         name: username,
@@ -51,8 +50,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       await setDoc(doc(db, "users", user.uid), data);
       await deleteDoc(doc(db, "pending users", pendingUser.id));
-
-      console.log(pendingUser.id);
 
       const currentUser = (await getUserById(user.uid)) as User;
 
@@ -69,10 +66,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const loginUser = async (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log({ user });
-      })
+      // .then((userCredential) => {
+      //   const user = userCredential.user;
+      // })
       .catch((err) => {
         console.error(err);
       });
@@ -90,14 +86,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (!currentUser) {
           return setUser(null);
         }
-        // console.log({ currentUser });
-
-        // this is the drama here
-        // need to create converter function like https://firebase.google.com/docs/firestore/query-data/get-data
-        //  or https://medium.com/swlh/using-firestore-with-typescript-65bd2a602945
         setUser(currentUser);
       }
-      console.log("auth state changed", user);
+      // console.log("auth state changed", user);
     });
     return () => {
       unsubscribe();
