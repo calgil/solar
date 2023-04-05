@@ -1,0 +1,33 @@
+@use "../abstracts" as a;
+
+.category {
+  background-color: a.$backgroundLight;
+  border: 1px solid a.$accentLight;
+  border-radius: 16px;
+  font-family: "Tahoma", sans-serif;
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 400;
+  color: a.$primaryText;
+  padding: 4px 10px;
+
+  .line {
+    color: a.$accentLight;
+  }
+}
+
+.category.red {
+  border: 1px solid red;
+}
+
+.category.green {
+  border: 1px solid green;
+}
+
+.category.yellow {
+  border: 1px solid yellow;
+}
+
+.category.black {
+  border: 1px solid black;
+}

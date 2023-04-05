@@ -1,0 +1,28 @@
+@use "../abstracts" as a;
+
+.detailsContainer {
+  background-color: a.$backgroundWhite;
+  border: 1px solid a.$borderGrey;
+  border-radius: 8px;
+  margin-top: 20px;
+  padding: 10px 16px;
+
+  .collapsedView {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .hours {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .title {
+      font-family: a.$secondaryFont;
+      font-weight: 800;
+      line-height: 27.32px;
+      margin-right: 40px;
+    }
+  }
+}

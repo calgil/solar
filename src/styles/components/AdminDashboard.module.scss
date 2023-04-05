@@ -1,7 +1,9 @@
 @use "../layouts";
+@use "../abstracts" as a;
 
 .container {
   @extend .container;
+  padding-top: 16px;
 }
 
 .title {
@@ -16,4 +18,22 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
+
+  .filterBtn {
+    background-color: a.$yellow;
+    border: 1px solid a.$accentDark;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .filterImg {
+      max-width: 16px;
+    }
+  }
+}
+
+.usersContainer {
+  padding-top: 30px;
 }

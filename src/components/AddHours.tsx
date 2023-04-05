@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
+import { months } from "../data/months";
 import { createMpr } from "../firebase/mpr/createMpr";
 // import { createMpr } from "../firebase/mpr/createMpr";
 import { uploadMprPhoto } from "../firebase/mpr/uploadMprPhoto";
@@ -7,11 +8,6 @@ import s from "../styles/components/AddHours.module.scss";
 import { InputType } from "../types/input.type";
 import { User } from "../types/user.type";
 import { InputBase } from "./InputBase";
-
-type Month = {
-  id: number;
-  name: string;
-};
 
 type AddHoursProps = {
   user: User;
@@ -34,21 +30,6 @@ export const AddHours = ({ user }: AddHoursProps) => {
   const [apprenticeSignature, setApprenticeSignature] = useState(false);
 
   const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | null>(null);
-
-  const months: Month[] = [
-    { id: 1, name: "January" },
-    { id: 2, name: "February" },
-    { id: 3, name: "March" },
-    { id: 4, name: "April" },
-    { id: 5, name: "May" },
-    { id: 6, name: "June" },
-    { id: 7, name: "July" },
-    { id: 8, name: "August" },
-    { id: 9, name: "September" },
-    { id: 10, name: "October" },
-    { id: 11, name: "November" },
-    { id: 12, name: "December" },
-  ];
 
   const hoursInputs: InputType[] = [
     {
