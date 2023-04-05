@@ -22,7 +22,7 @@ export const HoursOverview = ({ hours }: HoursOverviewProps) => {
   return (
     <div className={s.hoursOverview}>
       <div className={s.totalHours} onClick={handleExpandClick}>
-        <div className={s.percentageBar}>Percentage Bar</div>
+        <div className={s.percentageBar}>Total Hours</div>
         <DownArrow expand={showDetails} />
       </div>
       {showDetails && <div className={s.hoursDetails}>Category Totals</div>}
