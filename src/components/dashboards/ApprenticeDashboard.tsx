@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import s from "../../styles/components/ApprenticeDashboard.module.scss";
 import { useAuth } from "../../firebase/auth/auth.provider";
 import { useState } from "react";
@@ -7,8 +8,8 @@ import { capitalizeName } from "../../utils/capitalizeName";
 import { mprType } from "../../types/mpr.type";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../../firebase/config";
+import { HoursOverview } from "../HoursOverview";
 
-/* eslint-disable react/react-in-jsx-scope */
 export const ApprenticeDashboard = () => {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,6 +17,8 @@ export const ApprenticeDashboard = () => {
   const closeModal = () => setIsModalOpen(false);
 
   const [userMprs, setUserMprs] = useState<mprType[]>([]);
+
+  // TODO: move this to separate file
 
   const fetchMprs = async () => {
     const mprsQuery = query(
@@ -41,12 +44,20 @@ export const ApprenticeDashboard = () => {
     });
   }
 
+  const totalHours = userMprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
+  const psHours = userMprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
+  const oresHours = userMprs.reduce((acc, mpr) => acc + mpr.resHours, 0);
+  const bosHours = userMprs.reduce((acc, mpr) => acc + mpr.bosHours, 0);
+  const otherHours = userMprs.reduce((acc, mpr) => acc + mpr.otherHours, 0);
+
   return (
     <div>
       <div className={s.overview}>
         <h2>{capitalizeName(user?.name)}&apos;s Dashboard</h2>
         <div className={s.totals}>
-          <div>Hours</div>
+          <HoursOverview
+            hours={{ totalHours, psHours, oresHours, bosHours, otherHours }}
+          />
           <div>Certs and Education</div>
           <div>Test</div>
         </div>
