@@ -7,6 +7,7 @@ import { AddUser } from "../AddUser";
 import { Modal } from "../Modal";
 import { StaffMember } from "../StaffMember";
 import filter from "../../assets/filter.png";
+import search from "../../assets/search.png";
 export const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -39,18 +40,25 @@ export const AdminDashboard = () => {
       <h2 className={s.title}>Administrator Dashboard</h2>
       <div className={s.adminActions}>
         <button className={s.filterBtn}>
-          {" "}
           <div className={s.filterImg}>
             <img src={filter} alt="filter" />
-          </div>{" "}
+          </div>
           Filters
         </button>
-        <input
-          type="text"
-          placeholder="Filter Staff"
-          onChange={handleSearchQueryChange}
-        />
-        <button onClick={() => setIsModalOpen(true)}>Add User</button>
+        <div className={s.searchContainer}>
+          <input
+            className={s.filterInput}
+            type="text"
+            placeholder="Filter Staff"
+            onChange={handleSearchQueryChange}
+          />
+          <div className={s.searchImg}>
+            <img src={search} alt="search" />
+          </div>
+        </div>
+        <button className={s.addBtn} onClick={() => setIsModalOpen(true)}>
+          Add User
+        </button>
         <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New User">
           <AddUser />
         </Modal>
