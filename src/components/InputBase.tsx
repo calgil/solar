@@ -1,9 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 import s from "../styles/components/InputBase.module.scss";
-import { Input } from "../types/input.type";
+import { InputType } from "../types/input.type";
 
 type InputProps = {
-  input: Input;
+  input: InputType;
 };
 
 export const InputBase = ({ input }: InputProps) => {
@@ -12,17 +12,18 @@ export const InputBase = ({ input }: InputProps) => {
     <div className={s.inputContainer}>
       <label className={s.label} htmlFor={input.id}>
         {input.labelText}
+
+        <input
+          className={s.input}
+          id={id}
+          type={type}
+          name={name}
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          autoComplete={autoComplete}
+        />
       </label>
-      <input
-        className={s.input}
-        id={id}
-        type={type}
-        name={name}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-        autoComplete={autoComplete}
-      />
     </div>
   );
 };

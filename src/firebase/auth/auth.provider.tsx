@@ -5,11 +5,12 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "@firebase/auth";
-import { doc, getDoc, setDoc } from "@firebase/firestore";
+import { deleteDoc, doc, setDoc } from "@firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getUserById } from "../../fetch/auth/getUserById";
 import { User } from "../../types/user.type";
 import { auth, db } from "../config";
+import { isEmailPending } from "../pendingUsers/isEmailPending";
 
 type AuthContextType = {
   user: User | null;
@@ -28,32 +29,46 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     email: string,
     password: string
   ) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCred) => {
-        const user = userCred.user;
-        if (user) {
-          console.log("change auth.provider before adding more users");
+    try {
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCred.user;
 
-          // const data = {
-          //   name: username,
-          //   role: "admin",
-          // };
+      if (!user) {
+        throw new Error("Failed to create user.");
+      }
 
-          // await setDoc(doc(db, "users", user.uid), data);
-        }
-        // console.log({ user });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      const pendingUser = await isEmailPending(email);
+
+      const data = {
+        name: username,
+        role: pendingUser.user.role,
+      };
+
+      await setDoc(doc(db, "users", user.uid), data);
+      await deleteDoc(doc(db, "pending users", pendingUser.id));
+
+      const currentUser = (await getUserById(user.uid)) as User;
+
+      if (!currentUser) {
+        throw new Error("Failed to get user by id.");
+      }
+
+      setUser(currentUser);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to create user.");
+    }
   };
 
   const loginUser = async (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log({ user });
-      })
+      // .then((userCredential) => {
+      //   const user = userCredential.user;
+      // })
       .catch((err) => {
         console.error(err);
       });
@@ -71,11 +86,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (!currentUser) {
           return setUser(null);
         }
-        // console.log({ currentUser });
-
-        // this is the drama here
-        // need to create converter function like https://firebase.google.com/docs/firestore/query-data/get-data
-        //  or https://medium.com/swlh/using-firestore-with-typescript-65bd2a602945
         setUser(currentUser);
       }
       // console.log("auth state changed", user);

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthForm } from "../components/AuthForm";
 import { useAuth } from "../firebase/auth/auth.provider";
-import { Input } from "../types/input.type";
+import { InputType } from "../types/input.type";
 
 /* eslint-disable react/react-in-jsx-scope */
 export default function Login() {
@@ -12,7 +12,7 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const inputData: Input[] = [
+  const inputData: InputType[] = [
     {
       id: "email",
       labelText: "Email",

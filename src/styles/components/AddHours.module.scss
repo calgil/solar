@@ -1,0 +1,30 @@
+.addHours {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+
+  .uploadContainer {
+    max-width: 100px;
+    max-height: 100px;
+    overflow: hidden;
+  }
+
+  .rightCol {
+    .dateContainer {
+      display: flex;
+      align-items: center;
+    }
+
+    .hours {
+      input,
+      label {
+        display: inline-block;
+      }
+    }
+
+    .submitBtn {
+      display: block;
+    }
+    display: block;
+  }
+}

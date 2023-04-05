@@ -6,7 +6,6 @@ import { Modal } from "../Modal";
 export const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   return (
@@ -15,7 +14,7 @@ export const AdminDashboard = () => {
       <div className={s.adminActions}>
         <button>Filter</button>
         <input type="text" placeholder="Filter Staff" />
-        <button onClick={openModal}>Add User</button>
+        <button onClick={() => setIsModalOpen(true)}>Add User</button>
         <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New User">
           <AddUser />
         </Modal>
