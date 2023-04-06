@@ -3,6 +3,9 @@ import { useState } from "react";
 import { createPendingUser } from "../firebase/pendingUsers/createPendingUser";
 import s from "../styles/components/AddUser.module.scss";
 import { User } from "../types/user.type";
+import classNames from "classnames/bind";
+
+const cx = classNames.bind(s);
 
 type AddUserProps = {
   supervisors: User[];
@@ -10,29 +13,63 @@ type AddUserProps = {
 
 export const AddUser = ({ supervisors }: AddUserProps) => {
   const [newUserRole, setNewUserRole] = useState<string>("");
+  const [newUserSupervisor, setNewUserSupervisor] = useState("");
   const [newUserName, setNewUserName] = useState<string>("");
   const [newUserEmail, setNewUserEmail] = useState<string>("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const addUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitted(true);
     if (!newUserRole || !newUserEmail) {
       return console.log("Please input role, and email");
     }
 
+    console.log("supervisor", newUserSupervisor);
+
     createPendingUser({
       email: newUserEmail,
       role: newUserRole,
-    }).then((success) => console.log(success));
+    })
+      .then((success) => {
+        console.log(success);
+        setNewUserRole("");
+        setNewUserName("");
+        setNewUserEmail("");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     // TODO: add toast for success / failure
-
-    setNewUserRole("");
-    setNewUserName("");
-    setNewUserEmail("");
   };
 
+  const roleClass = cx({
+    label: true,
+    invalid: !newUserRole && isSubmitted,
+    valid: !isSubmitted || newUserRole,
+  });
+
+  const supervisorClass = cx({
+    label: true,
+    invalid: newUserRole === "apprentice" && isSubmitted,
+    valid: !isSubmitted || (newUserRole === "apprentice" && !newUserSupervisor),
+  });
+
+  const nameClass = cx({
+    label: true,
+    invalid: !newUserName && isSubmitted,
+    valid: !isSubmitted || newUserName,
+  });
+
+  const emailClass = cx({
+    label: true,
+    invalid: isSubmitted && !newUserEmail,
+    valid: !isSubmitted || newUserEmail,
+  });
+
   return (
-    <form className={s.addUser} onSubmit={addUser}>
-      <label htmlFor="role">
+    <form className={s.addUser} onSubmit={addUser} noValidate>
+      <label className={roleClass} htmlFor="role">
         Role
         <select
           className={s.input}
@@ -40,6 +77,7 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
           id="role"
           onChange={(e) => setNewUserRole(e.target.value)}
           value={newUserRole}
+          required
         >
           <option value="">Please Select Role</option>
           <option value="apprentice">Apprentice</option>
@@ -48,9 +86,15 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
         </select>
       </label>
       {newUserRole === "apprentice" && (
-        <label htmlFor="supervisor">
+        <label className={supervisorClass} htmlFor="supervisor">
           Supervisor
-          <select className={s.input} name="supervisor" id="supervisor">
+          <select
+            className={s.input}
+            name="supervisor"
+            id="supervisor"
+            onChange={(e) => setNewUserSupervisor(e.target.value)}
+            required
+          >
             {supervisors.map((supervisor) => (
               <option key={supervisor.id} value={supervisor.id}>
                 {supervisor.name}
@@ -59,23 +103,38 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
           </select>
         </label>
       )}
-      <label htmlFor="name">Name *</label>
-      <input
-        className={s.input}
-        id="name"
-        type="text"
-        onChange={(e) => setNewUserName(e.target.value)}
-        value={newUserName}
-      />
-      <label htmlFor="email">Email *</label>
-      <input
-        className={s.input}
-        id="email"
-        type="email"
-        onChange={(e) => setNewUserEmail(e.target.value)}
-        value={newUserEmail}
-      />
-      <input className={s.submitBtn} type="submit" value="Add User" />
+      <label className={nameClass} htmlFor="name">
+        Name *
+        {!newUserName && isSubmitted && (
+          <span className={s.error}>Please enter a name</span>
+        )}
+        <input
+          className={s.input}
+          id="name"
+          type="text"
+          onChange={(e) => setNewUserName(e.target.value)}
+          value={newUserName}
+          required
+        />
+      </label>
+      <label className={emailClass} htmlFor="email">
+        Email *
+        {!newUserEmail && isSubmitted && (
+          <span className={s.error}>Please enter a valid email</span>
+        )}
+        <input
+          className={s.input}
+          id="email"
+          type="email"
+          onChange={(e) => setNewUserEmail(e.target.value)}
+          value={newUserEmail}
+          required
+        />
+      </label>
+
+      <div className={s.submitContainer}>
+        <input className={s.submitBtn} type="submit" value="Add User" />
+      </div>
     </form>
   );
 };

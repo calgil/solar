@@ -13,12 +13,54 @@
     @extend .input;
   }
 
-  .submitBtn {
-    background-color: a.$success;
-    color: a.$whiteText;
-    border: 1px solid a.$solarMain;
-    border-radius: 8px;
-    padding: 10px;
-    width: 100px;
+  // .input.invalid {
+  //   border-color: red;
+  // }
+
+  // // .input:valid {
+  // //   border-color: inherit;
+  // // }
+
+  // .input + span {
+  //   display: none;
+  // }
+
+  // .input.invalid + span {
+  //   display: block;
+  //   color: red;
+  // }
+
+  .label.invalid {
+    .error {
+      color: red;
+      display: block;
+      text-decoration: none;
+    }
+
+    .input {
+      border-color: red;
+    }
+  }
+
+  .label.valid {
+    .error {
+      display: none;
+    }
+  }
+
+  .submitContainer {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 40px;
+    margin-top: 15px;
+
+    .submitBtn {
+      background-color: a.$success;
+      color: a.$whiteText;
+      border: 1px solid a.$solarMain;
+      border-radius: 8px;
+      padding: 10px;
+      width: 100px;
+    }
   }
 }

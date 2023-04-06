@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { useRef, useState } from "react";
 import s from "../styles/components/DisplayUser.module.scss";
 import { useAuth } from "../firebase/auth/auth.provider";
@@ -6,8 +7,6 @@ import classNames from "classnames/bind";
 import { capitalizeName } from "../utils/capitalizeName";
 
 const cx = classNames.bind(s);
-
-/* eslint-disable react/react-in-jsx-scope */
 
 export const DisplayUser = () => {
   const { logout, user } = useAuth();
