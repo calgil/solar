@@ -9,6 +9,7 @@ import Register from "./pages/register";
 import Root from "./pages/root";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { UnProtectedRoute } from "./UnProtectedRoute";
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   {
@@ -54,5 +55,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
+    <ToastContainer />
   </React.StrictMode>
 );

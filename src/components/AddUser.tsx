@@ -4,6 +4,7 @@ import { createPendingUser } from "../firebase/pendingUsers/createPendingUser";
 import s from "../styles/components/AddUser.module.scss";
 import { User } from "../types/user.type";
 import classNames from "classnames/bind";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(s);
 
@@ -25,6 +26,10 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
       return console.log("Please input role, and email");
     }
 
+    if (newUserRole === "apprentice") {
+      return console.log("Apprentice must have supervisor");
+    }
+
     console.log("supervisor", newUserSupervisor);
 
     createPendingUser({
@@ -33,12 +38,14 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
     })
       .then((success) => {
         console.log(success);
+        toast.success("New User added");
         setNewUserRole("");
         setNewUserName("");
         setNewUserEmail("");
       })
       .catch((error) => {
         console.error(error);
+        toast.error("Could not create user");
       });
     // TODO: add toast for success / failure
   };
