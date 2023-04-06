@@ -1,7 +1,7 @@
 import {
   collection,
   getDocs,
-  limit,
+  // limit,
   orderBy,
   query,
   where,
@@ -12,38 +12,38 @@ import { db } from "../config";
 export type ApprenticeData = {
   totalHours: number;
   psHours: number;
-  resHours: number;
+  oresHours: number;
   bosHours: number;
   otherHours: number;
-  recentMprs: mprType[];
+  mprs: mprType[];
 };
 
 export const getApprenticeData = async (apprenticeId: string) => {
   const mprsQuery = query(
     collection(db, "mprs"),
     where("userId", "==", apprenticeId),
-    orderBy("date", "desc"),
-    limit(3)
+    orderBy("date", "desc")
+    // limit(3)
   );
 
   const mprsSnapshot = await getDocs(mprsQuery);
-  const recentMprs = mprsSnapshot.docs.map((doc) => ({
+  const mprs = mprsSnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
   })) as mprType[];
 
-  const totalHours = recentMprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
-  const psHours = recentMprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
-  const resHours = recentMprs.reduce((acc, mpr) => acc + mpr.resHours, 0);
-  const bosHours = recentMprs.reduce((acc, mpr) => acc + mpr.bosHours, 0);
-  const otherHours = recentMprs.reduce((acc, mpr) => acc + mpr.otherHours, 0);
+  const totalHours = mprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
+  const psHours = mprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
+  const oresHours = mprs.reduce((acc, mpr) => acc + mpr.resHours, 0);
+  const bosHours = mprs.reduce((acc, mpr) => acc + mpr.bosHours, 0);
+  const otherHours = mprs.reduce((acc, mpr) => acc + mpr.otherHours, 0);
 
   return {
     totalHours,
     psHours,
-    resHours,
+    oresHours,
     bosHours,
     otherHours,
-    recentMprs,
+    mprs,
   };
 };

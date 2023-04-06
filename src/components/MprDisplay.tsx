@@ -8,7 +8,7 @@ type MprDetailsProps = {
   mpr: mprType;
 };
 
-export const MprDetails = ({ mpr }: MprDetailsProps) => {
+export const MprDisplay = ({ mpr }: MprDetailsProps) => {
   return (
     <div className={s.mprDetails}>
       <p className={s.date}>{displayDate(mpr.date)}</p>

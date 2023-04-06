@@ -27,13 +27,19 @@ export const StaffMember = ({ user }: StaffMemberProps) => {
     }
     setLoading(true);
     setShowDetails(true);
+
     const apprenticeHours = await getApprenticeData(user.id);
-    setApprenticeData(apprenticeHours);
-    if (apprenticeHours) {
-      return setLoading(false);
+
+    if (!apprenticeHours) {
+      setLoading(false);
+      return console.log("could not fetch apprentice data");
     }
+
+    setApprenticeData(apprenticeHours);
+    setLoading(false);
     console.log({ apprenticeHours });
   };
+
   return (
     <div className={s.staffMember} onClick={handleExpandClick}>
       <div className={s.staffContainer}>

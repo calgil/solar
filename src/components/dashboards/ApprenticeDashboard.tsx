@@ -9,12 +9,18 @@ import { mprType } from "../../types/mpr.type";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { HoursOverview } from "../HoursOverview";
+import { HoursDetails } from "../HoursDetails";
 
 export const ApprenticeDashboard = () => {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const closeModal = () => setIsModalOpen(false);
+
+  const openModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    setIsModalOpen(true);
+  };
 
   const [userMprs, setUserMprs] = useState<mprType[]>([]);
 
@@ -58,26 +64,39 @@ export const ApprenticeDashboard = () => {
           <HoursOverview
             hours={{ totalHours, psHours, oresHours, bosHours, otherHours }}
           />
-          <div>Certs and Education</div>
-          <div>Test</div>
+          {/* <div>Certs and Education</div> */}
+          {/* <div>Test</div> */}
         </div>
       </div>
       <div className={s.details}>
-        <div className={s.hoursDetail}>
+        <HoursDetails
+          apprenticeData={{
+            totalHours,
+            psHours,
+            oresHours,
+            bosHours,
+            otherHours,
+            mprs: userMprs,
+          }}
+          apprentice={true}
+          btnClick={openModal}
+        />
+        <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
+          {user && <AddHours user={user} />}
+        </Modal>
+        {/* <div className={s.hoursDetail}>
           Hours
           <button onClick={() => setIsModalOpen(true)}>Add hours</button>
-          <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
-            {user && <AddHours user={user} />}
-          </Modal>
-        </div>
-        <div className={s.allMprs}>
+          
+        </div> */}
+        {/* <div className={s.allMprs}>
           {userMprs.map((mpr) => (
             <div key={mpr.id}>
               <p>{mpr.date}</p>
               <p>{mpr.totalHours}</p>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@
   border-radius: 8px;
   margin-top: 20px;
   padding: 10px 16px;
+  padding-top: 20px;
 
   .collapsedView {
     display: flex;
@@ -23,6 +24,26 @@
       font-weight: 800;
       line-height: 27.32px;
       margin-right: 40px;
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+
+    .addBtn {
+      margin-right: 20px;
+    }
+  }
+
+  .mprsContainer {
+    .mprQuantity {
+      margin-top: 20px;
+      cursor: pointer;
+      font-family: a.$secondaryFont;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 19px;
     }
   }
 }
