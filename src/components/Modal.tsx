@@ -2,6 +2,7 @@
 import { ReactNode, useRef } from "react";
 import { useClickOutside } from "../hooks/useClickOutside";
 import s from "../styles/components/Modal.module.scss";
+import close from "../assets/close.png";
 
 type ModalProps = {
   isOpen: boolean;
@@ -24,7 +25,11 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
       <div ref={modalRef} className={s.modal}>
         <div className={s.modalHeader}>
           <h4 className={s.title}>{title}</h4>
-          <button onClick={onClose}>Close</button>
+          <button className={s.closeBtn} onClick={onClose}>
+            <div className={s.close}>
+              <img src={close} alt="close" />
+            </div>
+          </button>
         </div>
         <div className={s.modalBody}>{children}</div>
       </div>

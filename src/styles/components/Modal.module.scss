@@ -1,3 +1,5 @@
+@use "../abstracts" as a;
+
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -13,14 +15,43 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #fff;
-    padding: 50px;
     z-index: 1000;
     min-width: 500px;
+    padding: 10px 32px;
+    border-radius: 8px;
 
     .modalHeader {
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      .title {
+        line-height: 24px;
+        font-size: 18px;
+        font-weight: 400;
+      }
+
+      .closeBtn {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        transition: all 200ms ease-in-out;
+        padding: 3px;
+
+        &:hover {
+          outline: 1px solid a.$borderGrey;
+        }
+      }
+
+      .close {
+        width: 20px;
+        height: 20px;
+        transition: all 200ms ease-in-out;
+
+        &:hover {
+          transform: scale(1.15);
+        }
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import s from "../styles/components/MprDetails.module.scss";
+import s from "../styles/components/MprDisplay.module.scss";
 import { mprType } from "../types/mpr.type";
 import { displayDate } from "../utils/displayDate";
 import { HourCategory } from "./HourCategory";

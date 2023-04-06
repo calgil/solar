@@ -28,7 +28,7 @@ export const createMpr = async ({
     apprenticeSignature,
     supervisorSignature,
   };
-  console.log(data);
+  console.log("cannot upload mpr yet");
 
-  await addDoc(collection(db, "mprs"), data);
+  // await addDoc(collection(db, "mprs"), data);
 };

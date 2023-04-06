@@ -2,7 +2,7 @@ export type mprType = {
   id?: string;
   userId: string;
   username: string;
-  date: string;
+  date: Date;
   photoUrl: string;
   psHours: number;
   resHours: number;

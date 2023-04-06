@@ -7,6 +7,7 @@ import { uploadMprPhoto } from "../firebase/mpr/uploadMprPhoto";
 import s from "../styles/components/AddHours.module.scss";
 import { InputType } from "../types/input.type";
 import { User } from "../types/user.type";
+import { toDate } from "../utils/toDate";
 import { InputBase } from "./InputBase";
 
 type AddHoursProps = {
@@ -14,9 +15,8 @@ type AddHoursProps = {
 };
 
 export const AddHours = ({ user }: AddHoursProps) => {
-  const [month, setMonth] = useState<number | string>("");
-  const [year, setYear] = useState<number | string>(new Date().getFullYear());
-  const date = `${month}-${year}`;
+  const [month, setMonth] = useState(0);
+  const [year, setYear] = useState(+new Date().getFullYear());
 
   const [psHours, setPsHours] = useState(0);
   const [resHours, setResHours] = useState(0);
@@ -108,6 +108,10 @@ export const AddHours = ({ user }: AddHoursProps) => {
       return console.log("enter month");
     }
 
+    // const dateObject = new Date()
+    // dateObject.setMonth(+month - 1)
+    // dateObject.setFullYear(+year)
+
     if (!uploadPhotoUrl) {
       return console.log("upload photo");
     }
@@ -123,7 +127,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
     createMpr({
       userId: user.id,
       username: user.name,
-      date: date,
+      date: toDate(month, year),
       photoUrl: uploadPhotoUrl,
       psHours,
       resHours,
@@ -165,12 +169,12 @@ export const AddHours = ({ user }: AddHoursProps) => {
             <select
               name="month"
               id="month"
-              onChange={(e) => setMonth(e.target.value)}
+              onChange={(e) => setMonth(parseInt(e.target.value))}
               autoFocus
             >
               <option value="">-Choose a month</option>
               {months.map((month) => (
-                <option key={month.id} value={month.id}>
+                <option key={month.id} value={+month.id}>
                   {month.name}
                 </option>
               ))}
@@ -181,11 +185,11 @@ export const AddHours = ({ user }: AddHoursProps) => {
             <input
               type="number"
               name="year"
-              min="2023"
+              min="2020"
               max="2060"
               step="1"
               value={year}
-              onChange={(e) => setYear(e.target.value)}
+              onChange={(e) => setYear(parseInt(e.target.value))}
             />
           </label>
         </div>

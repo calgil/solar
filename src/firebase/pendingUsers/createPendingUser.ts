@@ -17,11 +17,13 @@ export const createPendingUser = async ({
     email,
     role,
   };
-  const docRef = await addDoc(collection(db, "pending users"), data);
-  console.log("passed", docRef.id);
+  console.log("i turned this off");
 
-  if (!docRef) {
-    return false;
-  }
-  return true;
+  // const docRef = await addDoc(collection(db, "pending users"), data);
+  // console.log("passed", docRef.id);
+
+  // if (!docRef) {
+  //   return false;
+  // }
+  // return true;
 };
