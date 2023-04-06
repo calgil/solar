@@ -2,8 +2,13 @@
 import { useState } from "react";
 import { createPendingUser } from "../firebase/pendingUsers/createPendingUser";
 import s from "../styles/components/AddUser.module.scss";
+import { User } from "../types/user.type";
 
-export const AddUser = () => {
+type AddUserProps = {
+  supervisors: User[];
+};
+
+export const AddUser = ({ supervisors }: AddUserProps) => {
   const [newUserRole, setNewUserRole] = useState<string>("");
   const [newUserName, setNewUserName] = useState<string>("");
   const [newUserEmail, setNewUserEmail] = useState<string>("");
@@ -27,19 +32,36 @@ export const AddUser = () => {
 
   return (
     <form className={s.addUser} onSubmit={addUser}>
-      <select
-        name="role"
-        id="role"
-        onChange={(e) => setNewUserRole(e.target.value)}
-        value={newUserRole}
-      >
-        <option value="">Please Select Role</option>
-        <option value="apprentice">Apprentice</option>
-        <option value="supervisor">Supervisor</option>
-        <option value="admin">Admin</option>
-      </select>
+      <label htmlFor="role">
+        Role
+        <select
+          className={s.input}
+          name="role"
+          id="role"
+          onChange={(e) => setNewUserRole(e.target.value)}
+          value={newUserRole}
+        >
+          <option value="">Please Select Role</option>
+          <option value="apprentice">Apprentice</option>
+          <option value="supervisor">Supervisor</option>
+          <option value="admin">Admin</option>
+        </select>
+      </label>
+      {newUserRole === "apprentice" && (
+        <label htmlFor="supervisor">
+          Supervisor
+          <select className={s.input} name="supervisor" id="supervisor">
+            {supervisors.map((supervisor) => (
+              <option key={supervisor.id} value={supervisor.id}>
+                {supervisor.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       <label htmlFor="name">Name *</label>
       <input
+        className={s.input}
         id="name"
         type="text"
         onChange={(e) => setNewUserName(e.target.value)}
@@ -47,6 +69,7 @@ export const AddUser = () => {
       />
       <label htmlFor="email">Email *</label>
       <input
+        className={s.input}
         id="email"
         type="email"
         onChange={(e) => setNewUserEmail(e.target.value)}

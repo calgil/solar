@@ -1,8 +1,24 @@
+@use "../layouts";
+@use "../abstracts" as a;
+
 .addUser {
   margin-top: 20px;
-  input,
+  .input,
   select {
     display: block;
     margin: 5px 0;
+  }
+
+  .input {
+    @extend .input;
+  }
+
+  .submitBtn {
+    background-color: a.$success;
+    color: a.$whiteText;
+    border: 1px solid a.$solarMain;
+    border-radius: 8px;
+    padding: 10px;
+    width: 100px;
   }
 }

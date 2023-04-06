@@ -25,6 +25,8 @@ export const AdminDashboard = () => {
     getUsers();
   }
 
+  const supervisors = users.filter((user) => user.role === "supervisor");
+
   const filteredUsers = users.filter(
     (user) =>
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -60,7 +62,7 @@ export const AdminDashboard = () => {
           Add User
         </button>
         <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New User">
-          <AddUser />
+          <AddUser supervisors={supervisors} />
         </Modal>
       </div>
       <div className={s.usersContainer}>
