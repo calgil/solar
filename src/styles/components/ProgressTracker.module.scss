@@ -1,0 +1,39 @@
+@use "../abstracts" as a;
+
+.progressBar {
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+  height: 20px;
+  background-color: a.$backgroundWhite;
+  border: 1px solid a.$borderGrey;
+  border-radius: 8px;
+  margin-left: 20px;
+
+  .percent {
+    position: absolute;
+    left: -15px;
+    top: -15px;
+    z-index: 20;
+    width: 45px;
+    height: 45px;
+    background-color: a.$backgroundGrey;
+    border: 3px solid a.$backgroundWhite;
+    border-radius: 50%;
+    padding: 12px;
+    font-family: "Tahoma", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 14.5px;
+    color: a.$solarMain;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .progress {
+    background-color: red;
+    height: 100%;
+    border-radius: 8px;
+  }
+}
