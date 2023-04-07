@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
 import { capitalizeName } from "../../utils/capitalizeName";
-import { mprType } from "../../types/mpr.type";
+import { MprType } from "../../types/mpr.type";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { HoursOverview } from "../HoursOverview";
@@ -23,7 +23,7 @@ export const ApprenticeDashboard = () => {
     setIsModalOpen(true);
   };
 
-  const [userMprs, setUserMprs] = useState<mprType[]>([]);
+  const [userMprs, setUserMprs] = useState<MprType[]>([]);
 
   useEffect(() => {
     if (user?.id) {

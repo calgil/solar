@@ -1,6 +1,22 @@
 import { addDoc, collection } from "firebase/firestore";
-import { mprType } from "../../types/mpr.type";
+import { MprType } from "../../types/mpr.type";
 import { db } from "../config";
+
+export type UploadMpr = {
+  id?: string;
+  userId: string;
+  username: string;
+  date: Date;
+  photoUrl: string;
+  psHours: number;
+  oresHours: number;
+  bosHours: number;
+  otherHours: number;
+  totalHours: number;
+  apprenticeSignature: boolean;
+  supervisorSignature: boolean;
+  supervisorId: string;
+};
 
 export const createMpr = async ({
   userId,
@@ -15,7 +31,7 @@ export const createMpr = async ({
   apprenticeSignature,
   supervisorSignature,
   supervisorId,
-}: mprType) => {
+}: UploadMpr) => {
   const data = {
     userId,
     username,

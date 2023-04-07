@@ -1,16 +1,14 @@
 /* eslint-disable react/react-in-jsx-scope */
 import s from "../styles/components/MprDisplay.module.scss";
-import { mprType } from "../types/mpr.type";
+import { MprType } from "../types/mpr.type";
 import { displayDate } from "../utils/displayDate";
 import { HourCategory } from "./HourCategory";
 
 type MprDetailsProps = {
-  mpr: mprType;
+  mpr: MprType;
 };
 
 export const MprDisplay = ({ mpr }: MprDetailsProps) => {
-  console.log("stupid", mpr);
-
   return (
     <div className={s.mprDetails}>
       <p className={s.date}>{displayDate(mpr.date)}</p>

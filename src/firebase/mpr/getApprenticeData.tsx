@@ -6,7 +6,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { mprType } from "../../types/mpr.type";
+import { MprType } from "../../types/mpr.type";
 import { db } from "../config";
 
 export type ApprenticeData = {
@@ -15,7 +15,7 @@ export type ApprenticeData = {
   oresHours: number;
   bosHours: number;
   otherHours: number;
-  mprs: mprType[];
+  mprs: MprType[];
 };
 
 export const getApprenticeData = async (apprenticeId: string) => {
@@ -30,7 +30,7 @@ export const getApprenticeData = async (apprenticeId: string) => {
   const mprs = mprsSnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
-  })) as mprType[];
+  })) as MprType[];
 
   const totalHours = mprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
   const psHours = mprs.reduce((acc, mpr) => acc + mpr.psHours, 0);

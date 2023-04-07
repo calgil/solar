@@ -1,13 +1,11 @@
-export type mprType = {
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
+
+export type MprType = {
   id?: string;
   userId: string;
   username: string;
-  date:
-    | {
-        seconds: number;
-        nanoseconds: number;
-      }
-    | Date;
+  date: firebase.firestore.Timestamp;
   photoUrl: string;
   psHours: number;
   oresHours: number;

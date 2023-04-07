@@ -7,7 +7,6 @@ import { uploadMprPhoto } from "../firebase/mpr/uploadMprPhoto";
 import s from "../styles/components/AddHours.module.scss";
 import { InputType } from "../types/input.type";
 import { User } from "../types/user.type";
-import { toDate } from "../utils/toDate";
 import { InputBase } from "./InputBase";
 
 type AddHoursProps = {
