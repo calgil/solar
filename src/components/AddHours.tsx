@@ -19,10 +19,10 @@ export const AddHours = ({ user }: AddHoursProps) => {
   const [year, setYear] = useState(+new Date().getFullYear());
 
   const [psHours, setPsHours] = useState(0);
-  const [resHours, setResHours] = useState(0);
+  const [oresHours, setOresHours] = useState(0);
   const [bosHours, setBosHours] = useState(0);
   const [otherHours, setOtherHours] = useState(0);
-  const totalHours = [psHours, resHours, bosHours, otherHours].reduce(
+  const totalHours = [psHours, oresHours, bosHours, otherHours].reduce(
     (acc, val) => acc + val,
     0
   );
@@ -43,13 +43,13 @@ export const AddHours = ({ user }: AddHoursProps) => {
       autoComplete: "off",
     },
     {
-      id: "RES",
-      labelText: "Renewable Energy Systems",
+      id: "ORES",
+      labelText: "Other Renewable Energy Systems",
       type: "number",
-      name: "RES",
-      value: resHours,
+      name: "ORES",
+      value: oresHours,
       placeholder: "0",
-      onChange: (e) => setResHours(Number(e.target.value)),
+      onChange: (e) => setOresHours(Number(e.target.value)),
       autoComplete: "off",
     },
     {
@@ -87,9 +87,10 @@ export const AddHours = ({ user }: AddHoursProps) => {
     });
     console.log({ newFile });
     try {
-      const photoUrl = await uploadMprPhoto(newFile);
-      console.log({ photoUrl });
-      setUploadPhotoUrl(photoUrl);
+      // const photoUrl = await uploadMprPhoto(newFile);
+      // console.log({ photoUrl });
+      console.log("upload photo");
+      // setUploadPhotoUrl(photoUrl);
     } catch (err) {
       console.error(err);
       setUploadPhotoUrl(null);
@@ -108,14 +109,6 @@ export const AddHours = ({ user }: AddHoursProps) => {
       return console.log("enter month");
     }
 
-    // const dateObject = new Date()
-    // dateObject.setMonth(+month - 1)
-    // dateObject.setFullYear(+year)
-
-    if (!uploadPhotoUrl) {
-      return console.log("upload photo");
-    }
-
     if (!totalHours) {
       return console.log("add hours");
     }
@@ -124,21 +117,31 @@ export const AddHours = ({ user }: AddHoursProps) => {
       return console.log("sign the mpr");
     }
 
+    if (!user.supervisorId) {
+      return console.log("apprentices must be supervised");
+    }
+
+    console.log("user", user);
+
+    const date = new Date(year, month - 1);
+
     createMpr({
       userId: user.id,
       username: user.name,
-      date: toDate(month, year),
-      photoUrl: uploadPhotoUrl,
+      date,
+      photoUrl: `exampleUrl.com`,
       psHours,
-      resHours,
+      oresHours,
       bosHours,
       otherHours,
       totalHours,
       apprenticeSignature,
       supervisorSignature: false,
+      supervisorId: user.supervisorId,
     });
 
     console.log("upload");
+    // TODO: clear form
   };
 
   return (
@@ -149,7 +152,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
             type="file"
             name="mprPhoto"
             accept="image/*"
-            required
+            // required
             onChange={handleFileChange}
           />
         )}

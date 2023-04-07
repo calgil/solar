@@ -8,27 +8,29 @@ export const createMpr = async ({
   date,
   photoUrl,
   psHours,
-  resHours,
+  oresHours,
   bosHours,
   otherHours,
   totalHours,
   apprenticeSignature,
   supervisorSignature,
+  supervisorId,
 }: mprType) => {
   const data = {
     userId,
     username,
     date,
-    photoUrl,
+    // photoUrl,
     psHours,
-    resHours,
+    oresHours,
     bosHours,
     otherHours,
     totalHours,
     apprenticeSignature,
     supervisorSignature,
+    supervisorId,
   };
-  console.log("cannot upload mpr yet");
+  // console.log("cannot upload mpr yet");
 
-  // await addDoc(collection(db, "mprs"), data);
+  await addDoc(collection(db, "mprs"), data);
 };

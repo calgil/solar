@@ -17,3 +17,7 @@ export const months: Month[] = [
   { id: 11, name: "November" },
   { id: 12, name: "December" },
 ];
+
+export const getMonthName = (monthNumber: number) => {
+  return months[monthNumber];
+};

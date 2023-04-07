@@ -94,7 +94,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
         setUser(currentUser);
       }
-      // console.log("auth state changed", user);
     });
     return () => {
       unsubscribe();

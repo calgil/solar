@@ -9,6 +9,8 @@ type MprDetailsProps = {
 };
 
 export const MprDisplay = ({ mpr }: MprDetailsProps) => {
+  console.log("stupid", mpr);
+
   return (
     <div className={s.mprDetails}>
       <p className={s.date}>{displayDate(mpr.date)}</p>
@@ -21,7 +23,7 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
       />
       <HourCategory
         category="ORES"
-        hoursEarned={mpr.resHours}
+        hoursEarned={mpr.oresHours}
         totalHours={500}
       />
       <HourCategory
