@@ -31,9 +31,36 @@
     align-items: center;
   }
 
+  .percent.red {
+    border: 3px solid a.$progressRed;
+  }
+  .percent.yellow {
+    border: 3px solid a.$progressYellow;
+  }
+  .percent.green {
+    border: 3px solid a.$progressGreen;
+  }
+  .percent.overage {
+    border: 3px solid a.$progressOverage;
+  }
+
   .progress {
-    background-color: red;
     height: 100%;
     border-radius: 8px;
+  }
+
+  .progress.red {
+    background-color: a.$progressRed;
+    // border: 1px solid a.$progressRed;
+  }
+  .progress.yellow {
+    background-color: a.$progressYellow;
+    border: 1px solid a.$progressYellow;
+  }
+  .progress.green {
+    background-color: a.$progressGreen;
+  }
+  .progress.overage {
+    background-color: a.$progressOverage;
   }
 }

@@ -34,7 +34,7 @@ export const getApprenticeData = async (apprenticeId: string) => {
 
   const totalHours = mprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
   const psHours = mprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
-  const oresHours = mprs.reduce((acc, mpr) => acc + mpr.resHours, 0);
+  const oresHours = mprs.reduce((acc, mpr) => acc + mpr.oresHours, 0);
   const bosHours = mprs.reduce((acc, mpr) => acc + mpr.bosHours, 0);
   const otherHours = mprs.reduce((acc, mpr) => acc + mpr.otherHours, 0);
 

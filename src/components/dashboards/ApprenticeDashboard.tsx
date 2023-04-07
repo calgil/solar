@@ -6,8 +6,6 @@ import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
 import { capitalizeName } from "../../utils/capitalizeName";
 import { MprType } from "../../types/mpr.type";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { db } from "../../firebase/config";
 import { HoursOverview } from "../HoursOverview";
 import { HoursDetails } from "../HoursDetails";
 import { fetchMprs } from "../../firebase/mpr/getApprenticeMprs";
@@ -66,19 +64,6 @@ export const ApprenticeDashboard = () => {
         <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
           {user && <AddHours user={user} />}
         </Modal>
-        {/* <div className={s.hoursDetail}>
-          Hours
-          <button onClick={() => setIsModalOpen(true)}>Add hours</button>
-          
-        </div> */}
-        {/* <div className={s.allMprs}>
-          {userMprs.map((mpr) => (
-            <div key={mpr.id}>
-              <p>{mpr.date}</p>
-              <p>{mpr.totalHours}</p>
-            </div>
-          ))}
-        </div> */}
       </div>
     </div>
   );

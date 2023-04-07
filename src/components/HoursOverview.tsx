@@ -3,7 +3,7 @@ import { useState } from "react";
 import { REQUIRED_HOURS } from "../data/hourRequirements";
 import s from "../styles/components/HoursOverview.module.scss";
 import { DownArrow } from "./DownArrow";
-import { HourProgress } from "./HourProgress";
+import { ProgressDisplay } from "./ProgressDisplay";
 
 type Hours = {
   totalHours: number;
@@ -26,34 +26,34 @@ export const HoursOverview = ({
   return (
     <div className={s.hoursOverview}>
       <div className={s.totalHours} onClick={handleExpandClick}>
-        <HourProgress
+        <ProgressDisplay
           title="Total Hours"
-          hoursEarned={totalHours}
-          requiredHours={REQUIRED_HOURS.totalHours}
+          earned={totalHours}
+          required={REQUIRED_HOURS.totalHours}
         />
         <DownArrow expand={showDetails} />
       </div>
       {showDetails && (
         <div className={s.hoursDetails}>
-          <HourProgress
+          <ProgressDisplay
             title="PS"
-            hoursEarned={psHours}
-            requiredHours={REQUIRED_HOURS.PSHours}
+            earned={psHours}
+            required={REQUIRED_HOURS.PSHours}
           />
-          <HourProgress
+          <ProgressDisplay
             title="BOS"
-            hoursEarned={bosHours}
-            requiredHours={REQUIRED_HOURS.BOSHours}
+            earned={bosHours}
+            required={REQUIRED_HOURS.BOSHours}
           />
-          <HourProgress
+          <ProgressDisplay
             title="ORES"
-            hoursEarned={oresHours}
-            requiredHours={REQUIRED_HOURS.ORESHours}
+            earned={oresHours}
+            required={REQUIRED_HOURS.ORESHours}
           />
-          <HourProgress
+          <ProgressDisplay
             title="Other"
-            hoursEarned={otherHours}
-            requiredHours={REQUIRED_HOURS.otherHours}
+            earned={otherHours}
+            required={REQUIRED_HOURS.otherHours}
           />
         </div>
       )}

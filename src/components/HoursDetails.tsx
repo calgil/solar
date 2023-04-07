@@ -48,7 +48,7 @@ export const HoursDetails = ({
       <div className={s.collapsedView} onClick={handleExpandClick}>
         <div className={s.hours}>
           <h3 className={s.title}>Hours</h3>
-          <p>{apprenticeData.totalHours}/4000</p>
+          <p className={s.totalHours}>{apprenticeData.totalHours}/4000</p>
           <HourCategory
             category="PS"
             hoursEarned={apprenticeData.psHours}
