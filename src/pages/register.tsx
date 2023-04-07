@@ -7,23 +7,23 @@ import { InputType } from "../types/input.type";
 /* eslint-disable react/react-in-jsx-scope */
 export default function Register() {
   const { registerUser } = useAuth();
-  const [usernameInput, setUsernameInput] = useState<string>("");
+  // const [usernameInput, setUsernameInput] = useState<string>("");
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
 
   const navigate = useNavigate();
 
   const inputData: InputType[] = [
-    {
-      id: "username",
-      labelText: "Username",
-      type: "text",
-      name: "username",
-      value: usernameInput,
-      placeholder: "Username",
-      onChange: (e) => setUsernameInput(e.target.value),
-      autoComplete: "off",
-    },
+    // {
+    //   id: "username",
+    //   labelText: "Username",
+    //   type: "text",
+    //   name: "username",
+    //   value: usernameInput,
+    //   placeholder: "Username",
+    //   onChange: (e) => setUsernameInput(e.target.value),
+    //   autoComplete: "off",
+    // },
     {
       id: "email",
       labelText: "Email",
@@ -51,8 +51,9 @@ export default function Register() {
     if (!emailInput || !passwordInput) {
       return console.log("no email or password");
     }
-    registerUser(usernameInput, emailInput, passwordInput);
-    setUsernameInput("");
+    // registerUser(usernameInput, emailInput, passwordInput);
+    registerUser(emailInput, passwordInput);
+    // setUsernameInput("");
     setEmailInput("");
     setPasswordInput("");
     navigate("/");

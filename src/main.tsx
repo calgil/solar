@@ -10,6 +10,7 @@ import Root from "./pages/root";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { UnProtectedRoute } from "./UnProtectedRoute";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {

@@ -22,19 +22,21 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
   const addUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitted(true);
-    if (!newUserRole || !newUserEmail) {
+    if (!newUserRole || !newUserEmail || !newUserName) {
       return console.log("Please input role, and email");
     }
 
-    if (newUserRole === "apprentice") {
+    if (newUserRole === "apprentice" && !newUserSupervisor) {
       return console.log("Apprentice must have supervisor");
     }
 
     console.log("supervisor", newUserSupervisor);
 
     createPendingUser({
+      name: newUserName,
       email: newUserEmail,
       role: newUserRole,
+      supervisor: newUserSupervisor,
     })
       .then((success) => {
         console.log(success);
@@ -42,6 +44,7 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
         setNewUserRole("");
         setNewUserName("");
         setNewUserEmail("");
+        setIsSubmitted(false);
       })
       .catch((error) => {
         console.error(error);
@@ -102,6 +105,7 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
             onChange={(e) => setNewUserSupervisor(e.target.value)}
             required
           >
+            <option value="">Please Select a Supervisor</option>
             {supervisors.map((supervisor) => (
               <option key={supervisor.id} value={supervisor.id}>
                 {supervisor.name}

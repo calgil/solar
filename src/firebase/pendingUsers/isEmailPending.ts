@@ -1,4 +1,5 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { NewUser } from "../auth/auth.provider";
 import { db } from "../config";
 
 export const isEmailPending = async (email: string) => {
@@ -11,5 +12,16 @@ export const isEmailPending = async (email: string) => {
     throw new Error("Email not found in pending users collection.");
   }
 
-  return { user: pendingUserDocSnapshot.data(), id: pendingUserDocSnapshot.id };
+  const { name, role, supervisor } = pendingUserDocSnapshot.data();
+
+  const user: NewUser = {
+    name,
+    role,
+  };
+
+  if (supervisor) {
+    user.supervisorId = supervisor;
+  }
+
+  return { id: pendingUserDocSnapshot.id, ...user };
 };

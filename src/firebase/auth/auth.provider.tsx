@@ -12,9 +12,15 @@ import { User } from "../../types/user.type";
 import { auth, db } from "../config";
 import { isEmailPending } from "../pendingUsers/isEmailPending";
 
+export type NewUser = {
+  name: string;
+  role: string;
+  supervisorId?: string;
+};
+
 type AuthContextType = {
   user: User | null;
-  registerUser: (username: string, email: string, password: string) => void;
+  registerUser: (email: string, password: string) => void;
   loginUser: (email: string, password: string) => void;
   logout: () => void;
 };
@@ -24,11 +30,7 @@ const AuthContext = createContext({} as AuthContextType);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const registerUser = async (
-    username: string,
-    email: string,
-    password: string
-  ) => {
+  const registerUser = async (email: string, password: string) => {
     try {
       const userCred = await createUserWithEmailAndPassword(
         auth,
@@ -43,10 +45,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const pendingUser = await isEmailPending(email);
 
-      const data = {
-        name: username,
-        role: pendingUser.user.role,
+      const data: NewUser = {
+        name: pendingUser.name,
+        role: pendingUser.role,
       };
+
+      if (pendingUser.supervisorId) {
+        data.supervisorId = pendingUser.supervisorId;
+      }
 
       await setDoc(doc(db, "users", user.uid), data);
       await deleteDoc(doc(db, "pending users", pendingUser.id));

@@ -13,23 +13,6 @@
     @extend .input;
   }
 
-  // .input.invalid {
-  //   border-color: red;
-  // }
-
-  // // .input:valid {
-  // //   border-color: inherit;
-  // // }
-
-  // .input + span {
-  //   display: none;
-  // }
-
-  // .input.invalid + span {
-  //   display: block;
-  //   color: red;
-  // }
-
   .label.invalid {
     .error {
       color: red;
