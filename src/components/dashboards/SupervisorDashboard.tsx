@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import s from "../../styles/components/SupervisorDashboard.module.scss";
 import { User } from "../../types/user.type";
 import { fetchUsers } from "../../firebase/users/fetchUsers";
@@ -19,12 +19,16 @@ export const SupervisorDashboard = () => {
     setApprentices(apprenticeData);
   };
 
-  if (!apprentices.length) {
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
     getApprentices();
-  }
+  }, [user]);
+
   return (
-    <div>
-      Supervisor Dashboard
+    <div className={s.apprenticeSummary}>
+      <h2 className={s.title}>Apprentice Summary</h2>
       <div className={s.apprenticeContainer}>
         {apprentices.map((app) => (
           <StaffMember key={app.id} user={app} />
