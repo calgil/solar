@@ -149,33 +149,26 @@ export const AddHours = ({ user }: AddHoursProps) => {
   return (
     <form className={s.addHours} onSubmit={uploadMPR}>
       <div className={s.fileContainer}>
-        {!uploadPhotoUrl && (
-          <label className={s.inputContainer}>
-            <div className={s.filePreview}>
-              <img src={fileSearch} alt="file upload" />
-            </div>
-            <span className={s.uploadText}>
-              Drag and drop or <span className={s.green}>upload file</span>
-            </span>
-            <input
-              className={s.fileInput}
-              type="file"
-              name="mprPhoto"
-              accept="image/*"
-              // required
-              // disabled ?
-              onChange={handleFileChange}
+        <label className={s.inputContainer}>
+          <div className={s.filePreview}>
+            <img
+              src={uploadPhotoUrl ? uploadPhotoUrl : fileSearch}
+              alt="file upload"
             />
-          </label>
-        )}
-        {/* {uploadPhotoUrl && (
-          <>
-            <div className={s.uploadContainer}>
-              <img src={uploadPhotoUrl} alt="user selected photo" />
-            </div>
-            <button onClick={deletePhoto}>Remove File</button>
-          </>
-        )} */}
+          </div>
+          <span className={s.uploadText}>
+            Drag and drop or <span className={s.green}>upload file</span>
+          </span>
+          <input
+            className={s.fileInput}
+            type="file"
+            name="mprPhoto"
+            accept="image/*"
+            // required
+            // disabled ?
+            onChange={handleFileChange}
+          />
+        </label>
       </div>
       <div className={s.rightCol}>
         <div className={s.dateContainer}>

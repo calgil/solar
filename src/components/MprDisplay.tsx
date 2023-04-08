@@ -3,6 +3,7 @@ import s from "../styles/components/MprDisplay.module.scss";
 import { MprType } from "../types/mpr.type";
 import { displayDate } from "../utils/displayDate";
 import { HourCategory } from "./HourCategory";
+import { Signature } from "./Signature";
 
 type MprDetailsProps = {
   mpr: MprType;
@@ -29,6 +30,14 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
         hoursEarned={mpr.otherHours}
         totalHours={1000}
       />
+      {/* <Signature
+        text="Apprentice Signature"
+        isSigned={mpr.apprenticeSignature}
+      />
+      <Signature
+        text="Supervisor Signature"
+        isSigned={mpr.supervisorSignature}
+      /> */}
     </div>
   );
 };
