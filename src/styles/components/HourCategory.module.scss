@@ -11,6 +11,7 @@
   font-weight: 400;
   color: a.$primaryText;
   padding: 4px 10px;
+  margin-right: 10px;
 
   .percent {
     position: absolute;
@@ -31,6 +32,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .percent.red {
+    border: 3px solid a.$progressRed;
+  }
+  .percent.yellow {
+    border: 3px solid a.$progressYellow;
+  }
+  .percent.green {
+    border: 3px solid a.$progressGreen;
+  }
+  .percent.overage {
+    border: 3px solid a.$progressOverage;
   }
 
   .line {

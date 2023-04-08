@@ -7,7 +7,10 @@ import { uploadMprPhoto } from "../firebase/mpr/uploadMprPhoto";
 import s from "../styles/components/AddHours.module.scss";
 import { InputType } from "../types/input.type";
 import { User } from "../types/user.type";
-import { InputBase } from "./InputBase";
+import classNames from "classnames";
+import fileSearch from "../assets/fileSearch.png";
+
+const cx = classNames.bind(s);
 
 type AddHoursProps = {
   user: User;
@@ -145,30 +148,41 @@ export const AddHours = ({ user }: AddHoursProps) => {
 
   return (
     <form className={s.addHours} onSubmit={uploadMPR}>
-      <div>
+      <div className={s.fileContainer}>
         {!uploadPhotoUrl && (
-          <input
-            type="file"
-            name="mprPhoto"
-            accept="image/*"
-            // required
-            onChange={handleFileChange}
-          />
+          <label className={s.inputContainer}>
+            <div className={s.filePreview}>
+              <img src={fileSearch} alt="file upload" />
+            </div>
+            <span className={s.uploadText}>
+              Drag and drop or <span className={s.green}>upload file</span>
+            </span>
+            <input
+              className={s.fileInput}
+              type="file"
+              name="mprPhoto"
+              accept="image/*"
+              // required
+              // disabled ?
+              onChange={handleFileChange}
+            />
+          </label>
         )}
-        {uploadPhotoUrl && (
+        {/* {uploadPhotoUrl && (
           <>
             <div className={s.uploadContainer}>
               <img src={uploadPhotoUrl} alt="user selected photo" />
             </div>
             <button onClick={deletePhoto}>Remove File</button>
           </>
-        )}
+        )} */}
       </div>
       <div className={s.rightCol}>
         <div className={s.dateContainer}>
-          <label>
-            Month:
+          <label className={s.label}>
+            Month
             <select
+              className={cx(s.input, s.date)}
               name="month"
               id="month"
               onChange={(e) => setMonth(parseInt(e.target.value))}
@@ -182,9 +196,10 @@ export const AddHours = ({ user }: AddHoursProps) => {
               ))}
             </select>
           </label>
-          <label>
-            Year:
+          <label className={s.label}>
+            Year
             <input
+              className={cx(s.input, s.date)}
               type="number"
               name="year"
               min="2020"
@@ -197,17 +212,29 @@ export const AddHours = ({ user }: AddHoursProps) => {
         </div>
         <div className={s.hours}>
           {hoursInputs.map((input) => (
-            <InputBase key={input.id} input={input} />
+            // <InputBase key={input.id} input={input} />
+            <label key={input.id} className={s.label}>
+              {input.labelText}
+              <input
+                className={s.input}
+                placeholder={input.placeholder}
+                onChange={input.onChange}
+              />
+            </label>
           ))}
         </div>
-        <label>
-          Apprentice has signed
+
+        <label className={`${s.label} ${s.checkbox}`}>
           <input
+            // className={s.checkbox}
             type="checkbox"
             onChange={() => setApprenticeSignature(!apprenticeSignature)}
           />
+          <span>Apprentice has signed</span>
         </label>
-        <input className={s.submitBtn} type="submit" value="Upload" />
+        <div className={s.submitContainer}>
+          <input className={s.submitBtn} type="submit" value="Upload" />
+        </div>
       </div>
     </form>
   );

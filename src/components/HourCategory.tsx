@@ -16,25 +16,20 @@ export const HourCategory = ({
 }: HourCategoryProps) => {
   const percentage = Math.round((hoursEarned / totalHours) * 100);
 
-  const red = cx(s.category, s.red);
-  const green = cx(s.category, s.green);
-  const yellow = cx(s.category, s.yellow);
-  const overage = cx(s.category, s.overage);
-
-  let categoryClass;
+  let percentageClass;
   if (percentage === 0) {
-    categoryClass = red;
+    percentageClass = "red";
   } else if (percentage > 0 && percentage <= 100) {
-    categoryClass = yellow;
+    percentageClass = "yellow";
   } else if (percentage === 100) {
-    categoryClass = green;
+    percentageClass = "green";
   } else {
-    categoryClass = overage;
+    percentageClass = "overage";
   }
   return (
-    <p className={categoryClass}>
-      <div className={s.percent}>{percentage}%</div>
+    <div className={cx(s.category, percentageClass)}>
+      <div className={cx(s.percent, percentageClass)}>{percentage}%</div>
       {category} <span className={s.line}>|</span> {hoursEarned} / {totalHours}
-    </p>
+    </div>
   );
 };

@@ -38,12 +38,7 @@
     margin-top: 15px;
 
     .submitBtn {
-      background-color: a.$success;
-      color: a.$whiteText;
-      border: 1px solid a.$solarMain;
-      border-radius: 8px;
-      padding: 10px;
-      width: 100px;
+      @extend .submitBtn;
     }
   }
 }
