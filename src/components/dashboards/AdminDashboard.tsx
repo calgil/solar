@@ -8,6 +8,7 @@ import { Modal } from "../Modal";
 import { StaffMember } from "../StaffMember";
 import filter from "../../assets/filter.png";
 import search from "../../assets/search.png";
+
 export const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
