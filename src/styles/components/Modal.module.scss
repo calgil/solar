@@ -36,10 +36,11 @@
         border: none;
         cursor: pointer;
         transition: all 200ms ease-in-out;
-        padding: 3px;
+        padding: 8px;
 
         &:hover {
-          outline: 1px solid a.$borderGrey;
+          background-color: a.$yellow;
+          border-radius: 50%;
         }
       }
 
