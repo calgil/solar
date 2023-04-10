@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { months } from "../data/months";
 import { createMpr } from "../firebase/mpr/createMpr";
-// import { createMpr } from "../firebase/mpr/createMpr";
 import { uploadMprPhoto } from "../firebase/mpr/uploadMprPhoto";
 import s from "../styles/components/AddHours.module.scss";
 import { InputType } from "../types/input.type";
@@ -15,9 +14,10 @@ const cx = classNames.bind(s);
 
 type AddHoursProps = {
   user: User;
+  closeModal: () => void;
 };
 
-export const AddHours = ({ user }: AddHoursProps) => {
+export const AddHours = ({ user, closeModal }: AddHoursProps) => {
   const [month, setMonth] = useState(0);
   const [year, setYear] = useState(+new Date().getFullYear());
 
@@ -88,18 +88,14 @@ export const AddHours = ({ user }: AddHoursProps) => {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    console.log("new file!");
 
     if (!selectedFile) {
-      return console.log("add photo");
+      return;
     }
 
     if (!month || !year) {
-      console.log("add date");
       return setPhotoError(true);
     }
-
-    console.log("new file! 2");
 
     setPhotoError(false);
     const date = new Date(year, month - 1);
@@ -166,8 +162,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
       supervisorId: user.supervisorId,
     });
 
-    console.log("upload");
-    // TODO: clear form close modal
+    closeModal();
   };
 
   const monthClass = cx({

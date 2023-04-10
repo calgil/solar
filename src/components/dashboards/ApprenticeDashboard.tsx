@@ -63,7 +63,7 @@ export const ApprenticeDashboard = () => {
           btnClick={openModal}
         />
         <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
-          {user && <AddHours user={user} />}
+          {user && <AddHours user={user} closeModal={closeModal} />}
         </Modal>
       </div>
     </div>

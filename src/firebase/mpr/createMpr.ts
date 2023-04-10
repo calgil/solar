@@ -1,5 +1,6 @@
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../config";
+import { toast } from "react-toastify";
 
 export type UploadMpr = {
   id?: string;
@@ -46,5 +47,11 @@ export const createMpr = async ({
     supervisorId,
   };
 
-  await addDoc(collection(db, "mprs"), data);
+  try {
+    await addDoc(collection(db, "mprs"), data);
+    toast.success("MPR created successfully!");
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to create MPR");
+  }
 };

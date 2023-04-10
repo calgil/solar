@@ -40,11 +40,6 @@ export const AddUser = ({ supervisors, closeModal }: AddUserProps) => {
     })
       .then(() => {
         toast.success("New User added");
-        setNewUserRole("");
-        setNewUserSupervisor("");
-        setNewUserName("");
-        setNewUserEmail("");
-        setIsSubmitted(false);
         closeModal();
       })
       .catch((error) => {
