@@ -6,9 +6,7 @@ export const uploadMprPhoto = (file: File) => {
 
   return uploadBytes(mprRef, file)
     .then(async () => {
-      console.log("uploaded");
       const downloadURL = await getDownloadURL(mprRef);
-      console.log("url", downloadURL);
       return downloadURL;
     })
     .catch((err) => {

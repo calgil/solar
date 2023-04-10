@@ -94,11 +94,8 @@ export const AddHours = ({ user }: AddHoursProps) => {
     const newFile = new File([selectedFile], newFileName, {
       type: selectedFile.type,
     });
-    console.log({ newFile });
     try {
       const photoUrl = await uploadMprPhoto(newFile);
-      // console.log({ photoUrl });
-      console.log("upload photo");
       setUploadPhotoUrl(photoUrl);
     } catch (err) {
       console.error(err);
