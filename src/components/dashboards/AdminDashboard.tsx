@@ -63,7 +63,7 @@ export const AdminDashboard = () => {
           Add User
         </button>
         <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New User">
-          <AddUser supervisors={supervisors} />
+          <AddUser supervisors={supervisors} closeModal={closeModal} />
         </Modal>
       </div>
       <div className={s.usersContainer}>

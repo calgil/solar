@@ -7,9 +7,9 @@ import { uploadMprPhoto } from "../firebase/mpr/uploadMprPhoto";
 import s from "../styles/components/AddHours.module.scss";
 import { InputType } from "../types/input.type";
 import { User } from "../types/user.type";
-import classNames from "classnames";
 import fileSearch from "../assets/fileSearch.png";
 import { generateFileName } from "../utils/generateFileName";
+import classNames from "classnames/bind";
 
 const cx = classNames.bind(s);
 
@@ -33,7 +33,8 @@ export const AddHours = ({ user }: AddHoursProps) => {
   const [apprenticeSignature, setApprenticeSignature] = useState(false);
   const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | null>(null);
 
-  const [dateError, setDateError] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [photoError, setPhotoError] = useState(false);
 
   const hoursInputs: InputType[] = [
     {
@@ -78,15 +79,29 @@ export const AddHours = ({ user }: AddHoursProps) => {
     },
   ];
 
+  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value) {
+      setPhotoError(false);
+      setMonth(+e.target.value);
+    }
+  };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
+    console.log("new file!");
+
     if (!selectedFile) {
       return console.log("add photo");
     }
 
     if (!month || !year) {
-      return setDateError(true);
+      console.log("add date");
+      return setPhotoError(true);
     }
+
+    console.log("new file! 2");
+
+    setPhotoError(false);
     const date = new Date(year, month - 1);
 
     const newFileName = generateFileName(user.name, date, selectedFile.type);
@@ -97,9 +112,11 @@ export const AddHours = ({ user }: AddHoursProps) => {
     try {
       const photoUrl = await uploadMprPhoto(newFile);
       setUploadPhotoUrl(photoUrl);
+      console.log("new file! 3");
     } catch (err) {
       console.error(err);
       setUploadPhotoUrl(null);
+      console.log("error! catch");
     }
   };
 
@@ -110,6 +127,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
 
   const uploadMPR = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitted(true);
 
     if (!+month) {
       return console.log("enter month");
@@ -152,17 +170,43 @@ export const AddHours = ({ user }: AddHoursProps) => {
     // TODO: clear form close modal
   };
 
+  const monthClass = cx({
+    label: true,
+    invalid: (!month && isSubmitted) || photoError,
+  });
+
+  const yearClass = cx({
+    label: true,
+    invalid: !year && isSubmitted,
+  });
+
+  const photoClass = cx({
+    fileContainer: true,
+    invalid: !uploadPhotoUrl && isSubmitted,
+  });
+
+  const hoursClass = cx({
+    hours: true,
+    invalid: !totalHours && isSubmitted,
+  });
+
+  const signatureClass = cx({
+    label: true,
+    checkbox: true,
+    invalid: !apprenticeSignature && isSubmitted,
+  });
+
   return (
     <form className={s.addHours} onSubmit={uploadMPR}>
       <div className={s.leftCol}>
         <div className={s.dateContainer}>
-          <label className={s.label}>
+          <label className={monthClass}>
             Month
             <select
               className={cx(s.input, s.date)}
               name="month"
               id="month"
-              onChange={(e) => setMonth(parseInt(e.target.value))}
+              onChange={handleMonthChange}
               autoFocus
             >
               <option value="">-Choose a month</option>
@@ -173,7 +217,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
               ))}
             </select>
           </label>
-          <label className={s.label}>
+          <label className={yearClass}>
             Year
             <input
               className={cx(s.input, s.date)}
@@ -187,7 +231,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
             />
           </label>
         </div>
-        <div className={s.fileContainer}>
+        <div className={photoClass}>
           <label className={s.inputContainer}>
             <div className={s.filePreview}>
               <img
@@ -204,22 +248,30 @@ export const AddHours = ({ user }: AddHoursProps) => {
               name="mprPhoto"
               accept="image/*"
               onChange={handleFileChange}
+              disabled={!month}
             />
           </label>
         </div>
-        {dateError && (
-          <p className={s.dateError}>
+        {!month && (
+          <p className={s.error}>
             Please choose month/year before uploading photo
           </p>
         )}
+        {isSubmitted && !uploadPhotoUrl && (
+          <p className={s.error}>Please upload photo</p>
+        )}
       </div>
       <div className={s.rightCol}>
-        <div className={s.hours}>
+        <div className={hoursClass}>
+          {isSubmitted && !totalHours && (
+            <p className={s.error}>Please add hours</p>
+          )}
           {hoursInputs.map((input) => (
             <label key={input.id} className={s.label}>
               {input.labelText}
               <input
                 className={s.input}
+                name={input.name}
                 placeholder={input.placeholder}
                 onChange={input.onChange}
               />
@@ -227,7 +279,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
           ))}
         </div>
 
-        <label className={`${s.label} ${s.checkbox}`}>
+        <label className={signatureClass}>
           <input
             type="checkbox"
             onChange={() => setApprenticeSignature(!apprenticeSignature)}

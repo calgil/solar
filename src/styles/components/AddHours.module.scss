@@ -8,6 +8,28 @@
   align-items: center;
   width: 600px;
 
+  .label {
+    font-family: a.$secondaryFont;
+    display: block;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+    margin-top: 8px;
+  }
+
+  .label.invalid {
+    color: a.$alert;
+
+    .input {
+      color: a.$alert;
+    }
+  }
+
+  .error {
+    color: a.$alert;
+    margin-top: 10px;
+  }
+
   .leftCol {
     flex: 1 1;
 
@@ -65,6 +87,9 @@
         }
       }
     }
+    .fileContainer.invalid {
+      border: 1px solid a.$alert;
+    }
 
     .uploadContainer {
       max-width: 100px;
@@ -72,30 +97,15 @@
       overflow: hidden;
     }
 
-    .dateError {
-      margin-top: 20px;
-      color: a.$alert;
-    }
+    // .dateError {
+    //   margin-top: 20px;
+    //   color: a.$alert;
+    // }
   }
 
   .rightCol {
     display: block;
     width: 250px;
-
-    // .dateContainer {
-    //   display: flex;
-    //   align-items: center;
-    //   gap: 10px;
-    // }
-
-    .label {
-      font-family: a.$secondaryFont;
-      display: block;
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 19px;
-      margin-top: 8px;
-    }
 
     .input {
       @extend .input;
@@ -104,12 +114,19 @@
       margin-top: 4px;
     }
 
-    .date {
-      max-width: none;
-    }
+    // .date {
+    //   max-width: none;
+    // }
 
     .hours {
       margin-top: 20px;
+      padding-left: 5px;
+      padding-bottom: 5px;
+    }
+
+    .hours.invalid {
+      border: 1px solid a.$alert;
+      border-radius: 8px;
     }
 
     .checkbox {

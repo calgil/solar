@@ -10,9 +10,10 @@ const cx = classNames.bind(s);
 
 type AddUserProps = {
   supervisors: User[];
+  closeModal: () => void;
 };
 
-export const AddUser = ({ supervisors }: AddUserProps) => {
+export const AddUser = ({ supervisors, closeModal }: AddUserProps) => {
   const [newUserRole, setNewUserRole] = useState<string>("");
   const [newUserSupervisor, setNewUserSupervisor] = useState("");
   const [newUserName, setNewUserName] = useState<string>("");
@@ -22,12 +23,13 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
   const addUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitted(true);
+
     if (!newUserRole || !newUserEmail || !newUserName) {
-      return console.log("Please input role, and email");
+      return;
     }
 
     if (newUserRole === "apprentice" && !newUserSupervisor) {
-      return console.log("Apprentice must have supervisor");
+      return;
     }
 
     createPendingUser({
@@ -36,19 +38,19 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
       role: newUserRole,
       supervisor: newUserSupervisor,
     })
-      .then((success) => {
-        console.log(success);
+      .then(() => {
         toast.success("New User added");
         setNewUserRole("");
+        setNewUserSupervisor("");
         setNewUserName("");
         setNewUserEmail("");
         setIsSubmitted(false);
+        closeModal();
       })
       .catch((error) => {
         console.error(error);
         toast.error("Could not create user");
       });
-    // TODO: add toast for success / failure
   };
 
   const roleClass = cx({
@@ -58,7 +60,7 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
 
   const supervisorClass = cx({
     label: true,
-    invalid: newUserRole === "apprentice" && isSubmitted,
+    invalid: newUserRole === "apprentice" && !newUserSupervisor && isSubmitted,
   });
 
   const nameClass = cx({
