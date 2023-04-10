@@ -131,10 +131,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
       return console.log("apprentices must be supervised");
     }
 
-    console.log("user");
-
     const date = new Date(year, month - 1);
-    console.log({ date });
 
     createMpr({
       userId: user.id,
@@ -152,7 +149,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
     });
 
     console.log("upload");
-    // TODO: clear form
+    // TODO: clear form close modal
   };
 
   return (

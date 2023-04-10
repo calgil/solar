@@ -1,12 +1,9 @@
 @use "../abstracts" as a;
 
 .mprDetails {
-  // display: flex;
-  // align-items: center;
   padding: 10px;
   border: 1px dashed a.$secondaryText;
   border-radius: 8px;
-  // gap: 10px;
   margin-top: 10px;
 
   .hoursContainer,
@@ -23,8 +20,9 @@
   }
 
   .totalHours {
-    margin-right: 30px;
+    margin-right: 40px;
     font-weight: 900;
+    font-style: normal;
   }
 
   .signatureContainer {
