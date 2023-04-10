@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthForm } from "../components/AuthForm";
 import { useAuth } from "../firebase/auth/auth.provider";
 import { InputType } from "../types/input.type";
+import { toast } from "react-toastify";
 
 /* eslint-disable react/react-in-jsx-scope */
 export default function Register() {
@@ -14,16 +15,6 @@ export default function Register() {
   const navigate = useNavigate();
 
   const inputData: InputType[] = [
-    // {
-    //   id: "username",
-    //   labelText: "Username",
-    //   type: "text",
-    //   name: "username",
-    //   value: usernameInput,
-    //   placeholder: "Username",
-    //   onChange: (e) => setUsernameInput(e.target.value),
-    //   autoComplete: "off",
-    // },
     {
       id: "email",
       labelText: "Email",
@@ -49,11 +40,9 @@ export default function Register() {
   const registerNewUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!emailInput || !passwordInput) {
-      return console.log("no email or password");
+      return toast.error("Please enter email and password");
     }
-    // registerUser(usernameInput, emailInput, passwordInput);
     registerUser(emailInput, passwordInput);
-    // setUsernameInput("");
     setEmailInput("");
     setPasswordInput("");
     navigate("/");

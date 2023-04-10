@@ -11,6 +11,7 @@ import { getUserById } from "../../fetch/auth/getUserById";
 import { User } from "../../types/user.type";
 import { auth, db } from "../config";
 import { isEmailPending } from "../pendingUsers/isEmailPending";
+import { toast } from "react-toastify";
 
 export type NewUser = {
   name: string;
@@ -40,6 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const user = userCred.user;
 
       if (!user) {
+        toast.error("Failed to create user");
         throw new Error("Failed to create user.");
       }
 
@@ -64,6 +66,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       setUser(currentUser);
+      toast.success("New account created");
     } catch (error) {
       console.error(error);
       throw new Error("Failed to create user.");
@@ -72,10 +75,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const loginUser = async (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
-      // .then((userCredential) => {
-      //   const user = userCredential.user;
-      // })
+      .then(() => {
+        toast.success("Welcome back!");
+      })
       .catch((err) => {
+        toast.error("Incorrect email or password");
         console.error(err);
       });
   };
