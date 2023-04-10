@@ -8,6 +8,8 @@
   border: 1px solid a.$accentDark;
   border-radius: 8px;
   transition: all 200ms ease-in-out;
+  font-family: a.$secondaryFont;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.01);

@@ -9,6 +9,7 @@ import { MprType } from "../../types/mpr.type";
 import { HoursOverview } from "../HoursOverview";
 import { HoursDetails } from "../HoursDetails";
 import { fetchMprs } from "../../firebase/mpr/getApprenticeMprs";
+// TODO: Make hours line up in column
 
 export const ApprenticeDashboard = () => {
   const { user } = useAuth();

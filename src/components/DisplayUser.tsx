@@ -6,6 +6,8 @@ import { useClickOutside } from "../hooks/useClickOutside";
 import { capitalizeName } from "../utils/capitalizeName";
 import { DownArrow } from "./DownArrow";
 
+// TODO: Fix dropdown styles
+
 export const DisplayUser = () => {
   const { logout, user } = useAuth();
   const [showActions, setShowActions] = useState<boolean>(false);

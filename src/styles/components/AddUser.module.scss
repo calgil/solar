@@ -14,22 +14,30 @@
   }
 
   .label.invalid {
-    .error {
-      color: red;
-      display: block;
-      text-decoration: none;
-    }
+    color: a.$alert;
 
     .input {
-      border-color: red;
+      border: 1px solid a.$alert;
+      color: a.$alert;
     }
+
+    .input::placeholder {
+      color: a.$alert;
+    }
+
+    // .error {
+    //   color: a.$alert;
+    //   display: block;
+    //   text-decoration: none;
+    //   margin-top: 5px;
+    // }
   }
 
-  .label.valid {
-    .error {
-      display: none;
-    }
-  }
+  // .label.valid {
+  //   .error {
+  //     display: none;
+  //   }
+  // }
 
   .submitContainer {
     display: flex;

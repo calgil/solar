@@ -30,8 +30,6 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
       return console.log("Apprentice must have supervisor");
     }
 
-    console.log("supervisor", newUserSupervisor);
-
     createPendingUser({
       name: newUserName,
       email: newUserEmail,
@@ -56,31 +54,27 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
   const roleClass = cx({
     label: true,
     invalid: !newUserRole && isSubmitted,
-    valid: !isSubmitted || newUserRole,
   });
 
   const supervisorClass = cx({
     label: true,
     invalid: newUserRole === "apprentice" && isSubmitted,
-    valid: !isSubmitted || (newUserRole === "apprentice" && !newUserSupervisor),
   });
 
   const nameClass = cx({
     label: true,
     invalid: !newUserName && isSubmitted,
-    valid: !isSubmitted || newUserName,
   });
 
   const emailClass = cx({
     label: true,
     invalid: isSubmitted && !newUserEmail,
-    valid: !isSubmitted || newUserEmail,
   });
 
   return (
     <form className={s.addUser} onSubmit={addUser} noValidate>
       <label className={roleClass} htmlFor="role">
-        Role
+        Role *
         <select
           className={s.input}
           name="role"
@@ -97,7 +91,7 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
       </label>
       {newUserRole === "apprentice" && (
         <label className={supervisorClass} htmlFor="supervisor">
-          Supervisor
+          Supervisor *
           <select
             className={s.input}
             name="supervisor"
@@ -116,9 +110,6 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
       )}
       <label className={nameClass} htmlFor="name">
         Name *
-        {!newUserName && isSubmitted && (
-          <span className={s.error}>Please enter a name</span>
-        )}
         <input
           className={s.input}
           id="name"
@@ -126,13 +117,11 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
           onChange={(e) => setNewUserName(e.target.value)}
           value={newUserName}
           required
+          placeholder={!newUserName && isSubmitted ? "Please enter name" : ""}
         />
       </label>
       <label className={emailClass} htmlFor="email">
         Email *
-        {!newUserEmail && isSubmitted && (
-          <span className={s.error}>Please enter a valid email</span>
-        )}
         <input
           className={s.input}
           id="email"
@@ -140,6 +129,7 @@ export const AddUser = ({ supervisors }: AddUserProps) => {
           onChange={(e) => setNewUserEmail(e.target.value)}
           value={newUserEmail}
           required
+          placeholder={!newUserEmail && isSubmitted ? "Please enter email" : ""}
         />
       </label>
 

@@ -4,6 +4,8 @@ import { useClickOutside } from "../hooks/useClickOutside";
 import s from "../styles/components/Modal.module.scss";
 import close from "../assets/close.png";
 
+// TODO: fix hover state styles
+
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
