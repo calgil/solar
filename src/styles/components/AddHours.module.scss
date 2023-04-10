@@ -8,58 +8,85 @@
   align-items: center;
   width: 600px;
 
-  .fileContainer {
+  .leftCol {
     flex: 1 1;
-    background-color: a.$backgroundGrey;
-    border-radius: 8px;
-    filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.25));
 
-    .inputContainer {
-      display: block;
-      position: relative;
-      width: 100%;
-      min-height: 300px;
+    .dateContainer {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 10px;
 
-      .uploadText {
-        position: absolute;
-        bottom: 33px;
-        font-family: a.$secondaryFont;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 19px;
-
-        .green {
-          color: a.$success;
-        }
-      }
-
-      .fileInput {
-        height: 100%;
-        opacity: 0;
-        position: absolute;
-        width: 100%;
+      .input {
+        @extend .input;
       }
     }
-  }
 
-  .uploadContainer {
-    max-width: 100px;
-    max-height: 100px;
-    overflow: hidden;
+    .fileContainer {
+      margin-top: 30px;
+      background-color: a.$backgroundGrey;
+      border-radius: 8px;
+      filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.25));
+
+      .inputContainer {
+        display: block;
+        position: relative;
+        width: 100%;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .filePreview {
+          max-width: 300px;
+
+          img {
+            width: 100%;
+          }
+        }
+
+        .uploadText {
+          position: absolute;
+          bottom: 33px;
+          font-family: a.$secondaryFont;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 19px;
+
+          .green {
+            color: a.$success;
+          }
+        }
+
+        .fileInput {
+          height: 100%;
+          opacity: 0;
+          position: absolute;
+          width: 100%;
+        }
+      }
+    }
+
+    .uploadContainer {
+      max-width: 100px;
+      max-height: 100px;
+      overflow: hidden;
+    }
+
+    .dateError {
+      margin-top: 20px;
+      color: a.$alert;
+    }
   }
 
   .rightCol {
     display: block;
     width: 250px;
 
-    .dateContainer {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    // .dateContainer {
+    //   display: flex;
+    //   align-items: center;
+    //   gap: 10px;
+    // }
 
     .label {
       font-family: a.$secondaryFont;

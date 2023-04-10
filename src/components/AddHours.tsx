@@ -9,6 +9,7 @@ import { InputType } from "../types/input.type";
 import { User } from "../types/user.type";
 import classNames from "classnames";
 import fileSearch from "../assets/fileSearch.png";
+import { generateFileName } from "../utils/generateFileName";
 
 const cx = classNames.bind(s);
 
@@ -30,8 +31,9 @@ export const AddHours = ({ user }: AddHoursProps) => {
   );
 
   const [apprenticeSignature, setApprenticeSignature] = useState(false);
-
   const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | null>(null);
+
+  const [dateError, setDateError] = useState(false);
 
   const hoursInputs: InputType[] = [
     {
@@ -81,18 +83,23 @@ export const AddHours = ({ user }: AddHoursProps) => {
     if (!selectedFile) {
       return console.log("add photo");
     }
-    const newFileName = `${
-      user.name
-    }--${month}-${year}.${selectedFile.type.slice(-3)}`;
+
+    if (!month || !year) {
+      return setDateError(true);
+    }
+    const date = new Date(year, month - 1);
+
+    const newFileName = generateFileName(user.name, date, selectedFile.type);
+
     const newFile = new File([selectedFile], newFileName, {
       type: selectedFile.type,
     });
     console.log({ newFile });
     try {
-      // const photoUrl = await uploadMprPhoto(newFile);
+      const photoUrl = await uploadMprPhoto(newFile);
       // console.log({ photoUrl });
       console.log("upload photo");
-      // setUploadPhotoUrl(photoUrl);
+      setUploadPhotoUrl(photoUrl);
     } catch (err) {
       console.error(err);
       setUploadPhotoUrl(null);
@@ -111,6 +118,10 @@ export const AddHours = ({ user }: AddHoursProps) => {
       return console.log("enter month");
     }
 
+    if (!uploadPhotoUrl) {
+      return console.log("add photo");
+    }
+
     if (!totalHours) {
       return console.log("add hours");
     }
@@ -123,15 +134,16 @@ export const AddHours = ({ user }: AddHoursProps) => {
       return console.log("apprentices must be supervised");
     }
 
-    console.log("user", user);
+    console.log("user");
 
     const date = new Date(year, month - 1);
+    console.log({ date });
 
     createMpr({
       userId: user.id,
       username: user.name,
       date,
-      photoUrl: `exampleUrl.com`,
+      photoUrl: uploadPhotoUrl,
       psHours,
       oresHours,
       bosHours,
@@ -148,29 +160,7 @@ export const AddHours = ({ user }: AddHoursProps) => {
 
   return (
     <form className={s.addHours} onSubmit={uploadMPR}>
-      <div className={s.fileContainer}>
-        <label className={s.inputContainer}>
-          <div className={s.filePreview}>
-            <img
-              src={uploadPhotoUrl ? uploadPhotoUrl : fileSearch}
-              alt="file upload"
-            />
-          </div>
-          <span className={s.uploadText}>
-            Drag and drop or <span className={s.green}>upload file</span>
-          </span>
-          <input
-            className={s.fileInput}
-            type="file"
-            name="mprPhoto"
-            accept="image/*"
-            // required
-            // disabled ?
-            onChange={handleFileChange}
-          />
-        </label>
-      </div>
-      <div className={s.rightCol}>
+      <div className={s.leftCol}>
         <div className={s.dateContainer}>
           <label className={s.label}>
             Month
@@ -203,9 +193,35 @@ export const AddHours = ({ user }: AddHoursProps) => {
             />
           </label>
         </div>
+        <div className={s.fileContainer}>
+          <label className={s.inputContainer}>
+            <div className={s.filePreview}>
+              <img
+                src={uploadPhotoUrl ? uploadPhotoUrl : fileSearch}
+                alt="file upload"
+              />
+            </div>
+            <span className={s.uploadText}>
+              Drag and drop or <span className={s.green}>upload file</span>
+            </span>
+            <input
+              className={s.fileInput}
+              type="file"
+              name="mprPhoto"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </label>
+        </div>
+        {dateError && (
+          <p className={s.dateError}>
+            Please choose month/year before uploading photo
+          </p>
+        )}
+      </div>
+      <div className={s.rightCol}>
         <div className={s.hours}>
           {hoursInputs.map((input) => (
-            // <InputBase key={input.id} input={input} />
             <label key={input.id} className={s.label}>
               {input.labelText}
               <input
@@ -219,7 +235,6 @@ export const AddHours = ({ user }: AddHoursProps) => {
 
         <label className={`${s.label} ${s.checkbox}`}>
           <input
-            // className={s.checkbox}
             type="checkbox"
             onChange={() => setApprenticeSignature(!apprenticeSignature)}
           />

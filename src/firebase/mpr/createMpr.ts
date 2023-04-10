@@ -1,5 +1,4 @@
 import { addDoc, collection } from "firebase/firestore";
-import { MprType } from "../../types/mpr.type";
 import { db } from "../config";
 
 export type UploadMpr = {
@@ -36,7 +35,7 @@ export const createMpr = async ({
     userId,
     username,
     date,
-    // photoUrl,
+    photoUrl,
     psHours,
     oresHours,
     bosHours,
@@ -46,7 +45,6 @@ export const createMpr = async ({
     supervisorSignature,
     supervisorId,
   };
-  // console.log("cannot upload mpr yet");
 
   await addDoc(collection(db, "mprs"), data);
 };
