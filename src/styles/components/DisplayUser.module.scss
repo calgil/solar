@@ -19,7 +19,21 @@
     position: absolute;
     top: 25px;
     right: 0;
-    background-color: lightgrey;
-    padding: 20px;
+    background-color: a.$backgroundWhite;
+    border: 1px solid a.$secondaryText;
+    border-radius: 8px;
+    padding: 10px;
+
+    .actionBtn {
+      padding: 5px 10px;
+      transition: all 200ms ease-in-out;
+      background-color: transparent;
+      border: none;
+      border-radius: 8px;
+
+      &:hover {
+        background-color: a.$yellow;
+      }
+    }
   }
 }

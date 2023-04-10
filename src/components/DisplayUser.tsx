@@ -31,7 +31,9 @@ export const DisplayUser = () => {
       <DownArrow expand={showActions} />
       {showActions && (
         <div className={s.actionsDropdown}>
-          <button onClick={() => logout()}>Logout</button>
+          <button className={s.actionBtn} onClick={() => logout()}>
+            Logout
+          </button>
         </div>
       )}
     </div>
