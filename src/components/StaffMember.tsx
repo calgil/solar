@@ -37,7 +37,6 @@ export const StaffMember = ({ user }: StaffMemberProps) => {
 
     setApprenticeData(apprenticeHours);
     setLoading(false);
-    console.log({ apprenticeHours });
   };
 
   return (

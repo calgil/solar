@@ -1,47 +1,51 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
-import { fetchUsers } from "../../firebase/users/fetchUsers";
 import s from "../../styles/components/AdminDashboard.module.scss";
-import { User } from "../../types/user.type";
-import { AddUser } from "../AddUser";
-import { Modal } from "../Modal";
-import { StaffMember } from "../StaffMember";
-import filter from "../../assets/filter.png";
-import search from "../../assets/search.png";
+// import { AddUser } from "../AddUser";
+// import { Modal } from "../Modal";
+// import { StaffMember } from "../StaffMember";
+import { Staff } from "../Staff";
 
 export const AdminDashboard = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [showAllMprs, setShowAllMprs] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [users, setUsers] = useState<User[]>([]);
+  // const [searchQuery, setSearchQuery] = useState("");
+  // // const [users, setUsers] = useState<User[]>([]);
 
-  const closeModal = () => setIsModalOpen(false);
+  // const closeModal = () => setIsModalOpen(false);
 
-  const getUsers = async () => {
-    const usersData = await fetchUsers();
-    setUsers(usersData);
-  };
+  // const { isLoading, users, error } = useUsers();
 
-  if (!users.length) {
-    getUsers();
-  }
+  // // probably best to add useEffect here to call getUsers and getAllMprs
 
-  const supervisors = users.filter((user) => user.role === "supervisor");
+  // const supervisors = users.filter((user) => user.role === "supervisor");
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.role.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // const filteredUsers = users.filter(
+  //   (user) =>
+  //     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //     user.role.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
 
-  const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
+  // const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSearchQuery(e.target.value);
+  // };
 
   return (
     <div className={s.container}>
-      <h2 className={s.title}>Administrator Dashboard</h2>
-      <div className={s.adminActions}>
+      <div className={s.adminNav}>
+        <h2 className={s.title} onClick={() => setShowAllMprs(false)}>
+          Administrator Dashboard
+        </h2>
+        <div className={s.links}>
+          <a className={s.link} onClick={() => setShowAllMprs(true)}>
+            Monthly Progress Reports
+          </a>
+        </div>
+      </div>
+      {showAllMprs && <div> All Mprs</div>}
+      {!showAllMprs && <Staff />}
+      {/* <div className={s.adminActions}>
         <button className={s.filterBtn}>
           <div className={s.filterImg}>
             <img src={filter} alt="filter" />
@@ -59,18 +63,19 @@ export const AdminDashboard = () => {
             <img src={search} alt="search" />
           </div>
         </div>
-        <button className={s.addBtn} onClick={() => setIsModalOpen(true)}>
+        <button className={s.link} onClick={() => setIsModalOpen(true)}>
           Add User
         </button>
         <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New User">
           <AddUser supervisors={supervisors} closeModal={closeModal} />
         </Modal>
       </div>
-      <div className={s.usersContainer}>
+      {/* instead of staff member fetching their data, just pass their mprs as props */}
+      {/* <div className={s.usersContainer}>
         {filteredUsers.map((user) => (
           <StaffMember key={user.id} user={user} />
         ))}
-      </div>
+      // </div> */}
     </div>
   );
 };

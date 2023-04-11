@@ -6,72 +6,20 @@
   padding-top: 16px;
 }
 
+.adminNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .title {
   font-size: 1.5625rem;
   font-weight: 600;
   line-height: 33px;
+  cursor: pointer;
 }
 
-.adminActions {
-  margin-top: 50px;
-  max-width: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-
-  .filterBtn {
-    background-color: a.$yellow;
-    border: 1px solid a.$accentDark;
-    border-radius: 8px;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    .filterImg {
-      max-width: 16px;
-    }
-  }
-
-  .searchContainer {
-    position: relative;
-
-    .filterInput {
-      @extend .input;
-      max-width: 200px;
-      padding: 8px 16px;
-      padding-left: 32px;
-    }
-
-    .searchImg {
-      position: absolute;
-      left: 8px;
-      top: 42%;
-      transform: translateY(-50%);
-      width: 13px;
-      height: 16px;
-
-      img {
-        width: 100%;
-      }
-    }
-  }
-
-  .addBtn {
-    background-color: transparent;
-    border: none;
-    font-family: a.$secondaryFont;
-    line-height: 19px;
-    color: a.$solarMain;
-    cursor: pointer;
-    padding-right: 20px;
-
-    &:hover {
-      border-bottom: 1px solid a.$accentDark;
-    }
-  }
-}
-
-.usersContainer {
-  padding-top: 30px;
+.link {
+  @extend .customLink
+  // background-color: transparent;;;
 }
