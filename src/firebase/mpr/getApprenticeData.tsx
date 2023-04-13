@@ -1,11 +1,4 @@
-import {
-  collection,
-  getDocs,
-  // limit,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { MprType } from "../../types/mpr.type";
 import { db } from "../config";
 
@@ -23,7 +16,6 @@ export const getApprenticeData = async (apprenticeId: string) => {
     collection(db, "mprs"),
     where("userId", "==", apprenticeId),
     orderBy("date", "desc")
-    // limit(3)
   );
 
   const mprsSnapshot = await getDocs(mprsQuery);

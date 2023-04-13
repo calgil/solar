@@ -1,0 +1,81 @@
+@use "../abstracts" as a;
+@use "../layouts";
+
+.adminActions {
+  margin-top: 50px;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  .filterBtn {
+    background-color: a.$yellow;
+    border: 1px solid a.$accentDark;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .filterImg {
+      max-width: 16px;
+    }
+  }
+
+  .searchContainer {
+    position: relative;
+
+    .filterInput {
+      @extend .input;
+      max-width: 200px;
+      padding: 8px 16px;
+      padding-left: 32px;
+    }
+
+    .searchImg {
+      position: absolute;
+      left: 8px;
+      top: 42%;
+      transform: translateY(-50%);
+      width: 13px;
+      height: 16px;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.table {
+  margin: 30px 0;
+  font-family: a.$secondaryFont;
+  width: 100%;
+  text-align: center;
+  color: a.$solarMain;
+  border: 1px solid a.$tableBorder;
+  padding: 10px;
+  border-collapse: collapse;
+
+  .headers {
+    font-style: normal;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 19px;
+  }
+
+  .body {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 20px;
+  }
+
+  .row {
+    border: 1px solid a.$tableBorder;
+    height: 40px;
+
+    &:hover {
+      background-color: a.$yellow;
+    }
+  }
+}

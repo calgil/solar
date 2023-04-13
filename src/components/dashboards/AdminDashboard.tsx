@@ -5,6 +5,7 @@ import s from "../../styles/components/AdminDashboard.module.scss";
 // import { Modal } from "../Modal";
 // import { StaffMember } from "../StaffMember";
 import { Staff } from "../Staff";
+import { MonthlyProgressReports } from "../MonthlyProgressReports";
 
 export const AdminDashboard = () => {
   const [showAllMprs, setShowAllMprs] = useState(false);
@@ -43,7 +44,7 @@ export const AdminDashboard = () => {
           </a>
         </div>
       </div>
-      {showAllMprs && <div> All Mprs</div>}
+      {showAllMprs && <MonthlyProgressReports />}
       {!showAllMprs && <Staff />}
       {/* <div className={s.adminActions}>
         <button className={s.filterBtn}>

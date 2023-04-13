@@ -13,6 +13,7 @@
 
   &:hover {
     transform: scale(1.01);
+    border: 1px solid a.$yellow;
   }
 }
 
@@ -31,11 +32,11 @@
 
     .name {
       width: 150px;
-      font-weight: 900;
+      font-weight: 700;
     }
 
     .role {
-      font-weight: 300;
+      font-weight: 400;
     }
   }
 }

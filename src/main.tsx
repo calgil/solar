@@ -7,8 +7,8 @@ import Dashboard from "./pages/dashboard";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Root from "./pages/root";
-import { ProtectedRoute } from "./ProtectedRoute";
-import { UnProtectedRoute } from "./UnProtectedRoute";
+import { ProtectedRoute } from "./pages/ProtectedRoute";
+import { UnProtectedRoute } from "./pages/UnProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
