@@ -54,6 +54,7 @@ export default function Login() {
       onSubmit={login}
       linkText="Create Account"
       linkURL="/register"
+      showForgotPassword
     />
   );
 }

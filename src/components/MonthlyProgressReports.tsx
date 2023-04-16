@@ -7,9 +7,9 @@ import search from "../assets/search.png";
 import { useState } from "react";
 
 export const MonthlyProgressReports = () => {
-  const { mprs, currentPage, totalPages } = useMprPagination();
+  const { mprs, currentPage, totalPages, next, prev } = useMprPagination();
+
   const [searchQuery, setSearchQuery] = useState("");
-  console.log({ currentPage, totalPages });
 
   const filteredMprs = mprs.filter((mpr) =>
     mpr.username.toLowerCase().includes(searchQuery.toLowerCase())
@@ -68,6 +68,17 @@ export const MonthlyProgressReports = () => {
           ))}
         </tbody>
       </table>
+      <div className={s.pagination}>
+        <button onClick={prev} disabled={currentPage === 1}>
+          Previous
+        </button>
+        <span>
+          {currentPage} of {totalPages}
+        </span>
+        <button onClick={next} disabled={currentPage === totalPages}>
+          Next
+        </button>
+      </div>
     </div>
   );
 };

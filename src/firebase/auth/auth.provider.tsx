@@ -4,6 +4,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  sendPasswordResetEmail,
 } from "@firebase/auth";
 import { deleteDoc, doc, setDoc } from "@firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -24,6 +25,7 @@ type AuthContextType = {
   registerUser: (email: string, password: string) => void;
   loginUser: (email: string, password: string) => void;
   logout: () => void;
+  forgotPassword: (email: string) => void;
 };
 
 const AuthContext = createContext({} as AuthContextType);
@@ -89,6 +91,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await signOut(auth);
   };
 
+  const forgotPassword = (email: string) => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        toast.success("Password reset email sent");
+      })
+      .catch((error) => {
+        toast.error("Could not send reset email");
+        console.error(error);
+      });
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -105,7 +118,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, registerUser, loginUser, logout }}>
+    <AuthContext.Provider
+      value={{ user, registerUser, loginUser, logout, forgotPassword }}
+    >
       {children}
     </AuthContext.Provider>
   );

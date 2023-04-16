@@ -51,10 +51,11 @@ export default function Register() {
     <AuthForm
       inputData={inputData}
       title="Create Account"
-      btnText="Create New User"
+      btnText="Create My Account"
       onSubmit={registerNewUser}
       linkText="Sign In"
       linkURL="/login"
+      showForgotPassword
     />
   );
 }

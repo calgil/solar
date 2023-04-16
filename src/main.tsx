@@ -11,6 +11,7 @@ import { ProtectedRoute } from "./pages/ProtectedRoute";
 import { UnProtectedRoute } from "./pages/UnProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ForgotPassword from "./pages/forgot-password";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,14 @@ const router = createBrowserRouter([
             element: (
               <UnProtectedRoute>
                 <Register />
+              </UnProtectedRoute>
+            ),
+          },
+          {
+            path: "forgot-password",
+            element: (
+              <UnProtectedRoute>
+                <ForgotPassword />
               </UnProtectedRoute>
             ),
           },
