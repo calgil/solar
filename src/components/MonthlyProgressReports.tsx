@@ -4,19 +4,42 @@ import s from "../styles/components/MonthlyProgressReports.module.scss";
 import { displayDate } from "../utils/displayDate";
 import filter from "../assets/filter.png";
 import search from "../assets/search.png";
+import leftArrow from "../assets/leftArrow.png";
+import rightArrow from "../assets/rightArrow.png";
 import { useState } from "react";
+import classNames from "classnames/bind";
+const cx = classNames.bind(s);
 
 export const MonthlyProgressReports = () => {
-  const { mprs, currentPage, totalPages, next, prev } = useMprPagination();
+  const {
+    mprs,
+    currentPage,
+    totalPages,
+    next,
+    prev,
+    filterByName,
+    findUnapproved,
+  } = useMprPagination();
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredMprs = mprs.filter((mpr) =>
-    mpr.username.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const pages = Array.from(Array(totalPages).keys());
+
+  // TODO: actually query the database for mprs that match query
 
   const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
+  };
+
+  const findAllByName = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("search for name", searchQuery);
+    filterByName(searchQuery);
+  };
+
+  const showUnapproved = () => {
+    console.log("unapproved");
+    findUnapproved();
   };
 
   return (
@@ -29,16 +52,21 @@ export const MonthlyProgressReports = () => {
           Filters
         </button>
         <div className={s.searchContainer}>
-          <input
-            className={s.filterInput}
-            type="text"
-            placeholder="Filter Staff"
-            onChange={handleSearchQueryChange}
-          />
+          <form onSubmit={findAllByName}>
+            <input
+              className={s.filterInput}
+              type="text"
+              placeholder="Filter Staff"
+              onChange={handleSearchQueryChange}
+            />
+          </form>
           <div className={s.searchImg}>
             <img src={search} alt="search" />
           </div>
         </div>
+        <button onClick={showUnapproved} className={s.link}>
+          Unapproved
+        </button>
       </div>
       <table className={s.table}>
         <thead className={s.headers}>
@@ -54,7 +82,7 @@ export const MonthlyProgressReports = () => {
           </tr>
         </thead>
         <tbody className={s.body}>
-          {filteredMprs.map((mpr) => (
+          {mprs.map((mpr) => (
             <tr className={s.row} key={mpr.id}>
               <td>{mpr.username}</td>
               <td>{displayDate(mpr.date)}</td>
@@ -68,17 +96,38 @@ export const MonthlyProgressReports = () => {
           ))}
         </tbody>
       </table>
-      <div className={s.pagination}>
-        <button onClick={prev} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <span>
-          {currentPage} of {totalPages}
-        </span>
-        <button onClick={next} disabled={currentPage === totalPages}>
-          Next
-        </button>
+      <div className={s.paginationContainer}>
+        <div className={s.pagination}>
+          <button
+            className={s.button}
+            onClick={prev}
+            disabled={currentPage === 1}
+          >
+            <img src={leftArrow} alt="left arrow" />
+          </button>
+          <div className={s.pageNumbers}>
+            {pages.map((page) => {
+              const pageClass = cx({
+                pageNum: true,
+                selected: page + 1 === currentPage,
+              });
+              return (
+                <div key={page} className={pageClass}>
+                  {page + 1}
+                </div>
+              );
+            })}
+          </div>
+          <button
+            className={s.button}
+            onClick={next}
+            disabled={currentPage === totalPages}
+          >
+            <img src={rightArrow} alt="right arrow" />
+          </button>
+        </div>
       </div>
+      {/* <PaginationButtons /> */}
     </div>
   );
 };

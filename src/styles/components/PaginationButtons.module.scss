@@ -1,0 +1,39 @@
+@use "../abstracts" as a;
+
+.paginationContainer {
+  display: flex;
+  justify-content: flex-end;
+  font-family: a.$secondaryFont;
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .button {
+      background: transparent;
+      border: none;
+    }
+
+    .pageNumbers {
+      display: flex;
+      align-items: center;
+
+      .pageNum {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 400;
+        font-size: 14px;
+        padding: 10px;
+        width: 24px;
+        height: 24px;
+
+        background-color: a.$yellow;
+        border-radius: 50%;
+
+        margin: 5px;
+      }
+    }
+  }
+}

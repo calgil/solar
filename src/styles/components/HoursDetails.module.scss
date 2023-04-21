@@ -18,20 +18,21 @@
   .hours {
     display: flex;
     align-items: center;
-    gap: 25px;
+    // gap: 25px;
     padding-left: 16px;
 
     .title {
       font-family: a.$secondaryFont;
       font-weight: 800;
       line-height: 27.32px;
-      margin-right: 100px;
+      width: 170px;
     }
 
     .totalHours {
-      margin-right: 30px;
       font-weight: 900;
       font-style: normal;
+      font-size: 14px;
+      width: 150px;
     }
   }
 
