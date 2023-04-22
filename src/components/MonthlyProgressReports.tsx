@@ -84,7 +84,7 @@ export const MonthlyProgressReports = () => {
         <tbody className={s.body}>
           {mprs.map((mpr) => (
             <tr className={s.row} key={mpr.id}>
-              <td>{mpr.username}</td>
+              <td>{mpr.apprenticeName}</td>
               <td>{displayDate(mpr.date)}</td>
               <td>{mpr.totalHours}</td>
               <td>{mpr.psHours}</td>

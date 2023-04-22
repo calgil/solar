@@ -26,9 +26,10 @@
       justify-content: space-between;
 
       .title {
-        line-height: 24px;
-        font-size: 18px;
+        line-height: 30px;
+        font-size: 25px;
         font-weight: 400;
+        font-family: a.$secondaryFont;
       }
 
       .closeBtn {

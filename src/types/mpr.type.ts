@@ -4,7 +4,7 @@ import "firebase/compat/firestore";
 export type MprType = {
   id?: string;
   userId: string;
-  username: string;
+  apprenticeName: string;
   date: firebase.firestore.Timestamp;
   photoUrl: string;
   psHours: number;

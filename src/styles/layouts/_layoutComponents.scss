@@ -48,3 +48,47 @@
     border-bottom: 1px solid a.$accentDark;
   }
 }
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  margin-top: 16px;
+  font-family: a.$alternativeFont;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18px;
+
+  > span {
+    padding: 0.5rem 0.25rem;
+  }
+
+  > input[type="checkbox"] {
+    height: 20px;
+    min-width: 20px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    border: 1px solid a.$borderGrey;
+    border-radius: 4px;
+    outline: none;
+    transition-duration: 0.3s;
+    background-color: transparent;
+    cursor: pointer;
+
+    &:checked {
+      border: 1px solid a.$borderGrey;
+      background-color: a.$backgroundOrange;
+    }
+
+    &:active {
+      border: 2px solid a.$borderGrey;
+    }
+
+    &:focus {
+      border: 1px solid a.$accentLight;
+    }
+  }
+}

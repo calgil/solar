@@ -75,7 +75,7 @@ export const useMprPagination = (): QueryResult => {
       if (filterName) {
         queryRef = query(
           collectionRef,
-          where("username", "==", filterName),
+          where("apprenticeName", "==", filterName),
           orderBy("date", "desc"),
           limit(10)
         );

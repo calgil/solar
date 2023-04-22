@@ -2,8 +2,14 @@
 
 @font-face {
   font-family: "Avenir";
-  src: url("./fonts/Avenir Regular.ttf");
+  src: url("../../fonts/AvenirRegular.ttf");
+}
+
+@font-face {
+  font-family: "Tahoma";
+  src: url("../../fonts/TahomaRegularFont.ttf");
 }
 
 $primaryFont: "Playfair Display", serif;
 $secondaryFont: "Avenir", sans-serif;
+$alternativeFont: "Tahoma", sans-serif;

@@ -1,11 +1,14 @@
+@use "../abstracts" as a;
+
 .hourProgress {
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
   margin-top: 10px;
+  cursor: pointer;
 
   .title {
-    width: 80px;
+    width: 90px;
   }
 }

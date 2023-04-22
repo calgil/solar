@@ -11,7 +11,12 @@ type MprDetailsProps = {
 
 export const MprDisplay = ({ mpr }: MprDetailsProps) => {
   return (
-    <div className={s.mprDetails}>
+    <div
+      className={s.mprDetails}
+      onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+        e.stopPropagation()
+      }
+    >
       <div className={s.hoursContainer}>
         <p className={s.date}>{displayDate(mpr.date)}</p>
         <p className={s.totalHours}>{mpr.totalHours} Hours</p>
@@ -37,10 +42,10 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
         />
       </div>
       <div className={s.signatureContainer}>
-        <Signature
+        {/* <Signature
           text="Apprentice Signature"
           isSigned={mpr.apprenticeSignature}
-        />
+        /> */}
         <Signature
           text="Supervisor Signature"
           isSigned={mpr.supervisorSignature}

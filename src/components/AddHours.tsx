@@ -15,9 +15,16 @@ const cx = classNames.bind(s);
 type AddHoursProps = {
   user: User;
   closeModal: () => void;
+  supervisor?: boolean;
+  apprentices?: User[];
 };
 
-export const AddHours = ({ user, closeModal }: AddHoursProps) => {
+export const AddHours = ({
+  user,
+  closeModal,
+  supervisor,
+  apprentices,
+}: AddHoursProps) => {
   const [month, setMonth] = useState(0);
   const [year, setYear] = useState(+new Date().getFullYear());
 
@@ -32,6 +39,11 @@ export const AddHours = ({ user, closeModal }: AddHoursProps) => {
 
   const [apprenticeSignature, setApprenticeSignature] = useState(false);
   const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | null>(null);
+
+  const [selectedApprentice, setSelectedApprentice] = useState<User | string>(
+    ""
+  );
+  const [supervisorSignature, setSupervisorSignature] = useState(false);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [photoError, setPhotoError] = useState(false);
@@ -79,6 +91,15 @@ export const AddHours = ({ user, closeModal }: AddHoursProps) => {
     },
   ];
 
+  const handleApprenticeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value) {
+      const apprentice = apprentices?.find((app) => app.id === e.target.value);
+      if (apprentice) {
+        setSelectedApprentice(apprentice);
+      }
+    }
+  };
+
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value) {
       setPhotoError(false);
@@ -125,31 +146,54 @@ export const AddHours = ({ user, closeModal }: AddHoursProps) => {
     e.preventDefault();
     setIsSubmitted(true);
 
-    if (!+month) {
-      return console.log("enter month");
+    if (!+month || !uploadPhotoUrl || !totalHours) {
+      return console.log("missing data");
     }
 
-    if (!uploadPhotoUrl) {
-      return console.log("add photo");
+    if (!supervisor && !apprenticeSignature) {
+      return console.log("apprentice post hours, missing signature");
+    }
+    if (supervisor && !supervisorSignature) {
+      return console.log("supervisor post hours, missing sup signature");
     }
 
-    if (!totalHours) {
-      return console.log("add hours");
-    }
-
-    if (!apprenticeSignature) {
-      return console.log("sign the mpr");
-    }
-
-    if (!user.supervisorId) {
+    if (!supervisor && !user.supervisorId) {
       return console.log("apprentices must be supervised");
     }
 
+    if (supervisor && typeof selectedApprentice === "string") {
+      return;
+    }
+
+    console.log("submit mpr");
+
     const date = new Date(year, month - 1);
+
+    if (supervisor && typeof selectedApprentice !== "string") {
+      createMpr({
+        userId: selectedApprentice.id,
+        apprenticeName: selectedApprentice.name,
+        date,
+        photoUrl: uploadPhotoUrl,
+        psHours,
+        oresHours,
+        bosHours,
+        otherHours,
+        totalHours,
+        apprenticeSignature: true,
+        supervisorSignature,
+        supervisorId: user.id,
+      });
+      return closeModal();
+    }
+
+    if (!user.supervisorId) {
+      return console.log("no supervisor");
+    }
 
     createMpr({
       userId: user.id,
-      username: user.name,
+      apprenticeName: user.name,
       date,
       photoUrl: uploadPhotoUrl,
       psHours,
@@ -164,6 +208,11 @@ export const AddHours = ({ user, closeModal }: AddHoursProps) => {
 
     closeModal();
   };
+
+  const apprenticeClass = cx({
+    label: true,
+    invalid: supervisor && !selectedApprentice && isSubmitted,
+  });
 
   const monthClass = cx({
     label: true,
@@ -191,99 +240,139 @@ export const AddHours = ({ user, closeModal }: AddHoursProps) => {
     invalid: !apprenticeSignature && isSubmitted,
   });
 
+  const supervisorSignatureClass = cx({
+    label: true,
+    checkbox: true,
+    invalid: supervisor && !supervisorSignature && isSubmitted,
+  });
+
   return (
-    <form className={s.addHours} onSubmit={uploadMPR}>
-      <div className={s.leftCol}>
-        <div className={s.dateContainer}>
-          <label className={monthClass}>
-            Month
-            <select
-              className={cx(s.input, s.date)}
-              name="month"
-              id="month"
-              onChange={handleMonthChange}
-              autoFocus
-            >
-              <option value="">-Choose a month</option>
-              {months.map((month) => (
-                <option key={month.id} value={+month.id}>
-                  {month.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className={yearClass}>
-            Year
-            <input
-              className={cx(s.input, s.date)}
-              type="number"
-              name="year"
-              min="2020"
-              max="2060"
-              step="1"
-              value={year}
-              onChange={(e) => setYear(parseInt(e.target.value))}
-            />
-          </label>
-        </div>
-        <div className={photoClass}>
-          <label className={s.inputContainer}>
-            <div className={s.filePreview}>
-              <img
-                src={uploadPhotoUrl ? uploadPhotoUrl : fileSearch}
-                alt="file upload"
-              />
-            </div>
-            <span className={s.uploadText}>
-              Drag and drop or <span className={s.green}>upload file</span>
-            </span>
-            <input
-              className={s.fileInput}
-              type="file"
-              name="mprPhoto"
-              accept="image/*"
-              onChange={handleFileChange}
-              disabled={!month}
-            />
-          </label>
-        </div>
-        {!month && (
-          <p className={s.error}>
-            Please choose month/year before uploading photo
-          </p>
-        )}
-        {isSubmitted && !uploadPhotoUrl && (
-          <p className={s.error}>Please upload photo</p>
-        )}
-      </div>
-      <div className={s.rightCol}>
-        <div className={hoursClass}>
-          {isSubmitted && !totalHours && (
-            <p className={s.error}>Please add hours</p>
-          )}
-          {hoursInputs.map((input) => (
-            <label key={input.id} className={s.label}>
-              {input.labelText}
-              <input
+    <form onSubmit={uploadMPR}>
+      <div className={s.addHours}>
+        <div className={s.leftCol}>
+          {supervisor && (
+            <label className={apprenticeClass}>
+              Apprentice
+              <select
                 className={s.input}
-                name={input.name}
-                placeholder={input.placeholder}
-                onChange={input.onChange}
+                name="apprentice"
+                id="apprentice"
+                onChange={handleApprenticeChange}
+              >
+                <option value="">Choose an apprentice</option>
+                {apprentices?.map((app) => (
+                  <option key={app.id} value={app.id}>
+                    {app.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          <div className={s.dateContainer}>
+            <label className={monthClass}>
+              Month
+              <select
+                className={cx(s.input, s.date)}
+                name="month"
+                id="month"
+                onChange={handleMonthChange}
+                autoFocus={!supervisor}
+              >
+                <option value="">-Choose a month</option>
+                {months.map((month) => (
+                  <option key={month.id} value={+month.id}>
+                    {month.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className={yearClass}>
+              Year
+              <input
+                className={cx(s.input, s.date)}
+                type="number"
+                name="year"
+                min="2020"
+                max="2060"
+                step="1"
+                value={year}
+                onChange={(e) => setYear(parseInt(e.target.value))}
               />
             </label>
-          ))}
+          </div>
+          <div className={photoClass}>
+            <label className={s.inputContainer}>
+              <div className={s.filePreview}>
+                <img
+                  src={uploadPhotoUrl ? uploadPhotoUrl : fileSearch}
+                  alt="file upload"
+                />
+              </div>
+              <span className={s.uploadText}>
+                Drag and drop or <span className={s.green}>upload file</span>
+              </span>
+              <input
+                className={s.fileInput}
+                type="file"
+                name="mprPhoto"
+                accept="image/*"
+                onChange={handleFileChange}
+                disabled={!month}
+              />
+            </label>
+          </div>
+          {!month && (
+            <p className={s.error}>
+              Please choose month/year before uploading photo
+            </p>
+          )}
+          {isSubmitted && !uploadPhotoUrl && (
+            <p className={s.error}>Please upload photo</p>
+          )}
         </div>
-
-        <label className={signatureClass}>
+        <div className={s.rightCol}>
+          <div className={hoursClass}>
+            {isSubmitted && !totalHours && (
+              <p className={s.error}>Please add hours</p>
+            )}
+            {hoursInputs.map((input) => (
+              <label key={input.id} className={s.label}>
+                {input.labelText}
+                <input
+                  className={s.input}
+                  name={input.name}
+                  placeholder={input.placeholder}
+                  onChange={input.onChange}
+                  value={input.value}
+                />
+              </label>
+            ))}
+          </div>
+          {!supervisor && (
+            <label className={signatureClass}>
+              <input
+                type="checkbox"
+                onChange={() => setApprenticeSignature(!apprenticeSignature)}
+              />
+              <span>Apprentice has signed</span>
+            </label>
+          )}
+        </div>
+      </div>
+      {supervisor && (
+        <label className={supervisorSignatureClass}>
           <input
             type="checkbox"
-            onChange={() => setApprenticeSignature(!apprenticeSignature)}
+            onChange={() => setSupervisorSignature(!supervisorSignature)}
           />
-          <span>Apprentice has signed</span>
+          <span className={s.supervisorApproval}>
+            This is true to the best of my knowledge as a member Training Agent
+            of the LRT Apprenticeship Program administered by the RE-JATC
+          </span>
         </label>
-        <div className={s.submitContainer}>
-          <input className={s.submitBtn} type="submit" value="Upload" />
-        </div>
+      )}
+      <div className={s.submitContainer}>
+        <input className={s.submitBtn} type="submit" value="Upload" />
       </div>
     </form>
   );

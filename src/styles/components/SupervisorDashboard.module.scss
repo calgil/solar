@@ -1,5 +1,19 @@
+@use "../layouts";
+@use "../abstracts" as a;
+
 .apprenticeSummary {
   padding: 30px;
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+
+    .link {
+      @extend .customLink;
+      padding-top: 6px;
+    }
+  }
 
   .title {
     font-weight: 600;

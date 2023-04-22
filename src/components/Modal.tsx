@@ -1,10 +1,21 @@
 /* eslint-disable react/react-in-jsx-scope */
+import ReactDOM from "react-dom";
 import { ReactNode, useRef } from "react";
 import { useClickOutside } from "../hooks/useClickOutside";
 import s from "../styles/components/Modal.module.scss";
 import close from "../assets/close.png";
 
-// TODO: fix hover state styles
+type PortalProps = {
+  children: React.ReactNode;
+};
+
+const Portal = ({ children }: PortalProps) => {
+  const modalRoot = document.getElementById("modal-root");
+  if (!modalRoot) {
+    return null;
+  }
+  return ReactDOM.createPortal(children, modalRoot);
+};
 
 type ModalProps = {
   isOpen: boolean;
@@ -23,18 +34,20 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   });
   if (!isOpen) return null;
   return (
-    <div className={s.modalOverlay}>
-      <div ref={modalRef} className={s.modal}>
-        <div className={s.modalHeader}>
-          <h4 className={s.title}>{title}</h4>
-          <button className={s.closeBtn} onClick={onClose}>
-            <div className={s.close}>
-              <img src={close} alt="close" />
-            </div>
-          </button>
+    <Portal>
+      <div className={s.modalOverlay}>
+        <div ref={modalRef} className={s.modal}>
+          <div className={s.modalHeader}>
+            <h4 className={s.title}>{title}</h4>
+            <button className={s.closeBtn} onClick={onClose}>
+              <div className={s.close}>
+                <img src={close} alt="close" />
+              </div>
+            </button>
+          </div>
+          <div className={s.modalBody}>{children}</div>
         </div>
-        <div className={s.modalBody}>{children}</div>
       </div>
-    </div>
+    </Portal>
   );
 };
