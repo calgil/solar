@@ -6,6 +6,7 @@ import { AddBtn } from "./AddBtn";
 import { DownArrow } from "./DownArrow";
 import { HourCategory } from "./HourCategory";
 import { MprDisplay } from "./MprDisplay";
+import { REQUIRED_HOURS } from "../data/hourRequirements";
 
 type HoursDetailsProps = {
   apprenticeData: ApprenticeData;
@@ -53,22 +54,26 @@ export const HoursDetails = ({
             <HourCategory
               category="PS"
               hoursEarned={apprenticeData.psHours}
-              totalHours={1000}
+              totalHours={REQUIRED_HOURS.PSHours}
+              showPercentage
             />
             <HourCategory
               category="BOS"
               hoursEarned={apprenticeData.bosHours}
-              totalHours={1500}
+              totalHours={REQUIRED_HOURS.BOSHours}
+              showPercentage
             />
             <HourCategory
               category="ORES"
               hoursEarned={apprenticeData.oresHours}
-              totalHours={500}
+              totalHours={REQUIRED_HOURS.ORESHours}
+              showPercentage
             />
             <HourCategory
               category="Other"
               hoursEarned={apprenticeData.otherHours}
-              totalHours={1000}
+              totalHours={REQUIRED_HOURS.otherHours}
+              showPercentage
             />
           </div>
         </div>

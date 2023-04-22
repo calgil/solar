@@ -7,12 +7,14 @@ type HourCategoryProps = {
   hoursEarned: number;
   totalHours: number;
   category: string;
+  showPercentage: boolean;
 };
 
 export const HourCategory = ({
   hoursEarned,
   totalHours,
   category,
+  showPercentage,
 }: HourCategoryProps) => {
   const percentage = Math.round((hoursEarned / totalHours) * 100);
 
@@ -26,10 +28,27 @@ export const HourCategory = ({
   } else {
     percentageClass = "overage";
   }
+
+  const categoryClass = cx({
+    category: true,
+    showPercentage,
+  });
   return (
-    <div className={cx(s.category, percentageClass)}>
-      <div className={cx(s.percent, percentageClass)}>{percentage}%</div>
-      {category} <span className={s.line}>|</span> {hoursEarned} / {totalHours}
+    <div className={cx(categoryClass, percentageClass)}>
+      {showPercentage && (
+        <div className={cx(s.percent, percentageClass)}>{percentage}%</div>
+      )}
+      {showPercentage && (
+        <div className={s.showPercentage}>
+          {category} <span className={s.line}>|</span> {hoursEarned} /
+          {totalHours}
+        </div>
+      )}
+      {!showPercentage && (
+        <div className={s.noPercentage}>
+          {category} <span className={s.line}>|</span> {hoursEarned}
+        </div>
+      )}
     </div>
   );
 };

@@ -25,21 +25,25 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
             category="PS"
             hoursEarned={mpr.psHours}
             totalHours={1000}
+            showPercentage={false}
           />
           <HourCategory
             category="BOS"
             hoursEarned={mpr.bosHours}
             totalHours={1500}
+            showPercentage={false}
           />
           <HourCategory
             category="ORES"
             hoursEarned={mpr.oresHours}
             totalHours={500}
+            showPercentage={false}
           />
           <HourCategory
             category="Other"
             hoursEarned={mpr.otherHours}
             totalHours={1000}
+            showPercentage={false}
           />
         </div>
       </div>

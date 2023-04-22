@@ -10,7 +10,6 @@
   font-weight: 400;
   color: a.$primaryText;
   padding: 4px 10px;
-  width: 123px;
 
   .percent {
     position: absolute;
@@ -65,4 +64,8 @@
 
 .category.overage {
   border: 1px solid a.$progressOverage;
+}
+
+.category.showPercentage {
+  width: 123px;
 }
