@@ -29,7 +29,7 @@ export const Signature = ({ text, isSigned, mpr }: SignatureProps) => {
 
   const handleApproval = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    if (user?.role === "apprentice") {
+    if (user?.role === "apprentice" || mpr.supervisorSignature) {
       return;
     }
 
