@@ -6,10 +6,16 @@
 }
 
 @font-face {
+  font-family: "Avenir Light";
+  src: url("../../fonts/avenir-light.ttf");
+}
+
+@font-face {
   font-family: "Tahoma";
   src: url("../../fonts/TahomaRegularFont.ttf");
 }
 
 $primaryFont: "Playfair Display", serif;
 $secondaryFont: "Avenir", sans-serif;
+$secondaryFontLight: "Avenir Light";
 $alternativeFont: "Tahoma", sans-serif;

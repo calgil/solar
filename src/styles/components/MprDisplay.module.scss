@@ -6,6 +6,7 @@
   border-radius: 8px;
   margin-top: 10px;
   cursor: default;
+  // font-family: a.$secondaryFont;
 
   .hoursContainer,
   .signatureContainer {
@@ -18,12 +19,19 @@
   .date {
     width: 170px;
     font-weight: 400;
+    font-family: a.$secondaryFontLight;
   }
 
   .totalHours {
-    margin-right: 40px;
+    width: 113px;
     font-weight: 900;
     font-style: normal;
+  }
+
+  .categoryContainer {
+    display: flex;
+    align-items: center;
+    gap: 30px;
   }
 
   .signatureContainer {

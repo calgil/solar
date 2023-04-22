@@ -8,6 +8,7 @@
   padding: 10px 16px;
   padding-top: 20px;
   cursor: pointer;
+  font-family: a.$secondaryFont;
 
   .collapsedView {
     display: flex;
@@ -22,17 +23,22 @@
     padding-left: 16px;
 
     .title {
-      font-family: a.$secondaryFont;
       font-weight: 800;
       line-height: 27.32px;
-      width: 170px;
+      width: 173px;
     }
 
     .totalHours {
       font-weight: 900;
       font-style: normal;
       font-size: 14px;
-      width: 150px;
+      width: 124px;
+    }
+
+    .categoryContainer {
+      display: flex;
+      align-items: center;
+      gap: 30px;
     }
   }
 

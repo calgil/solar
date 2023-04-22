@@ -3,7 +3,6 @@
 .category {
   position: relative;
   background-color: a.$backgroundLight;
-  border: 1px solid a.$accentLight;
   border-radius: 16px;
   font-family: "Tahoma", sans-serif;
   font-size: 12px;
@@ -11,7 +10,7 @@
   font-weight: 400;
   color: a.$primaryText;
   padding: 4px 10px;
-  margin-right: 25px;
+  width: 123px;
 
   .percent {
     position: absolute;
