@@ -30,6 +30,7 @@ export const HoursOverview = ({
           title="Total Hours"
           earned={totalHours}
           required={REQUIRED_HOURS.totalHours}
+          main
         />
         <DownArrow expand={showDetails} />
       </div>
@@ -39,21 +40,25 @@ export const HoursOverview = ({
             title="PS"
             earned={psHours}
             required={REQUIRED_HOURS.PSHours}
+            main={false}
           />
           <ProgressDisplay
             title="BOS"
             earned={bosHours}
             required={REQUIRED_HOURS.BOSHours}
+            main={false}
           />
           <ProgressDisplay
             title="ORES"
             earned={oresHours}
             required={REQUIRED_HOURS.ORESHours}
+            main={false}
           />
           <ProgressDisplay
             title="Other"
             earned={otherHours}
             required={REQUIRED_HOURS.otherHours}
+            main={false}
           />
         </div>
       )}

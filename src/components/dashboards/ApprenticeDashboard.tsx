@@ -9,6 +9,7 @@ import { MprType } from "../../types/mpr.type";
 import { HoursOverview } from "../HoursOverview";
 import { HoursDetails } from "../HoursDetails";
 import { fetchMprs } from "../../firebase/mpr/getApprenticeMprs";
+import { AddBtn } from "../AddBtn";
 // TODO: Make hours line up in column
 
 export const ApprenticeDashboard = () => {
@@ -49,6 +50,9 @@ export const ApprenticeDashboard = () => {
           {/* <div>Test</div> */}
         </div>
       </div>
+      <div className={s.action}>
+        <AddBtn text="Add Hours" onClick={openModal} />
+      </div>
       <div className={s.details}>
         <HoursDetails
           apprenticeData={{
@@ -59,8 +63,6 @@ export const ApprenticeDashboard = () => {
             otherHours,
             mprs: userMprs,
           }}
-          apprentice={true}
-          btnClick={openModal}
         />
         <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
           {user && <AddHours user={user} closeModal={closeModal} />}

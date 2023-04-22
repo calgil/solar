@@ -8,12 +8,11 @@
   cursor: default;
   // font-family: a.$secondaryFont;
 
-  .hoursContainer,
-  .signatureContainer {
+  .hoursContainer {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding-top: 15px;
+    padding: 15px 0;
   }
 
   .date {
@@ -35,6 +34,8 @@
   }
 
   .signatureContainer {
+    flex: 1;
+    display: flex;
     justify-content: flex-end;
   }
 }

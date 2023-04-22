@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
 import s from "../styles/components/HoursDetails.module.scss";
-import { AddBtn } from "./AddBtn";
 import { DownArrow } from "./DownArrow";
 import { HourCategory } from "./HourCategory";
 import { MprDisplay } from "./MprDisplay";
@@ -10,16 +9,9 @@ import { REQUIRED_HOURS } from "../data/hourRequirements";
 
 type HoursDetailsProps = {
   apprenticeData: ApprenticeData;
-  apprentice?: boolean;
-  btnText?: string;
-  btnClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
-export const HoursDetails = ({
-  apprenticeData,
-  apprentice,
-  btnClick,
-}: HoursDetailsProps) => {
+export const HoursDetails = ({ apprenticeData }: HoursDetailsProps) => {
   const [showDetails, setShowDetails] = useState(false);
   const [numMprsToShow, setNumMprsToShow] = useState(3);
 
@@ -78,9 +70,6 @@ export const HoursDetails = ({
           </div>
         </div>
         <div className={s.actions}>
-          {apprentice && btnClick && (
-            <AddBtn text="Add Hours" onClick={btnClick} />
-          )}
           <DownArrow expand={showDetails} />
         </div>
       </div>

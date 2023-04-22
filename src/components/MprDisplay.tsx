@@ -46,17 +46,13 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
             showPercentage={false}
           />
         </div>
-      </div>
-      <div className={s.signatureContainer}>
-        {/* <Signature
-          text="Apprentice Signature"
-          isSigned={mpr.apprenticeSignature}
-        /> */}
-        <Signature
-          text="Supervisor Signature"
-          isSigned={mpr.supervisorSignature}
-          mpr={mpr}
-        />
+        <div className={s.signatureContainer}>
+          <Signature
+            text="Supervisor Signature"
+            isSigned={mpr.supervisorSignature}
+            mpr={mpr}
+          />
+        </div>
       </div>
     </div>
   );

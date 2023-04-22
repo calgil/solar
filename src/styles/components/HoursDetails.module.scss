@@ -19,11 +19,10 @@
   .hours {
     display: flex;
     align-items: center;
-    // gap: 25px;
     padding-left: 16px;
 
     .title {
-      font-weight: 800;
+      font-weight: 900;
       line-height: 27.32px;
       width: 173px;
     }
@@ -33,6 +32,7 @@
       font-style: normal;
       font-size: 14px;
       width: 124px;
+      line-height: 19px;
     }
 
     .categoryContainer {
