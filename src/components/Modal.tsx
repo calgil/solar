@@ -27,6 +27,11 @@ type ModalProps = {
 export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
+  const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // prevent the click event from propagating up to the parent element
+    onClose();
+  };
+
   useClickOutside({
     containerRef: modalRef,
     onClickOutside: onClose,
@@ -39,7 +44,7 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
         <div ref={modalRef} className={s.modal}>
           <div className={s.modalHeader}>
             <h4 className={s.title}>{title}</h4>
-            <button className={s.closeBtn} onClick={onClose}>
+            <button className={s.closeBtn} onClick={handleClose}>
               <div className={s.close}>
                 <img src={close} alt="close" />
               </div>

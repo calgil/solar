@@ -49,6 +49,7 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
         <Signature
           text="Supervisor Signature"
           isSigned={mpr.supervisorSignature}
+          mpr={mpr}
         />
       </div>
     </div>

@@ -5,14 +5,18 @@ import alert from "../assets/alert.png";
 import classNames from "classnames/bind";
 import { useState } from "react";
 import { Modal } from "./Modal";
+import { useAuth } from "../firebase/auth/auth.provider";
+import { MprType } from "../types/mpr.type";
 
 const cx = classNames.bind(s);
 
 type SignatureProps = {
   text: string;
   isSigned: boolean;
+  mpr: MprType;
 };
-export const Signature = ({ text, isSigned }: SignatureProps) => {
+export const Signature = ({ text, isSigned, mpr }: SignatureProps) => {
+  const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const closeModal = () => setIsModalOpen(false);
@@ -25,8 +29,12 @@ export const Signature = ({ text, isSigned }: SignatureProps) => {
 
   const handleApproval = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
+    if (user?.role === "apprentice") {
+      return;
+    }
+
     setIsModalOpen(true);
-    console.log("i wan tto be approved!");
+    // console.log("i wan tto be approved!");
   };
   return (
     <div className={s.signature} onClick={handleApproval}>
@@ -35,7 +43,10 @@ export const Signature = ({ text, isSigned }: SignatureProps) => {
         <img src={isSigned ? success : alert} alt="signature" />
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal} title="Approve MPR">
-        <div>Hours!</div>
+        <div>
+          Hours! <br />
+          {mpr.id}
+        </div>
       </Modal>
     </div>
   );
