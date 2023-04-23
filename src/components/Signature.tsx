@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Modal } from "./Modal";
 import { useAuth } from "../firebase/auth/auth.provider";
 import { MprType } from "../types/mpr.type";
+import { AddHours } from "./AddHours";
 
 const cx = classNames.bind(s);
 
@@ -32,9 +33,8 @@ export const Signature = ({ text, isSigned, mpr }: SignatureProps) => {
     if (user?.role === "apprentice" || mpr.supervisorSignature) {
       return;
     }
-
     setIsModalOpen(true);
-    // console.log("i wan tto be approved!");
+    console.log("i want to be approved!");
   };
   return (
     <div className={s.signature} onClick={handleApproval}>
@@ -42,11 +42,14 @@ export const Signature = ({ text, isSigned, mpr }: SignatureProps) => {
       <div className={iconClass}>
         <img src={isSigned ? success : alert} alt="signature" />
       </div>
-      <Modal isOpen={isModalOpen} onClose={closeModal} title="Approve MPR">
-        <div>
-          Hours! <br />
-          {mpr.id}
-        </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title={`Approve ${mpr.apprenticeName}'s MPR`}
+      >
+        {user && (
+          <AddHours user={user} closeModal={closeModal} supervisor mpr={mpr} />
+        )}
       </Modal>
     </div>
   );

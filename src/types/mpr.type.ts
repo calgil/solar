@@ -2,8 +2,8 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 
 export type MprType = {
-  id?: string;
-  userId: string;
+  id: string;
+  apprenticeId: string;
   apprenticeName: string;
   date: firebase.firestore.Timestamp;
   photoUrl: string;
@@ -15,4 +15,5 @@ export type MprType = {
   apprenticeSignature: boolean;
   supervisorSignature: boolean;
   supervisorId: string;
+  adminApproval: boolean;
 };

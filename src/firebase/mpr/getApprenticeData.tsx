@@ -14,7 +14,7 @@ export type ApprenticeData = {
 export const getApprenticeData = async (apprenticeId: string) => {
   const mprsQuery = query(
     collection(db, "mprs"),
-    where("userId", "==", apprenticeId),
+    where("apprenticeId", "==", apprenticeId),
     orderBy("date", "desc")
   );
 

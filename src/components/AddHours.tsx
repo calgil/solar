@@ -9,6 +9,8 @@ import { User } from "../types/user.type";
 import fileSearch from "../assets/fileSearch.png";
 import { generateFileName } from "../utils/generateFileName";
 import classNames from "classnames/bind";
+import { MprType } from "../types/mpr.type";
+import { updateMpr } from "../firebase/mpr/updateMpr";
 
 const cx = classNames.bind(s);
 
@@ -17,6 +19,7 @@ type AddHoursProps = {
   closeModal: () => void;
   supervisor?: boolean;
   apprentices?: User[];
+  mpr?: MprType;
 };
 
 export const AddHours = ({
@@ -24,21 +27,30 @@ export const AddHours = ({
   closeModal,
   supervisor,
   apprentices,
+  mpr,
 }: AddHoursProps) => {
-  const [month, setMonth] = useState(0);
-  const [year, setYear] = useState(+new Date().getFullYear());
+  const [month, setMonth] = useState(
+    mpr ? mpr.date.toDate().getMonth() + 1 : 0
+  );
+  const [year, setYear] = useState(
+    mpr?.date.toDate().getFullYear() || +new Date().getFullYear()
+  );
 
-  const [psHours, setPsHours] = useState(0);
-  const [oresHours, setOresHours] = useState(0);
-  const [bosHours, setBosHours] = useState(0);
-  const [otherHours, setOtherHours] = useState(0);
+  const [psHours, setPsHours] = useState(mpr?.psHours || 0);
+  const [oresHours, setOresHours] = useState(mpr?.oresHours || 0);
+  const [bosHours, setBosHours] = useState(mpr?.bosHours || 0);
+  const [otherHours, setOtherHours] = useState(mpr?.otherHours || 0);
   const totalHours = [psHours, oresHours, bosHours, otherHours].reduce(
     (acc, val) => acc + val,
     0
   );
 
-  const [apprenticeSignature, setApprenticeSignature] = useState(false);
-  const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | null>(null);
+  const [apprenticeSignature, setApprenticeSignature] = useState(
+    mpr?.apprenticeSignature || false
+  );
+  const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | null>(
+    mpr?.photoUrl || null
+  );
 
   const [selectedApprentice, setSelectedApprentice] = useState<User | string>(
     ""
@@ -121,7 +133,15 @@ export const AddHours = ({
     setPhotoError(false);
     const date = new Date(year, month - 1);
 
-    const newFileName = generateFileName(user.name, date, selectedFile.type);
+    let newFileName = generateFileName(user.name, date, selectedFile.type);
+
+    if (supervisor && typeof selectedApprentice !== "string") {
+      newFileName = generateFileName(
+        selectedApprentice.name,
+        date,
+        selectedFile.type
+      );
+    }
 
     const newFile = new File([selectedFile], newFileName, {
       type: selectedFile.type,
@@ -144,34 +164,52 @@ export const AddHours = ({
 
   const uploadMPR = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsSubmitted(true);
 
     if (!+month || !uploadPhotoUrl || !totalHours) {
-      return console.log("missing data");
-    }
-
-    if (!supervisor && !apprenticeSignature) {
-      return console.log("apprentice post hours, missing signature");
-    }
-    if (supervisor && !supervisorSignature) {
-      return console.log("supervisor post hours, missing sup signature");
-    }
-
-    if (!supervisor && !user.supervisorId) {
-      return console.log("apprentices must be supervised");
-    }
-
-    if (supervisor && typeof selectedApprentice === "string") {
+      console.log("missing data");
       return;
     }
 
-    console.log("submit mpr");
+    if (!supervisor && !apprenticeSignature) {
+      console.log("apprentice post hours, missing signature");
+      return;
+    }
+    if (supervisor && !supervisorSignature) {
+      console.log("supervisor post hours, missing sup signature");
+      return;
+    }
+
+    if (!supervisor && !user.supervisorId) {
+      console.log("apprentices must be supervised");
+      return;
+    }
 
     const date = new Date(year, month - 1);
 
+    if (mpr) {
+      updateMpr(mpr.id, {
+        apprenticeId: mpr.apprenticeId,
+        apprenticeName: mpr.apprenticeName,
+        date,
+        photoUrl: uploadPhotoUrl,
+        psHours,
+        oresHours,
+        bosHours,
+        otherHours,
+        totalHours,
+        apprenticeSignature: mpr.apprenticeSignature,
+        supervisorSignature,
+        supervisorId: mpr.supervisorId,
+        adminApproval: false,
+      });
+      return closeModal();
+    }
+
     if (supervisor && typeof selectedApprentice !== "string") {
       createMpr({
-        userId: selectedApprentice.id,
+        apprenticeId: selectedApprentice.id,
         apprenticeName: selectedApprentice.name,
         date,
         photoUrl: uploadPhotoUrl,
@@ -183,6 +221,7 @@ export const AddHours = ({
         apprenticeSignature: true,
         supervisorSignature,
         supervisorId: user.id,
+        adminApproval: false,
       });
       return closeModal();
     }
@@ -192,7 +231,7 @@ export const AddHours = ({
     }
 
     createMpr({
-      userId: user.id,
+      apprenticeId: user.id,
       apprenticeName: user.name,
       date,
       photoUrl: uploadPhotoUrl,
@@ -204,6 +243,7 @@ export const AddHours = ({
       apprenticeSignature,
       supervisorSignature: false,
       supervisorId: user.supervisorId,
+      adminApproval: false,
     });
 
     closeModal();
@@ -250,7 +290,7 @@ export const AddHours = ({
     <form onSubmit={uploadMPR}>
       <div className={s.addHours}>
         <div className={s.leftCol}>
-          {supervisor && (
+          {supervisor && !mpr && (
             <label className={apprenticeClass}>
               Apprentice
               <select
@@ -277,6 +317,7 @@ export const AddHours = ({
                 id="month"
                 onChange={handleMonthChange}
                 autoFocus={!supervisor}
+                value={month}
               >
                 <option value="">-Choose a month</option>
                 {months.map((month) => (

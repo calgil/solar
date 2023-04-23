@@ -18,7 +18,8 @@ export const MonthlyProgressReports = () => {
     next,
     prev,
     filterByName,
-    findUnapproved,
+    findSupervisorUnapproved,
+    findAdminUnapproved,
   } = useMprPagination();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,7 +40,12 @@ export const MonthlyProgressReports = () => {
 
   const showUnapproved = () => {
     console.log("unapproved");
-    findUnapproved();
+    findSupervisorUnapproved();
+  };
+
+  const showAdminUnapproved = () => {
+    console.log("admin");
+    findAdminUnapproved();
   };
 
   return (
@@ -65,7 +71,10 @@ export const MonthlyProgressReports = () => {
           </div>
         </div>
         <button onClick={showUnapproved} className={s.link}>
-          Unapproved
+          Supervisor Unapproved
+        </button>
+        <button onClick={showAdminUnapproved} className={s.link}>
+          Admin Unapproved
         </button>
       </div>
       <table className={s.table}>

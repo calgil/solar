@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 /* eslint-disable react/react-in-jsx-scope */
 export default function Register() {
   const { registerUser } = useAuth();
-  // const [usernameInput, setUsernameInput] = useState<string>("");
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
 

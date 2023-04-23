@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export type UploadMpr = {
   id?: string;
-  userId: string;
+  apprenticeId: string;
   apprenticeName: string;
   date: Date;
   photoUrl: string;
@@ -16,10 +16,11 @@ export type UploadMpr = {
   apprenticeSignature: boolean;
   supervisorSignature: boolean;
   supervisorId: string;
+  adminApproval: boolean;
 };
 
 export const createMpr = async ({
-  userId,
+  apprenticeId,
   apprenticeName,
   date,
   photoUrl,
@@ -33,7 +34,7 @@ export const createMpr = async ({
   supervisorId,
 }: UploadMpr) => {
   const data = {
-    userId,
+    apprenticeId,
     apprenticeName,
     date,
     photoUrl,

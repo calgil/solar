@@ -22,7 +22,8 @@ export type QueryResult = {
   next: () => void;
   prev: () => void;
   filterByName: (name: string) => void;
-  findUnapproved: () => void;
+  findSupervisorUnapproved: () => void;
+  findAdminUnapproved: () => void;
 };
 
 export const useMprPagination = (): QueryResult => {
@@ -42,7 +43,10 @@ export const useMprPagination = (): QueryResult => {
     const collectionRef = collection(db, "mprs");
     let queryRef = query(collectionRef);
     if (filterName) {
-      queryRef = query(collectionRef, where("username", "==", filterName));
+      queryRef = query(
+        collectionRef,
+        where("apprenticeName", "==", filterName)
+      );
     }
     const snapshot = await getCountFromServer(queryRef);
     return Number(snapshot.data().count);
@@ -53,7 +57,7 @@ export const useMprPagination = (): QueryResult => {
     direction: "next" | "prev" = "next",
     referenceDoc?: DocumentData,
     filterName?: string,
-    showUnapproved?: boolean
+    showUnapproved?: "supervisor" | "admin"
   ) => {
     try {
       const collectionRef = collection(db, "mprs");
@@ -64,12 +68,22 @@ export const useMprPagination = (): QueryResult => {
       let queryRef = query(collectionRef, orderBy("date", "desc"), limit(10));
 
       if (showUnapproved) {
-        queryRef = query(
-          collectionRef,
-          orderBy("date", "desc"),
-          where("supervisorSignature", "==", false),
-          limit(10)
-        );
+        if (showUnapproved === "supervisor") {
+          queryRef = query(
+            collectionRef,
+            orderBy("date", "desc"),
+            where("supervisorSignature", "==", false),
+            limit(10)
+          );
+        }
+        if (showUnapproved === "admin") {
+          queryRef = query(
+            collectionRef,
+            orderBy("date", "desc"),
+            where("adminApproval", "==", false),
+            limit(10)
+          );
+        }
       }
 
       if (filterName) {
@@ -130,9 +144,13 @@ export const useMprPagination = (): QueryResult => {
     fetchMprs(1, "next", undefined, name);
   };
 
-  const findUnapproved = () => {
+  const findSupervisorUnapproved = () => {
     console.log("find unapproved");
-    fetchMprs(currentPage, "next", undefined, undefined, true);
+    fetchMprs(currentPage, "next", undefined, undefined, "supervisor");
+  };
+
+  const findAdminUnapproved = () => {
+    fetchMprs(currentPage, "next", undefined, undefined, "admin");
   };
 
   useEffect(() => {
@@ -146,6 +164,7 @@ export const useMprPagination = (): QueryResult => {
     next,
     prev,
     filterByName,
-    findUnapproved,
+    findSupervisorUnapproved,
+    findAdminUnapproved,
   };
 };
