@@ -24,6 +24,7 @@ export type QueryResult = {
   filterByName: (name: string) => void;
   findSupervisorUnapproved: () => void;
   findAdminUnapproved: () => void;
+  clearSearch: () => void;
 };
 
 export const useMprPagination = (): QueryResult => {
@@ -153,6 +154,10 @@ export const useMprPagination = (): QueryResult => {
     fetchMprs(currentPage, "next", undefined, undefined, "admin");
   };
 
+  const clearSearch = () => {
+    fetchMprs();
+  };
+
   useEffect(() => {
     fetchMprs();
   }, []);
@@ -166,5 +171,6 @@ export const useMprPagination = (): QueryResult => {
     filterByName,
     findSupervisorUnapproved,
     findAdminUnapproved,
+    clearSearch,
   };
 };

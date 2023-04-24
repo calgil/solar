@@ -20,6 +20,7 @@ export const MonthlyProgressReports = () => {
     filterByName,
     findSupervisorUnapproved,
     findAdminUnapproved,
+    clearSearch,
   } = useMprPagination();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -76,10 +77,11 @@ export const MonthlyProgressReports = () => {
         <button onClick={showAdminUnapproved} className={s.link}>
           Admin Unapproved
         </button>
+        <button onClick={() => clearSearch()}>Clear search</button>
       </div>
       <table className={s.table}>
         <thead className={s.headers}>
-          <tr className={s.row}>
+          <tr className={`${s.row} ${s.top}`}>
             <th>Name</th>
             <th>Date</th>
             <th>Total Time</th>
@@ -87,6 +89,7 @@ export const MonthlyProgressReports = () => {
             <th>ORES Hours</th>
             <th>BOS Hours</th>
             <th>Other Hours</th>
+            <th>Supervisor Approved</th>
             <th>Approved</th>
           </tr>
         </thead>
@@ -101,6 +104,7 @@ export const MonthlyProgressReports = () => {
               <td>{mpr.bosHours}</td>
               <td>{mpr.otherHours}</td>
               <td>{mpr.supervisorSignature ? "Yes" : "No"}</td>
+              <td>{mpr.adminApproval ? "Yes" : "No"}</td>
             </tr>
           ))}
         </tbody>
@@ -136,7 +140,6 @@ export const MonthlyProgressReports = () => {
           </button>
         </div>
       </div>
-      {/* <PaginationButtons /> */}
     </div>
   );
 };

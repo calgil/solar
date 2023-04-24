@@ -68,6 +68,12 @@
     font-weight: 800;
     font-size: 14px;
     line-height: 19px;
+
+    .row.top {
+      &:hover {
+        background-color: transparent;
+      }
+    }
   }
 
   .body {

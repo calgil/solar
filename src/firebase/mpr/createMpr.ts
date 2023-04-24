@@ -32,6 +32,7 @@ export const createMpr = async ({
   apprenticeSignature,
   supervisorSignature,
   supervisorId,
+  adminApproval,
 }: UploadMpr) => {
   const data = {
     apprenticeId,
@@ -46,6 +47,7 @@ export const createMpr = async ({
     apprenticeSignature,
     supervisorSignature,
     supervisorId,
+    adminApproval,
   };
 
   try {
