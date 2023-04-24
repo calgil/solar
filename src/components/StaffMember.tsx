@@ -9,6 +9,7 @@ import {
 } from "../firebase/mpr/getApprenticeData";
 import { HoursDetails } from "./HoursDetails";
 import { DownArrow } from "./DownArrow";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 type StaffMemberProps = {
   user: User;
@@ -48,7 +49,16 @@ export const StaffMember = ({ user }: StaffMemberProps) => {
         </div>
         <DownArrow expand={showDetails} />
       </div>
-      {loading && "loading"}
+      {loading && (
+        <div className={s.loading}>
+          <Player
+            autoplay
+            loop
+            src="https://assets7.lottiefiles.com/packages/lf20_cbj3s3sa.json"
+            style={{ height: "50px", width: "50px" }}
+          ></Player>
+        </div>
+      )}
       {showDetails && !loading && (
         <div className={s.detailsContainer}>
           {apprenticeData && !loading && (
