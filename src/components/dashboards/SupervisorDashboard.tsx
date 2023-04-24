@@ -7,6 +7,7 @@ import { useAuth } from "../../firebase/auth/auth.provider";
 import { StaffMember } from "../StaffMember";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
+import { AddBtn } from "../AddBtn";
 
 export const SupervisorDashboard = () => {
   const { user } = useAuth();
@@ -33,11 +34,9 @@ export const SupervisorDashboard = () => {
 
   return (
     <div className={s.apprenticeSummary}>
-      <div className={s.actions}>
-        <h2 className={s.title}>Apprentice Summary</h2>
-        <a className={s.link} onClick={() => setIsModalOpen(true)}>
-          Add Hours
-        </a>
+      <h2 className={s.title}>Apprentice Summary</h2>
+      <div className={s.action}>
+        <AddBtn text="Add Hours" onClick={() => setIsModalOpen(true)} />
       </div>
       <div className={s.apprenticeContainer}>
         {apprentices.map((app) => (
