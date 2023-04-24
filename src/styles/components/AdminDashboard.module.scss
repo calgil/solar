@@ -10,15 +10,21 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
 
-.title {
-  font-size: 1.5625rem;
-  font-weight: 600;
-  line-height: 33px;
-  cursor: pointer;
-}
+  .title {
+    font-size: 1.5625rem;
+    font-weight: 600;
+    line-height: 33px;
+    cursor: pointer;
+  }
 
-.link {
-  @extend .customLink;
+  .links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    .link {
+      @extend .customLink;
+    }
+  }
 }

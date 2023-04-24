@@ -7,8 +7,7 @@ export const useUsers = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    setIsLoading(true);
+  const getUsers = () => {
     fetchUsers()
       .then((usersData) => {
         setUsers(usersData);
@@ -18,6 +17,12 @@ export const useUsers = () => {
         console.error(err);
         setError(err);
       });
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    getUsers();
   }, []);
+
   return { isLoading, users, error };
 };

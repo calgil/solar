@@ -3,21 +3,14 @@ import { useState } from "react";
 import { useUsers } from "../hooks/useUsers";
 import s from "../styles/components/Staff.module.scss";
 import { StaffMember } from "./StaffMember";
-import { Modal } from "./Modal";
-import { AddUser } from "./AddUser";
 import filter from "../assets/filter.png";
 import search from "../assets/search.png";
 
 export const Staff = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const closeModal = () => setIsModalOpen(false);
-
   const [searchQuery, setSearchQuery] = useState("");
 
   //   TODO: Error/loading
   const { users } = useUsers();
-
-  const supervisors = users.filter((user) => user.role === "supervisor");
 
   const filteredUsers = users.filter(
     (user) =>
@@ -49,12 +42,6 @@ export const Staff = () => {
             <img src={search} alt="search" />
           </div>
         </div>
-        <a className={s.link} onClick={() => setIsModalOpen(true)}>
-          Add User
-        </a>
-        <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New User">
-          <AddUser supervisors={supervisors} closeModal={closeModal} />
-        </Modal>
       </div>
       <div className={s.staffContainer}>
         {filteredUsers.map((user) => (

@@ -92,3 +92,22 @@
     }
   }
 }
+
+.filterBtn {
+  background-color: a.$backgroundWhite;
+  border: 2px solid a.$solarMain;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  line-height: 19px;
+  font-weight: 900;
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.08);
+  }
+}

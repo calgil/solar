@@ -3,19 +3,12 @@
 
 .adminActions {
   margin-top: 50px;
-  max-width: 500px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  gap: 20px;
 
   .filterBtn {
-    background-color: a.$yellow;
-    border: 1px solid a.$accentDark;
-    border-radius: 8px;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    @extend .filterBtn;
 
     .filterImg {
       max-width: 16px;

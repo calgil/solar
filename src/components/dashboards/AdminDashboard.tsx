@@ -3,9 +3,18 @@ import { useState } from "react";
 import s from "../../styles/components/AdminDashboard.module.scss";
 import { Staff } from "../Staff";
 import { MonthlyProgressReports } from "../MonthlyProgressReports";
+import { AddBtn } from "../AddBtn";
+import { useUsers } from "../../hooks/useUsers";
+import { Modal } from "../Modal";
+import { AddUser } from "../AddUser";
 
 export const AdminDashboard = () => {
   const [showAllMprs, setShowAllMprs] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { users } = useUsers();
+
+  const supervisors = users.filter((user) => user.role === "supervisor");
 
   return (
     <div className={s.container}>
@@ -17,7 +26,18 @@ export const AdminDashboard = () => {
           <a className={s.link} onClick={() => setShowAllMprs(true)}>
             Monthly Progress Reports
           </a>
+          <AddBtn text="Add User" onClick={() => setIsModalOpen(true)} />
         </div>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="Add User"
+        >
+          <AddUser
+            supervisors={supervisors}
+            closeModal={() => setIsModalOpen(false)}
+          />
+        </Modal>
       </div>
       {showAllMprs && <MonthlyProgressReports />}
       {!showAllMprs && <Staff />}

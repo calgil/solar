@@ -62,14 +62,6 @@ export const Signature = ({
             mpr={mpr}
           />
         )}
-        {/* {user && user.role === "admin" && (
-          <AddHours
-            user={user}
-            closeModal={closeModal}
-            supervisor="admin"
-            mpr={mpr}
-          />
-        )} */}
       </Modal>
     </div>
   );

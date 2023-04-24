@@ -27,8 +27,6 @@ export const MonthlyProgressReports = () => {
 
   const pages = Array.from(Array(totalPages).keys());
 
-  // TODO: actually query the database for mprs that match query
-
   const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
@@ -49,6 +47,11 @@ export const MonthlyProgressReports = () => {
     findAdminUnapproved();
   };
 
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    clearSearch();
+  };
+
   return (
     <div>
       <div className={s.adminActions}>
@@ -63,7 +66,7 @@ export const MonthlyProgressReports = () => {
             <input
               className={s.filterInput}
               type="text"
-              placeholder="Filter Staff"
+              placeholder="Apprentice Name"
               onChange={handleSearchQueryChange}
             />
           </form>
@@ -77,7 +80,9 @@ export const MonthlyProgressReports = () => {
         <button onClick={showAdminUnapproved} className={s.link}>
           Admin Unapproved
         </button>
-        <button onClick={() => clearSearch()}>Clear search</button>
+        <button className={s.link} onClick={handleClearSearch}>
+          Clear Filters
+        </button>
       </div>
       <table className={s.table}>
         <thead className={s.headers}>
