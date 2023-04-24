@@ -17,7 +17,7 @@ const cx = classNames.bind(s);
 type AddHoursProps = {
   user: User;
   closeModal: () => void;
-  supervisor?: boolean;
+  supervisor?: "supervisor" | "admin";
   apprentices?: User[];
   mpr?: MprType;
 };
@@ -135,9 +135,13 @@ export const AddHours = ({
 
     let newFileName = generateFileName(user.name, date, selectedFile.type);
 
-    if (supervisor && typeof selectedApprentice !== "string") {
+    if (
+      supervisor &&
+      typeof selectedApprentice !== "string" &&
+      mpr?.apprenticeName
+    ) {
       newFileName = generateFileName(
-        selectedApprentice.name,
+        mpr?.apprenticeName,
         date,
         selectedFile.type
       );
@@ -187,6 +191,25 @@ export const AddHours = ({
     }
 
     const date = new Date(year, month - 1);
+
+    if (mpr && supervisor === "admin") {
+      updateMpr(mpr.id, {
+        apprenticeId: mpr.apprenticeId,
+        apprenticeName: mpr.apprenticeName,
+        date,
+        photoUrl: uploadPhotoUrl,
+        psHours,
+        oresHours,
+        bosHours,
+        otherHours,
+        totalHours,
+        apprenticeSignature: mpr.apprenticeSignature,
+        supervisorSignature: mpr.supervisorSignature,
+        supervisorId: mpr.supervisorId,
+        adminApproval: true,
+      });
+      return closeModal();
+    }
 
     if (mpr) {
       updateMpr(mpr.id, {

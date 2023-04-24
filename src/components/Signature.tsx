@@ -15,8 +15,14 @@ type SignatureProps = {
   text: string;
   isSigned: boolean;
   mpr: MprType;
+  authorizedApproval: "supervisor" | "admin";
 };
-export const Signature = ({ text, isSigned, mpr }: SignatureProps) => {
+export const Signature = ({
+  text,
+  isSigned,
+  mpr,
+  authorizedApproval,
+}: SignatureProps) => {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -30,7 +36,8 @@ export const Signature = ({ text, isSigned, mpr }: SignatureProps) => {
 
   const handleApproval = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    if (user?.role === "apprentice" || mpr.supervisorSignature) {
+
+    if (user?.role !== authorizedApproval || user?.role !== "admin") {
       return;
     }
     setIsModalOpen(true);
@@ -48,8 +55,21 @@ export const Signature = ({ text, isSigned, mpr }: SignatureProps) => {
         title={`Approve ${mpr.apprenticeName}'s MPR`}
       >
         {user && (
-          <AddHours user={user} closeModal={closeModal} supervisor mpr={mpr} />
+          <AddHours
+            user={user}
+            closeModal={closeModal}
+            supervisor={authorizedApproval}
+            mpr={mpr}
+          />
         )}
+        {/* {user && user.role === "admin" && (
+          <AddHours
+            user={user}
+            closeModal={closeModal}
+            supervisor="admin"
+            mpr={mpr}
+          />
+        )} */}
       </Modal>
     </div>
   );
