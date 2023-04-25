@@ -8,8 +8,19 @@ import rightArrow from "../assets/rightArrow.png";
 import classNames from "classnames/bind";
 const cx = classNames.bind(s);
 
-export const PaginationButtons = () => {
-  const { totalPages, prev, next, currentPage } = useMprPagination();
+type PaginationButtonsProps = {
+  totalPages: number;
+  prev: () => void;
+  next: () => void;
+  currentPage: number;
+};
+
+export const PaginationButtons = ({
+  totalPages,
+  prev,
+  next,
+  currentPage,
+}: PaginationButtonsProps) => {
   const pages = Array.from(Array(totalPages).keys());
 
   return (
@@ -23,11 +34,17 @@ export const PaginationButtons = () => {
           <img src={leftArrow} alt="left arrow" />
         </button>
         <div className={s.pageNumbers}>
-          {pages.map((page) => (
-            <div key={page} className={s.pageNum}>
-              {page + 1}
-            </div>
-          ))}
+          {pages.map((page) => {
+            const pageClass = cx({
+              pageNum: true,
+              selected: page + 1 === currentPage,
+            });
+            return (
+              <div key={page} className={pageClass}>
+                {page + 1}
+              </div>
+            );
+          })}
         </div>
         <button
           className={s.button}

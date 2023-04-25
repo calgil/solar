@@ -12,6 +12,7 @@ import { useUsers } from "../hooks/useUsers";
 import { ApprenticeSearch } from "./ApprenticeSearch";
 import { User } from "../types/user.type";
 import { MprTable } from "./mprTable";
+import { PaginationButtons } from "./PaginationButtons";
 const cx = classNames.bind(s);
 
 export const MonthlyProgressReports = () => {
@@ -89,37 +90,13 @@ export const MonthlyProgressReports = () => {
         </button>
       </div>
       <MprTable mprs={mprs} />
-      {/* <table className={s.table}>
-        <thead className={s.headers}>
-          <tr className={`${s.row} ${s.top}`}>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Total Time</th>
-            <th>PS Hours</th>
-            <th>ORES Hours</th>
-            <th>BOS Hours</th>
-            <th>Other Hours</th>
-            <th>Supervisor Approved</th>
-            <th>Approved</th>
-          </tr>
-        </thead>
-        <tbody className={s.body}>
-          {mprs.map((mpr) => (
-            <tr className={s.row} key={mpr.id}>
-              <td>{mpr.apprenticeName}</td>
-              <td>{displayDate(mpr.date)}</td>
-              <td>{mpr.totalHours}</td>
-              <td>{mpr.psHours}</td>
-              <td>{mpr.oresHours}</td>
-              <td>{mpr.bosHours}</td>
-              <td>{mpr.otherHours}</td>
-              <td>{mpr.supervisorSignature ? "Yes" : "No"}</td>
-              <td>{mpr.adminApproval ? "Yes" : "No"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
-      <div className={s.paginationContainer}>
+      <PaginationButtons
+        totalPages={totalPages}
+        prev={prev}
+        next={next}
+        currentPage={currentPage}
+      />
+      {/* <div className={s.paginationContainer}>
         <div className={s.pagination}>
           <button
             className={s.button}
@@ -149,7 +126,7 @@ export const MonthlyProgressReports = () => {
             <img src={rightArrow} alt="right arrow" />
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
