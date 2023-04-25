@@ -10,9 +10,15 @@ import { HoursOverview } from "../HoursOverview";
 import { HoursDetails } from "../HoursDetails";
 import { fetchMprs } from "../../firebase/mpr/getApprenticeMprs";
 import { AddBtn } from "../AddBtn";
-// TODO: Make hours line up in column
+import { User } from "../../types/user.type";
 
-export const ApprenticeDashboard = () => {
+type ApprenticeDashboardProps = {
+  apprentice: User;
+};
+
+export const ApprenticeDashboard = ({
+  apprentice,
+}: ApprenticeDashboardProps) => {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -26,11 +32,11 @@ export const ApprenticeDashboard = () => {
   const [userMprs, setUserMprs] = useState<MprType[]>([]);
 
   useEffect(() => {
-    if (user?.id) {
-      const unsubscribe = fetchMprs(user.id, setUserMprs);
+    if (apprentice) {
+      const unsubscribe = fetchMprs(apprentice.id, setUserMprs);
       return () => unsubscribe();
     }
-  }, [user?.id]);
+  }, [apprentice]);
 
   const totalHours = userMprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
   const psHours = userMprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
@@ -41,7 +47,7 @@ export const ApprenticeDashboard = () => {
   return (
     <div>
       <div className={s.overview}>
-        <h2>{capitalizeName(user?.name)}&apos;s Dashboard</h2>
+        <h2>{capitalizeName(apprentice.name)}&apos;s Dashboard</h2>
         <div className={s.totals}>
           <HoursOverview
             hours={{ totalHours, psHours, oresHours, bosHours, otherHours }}
