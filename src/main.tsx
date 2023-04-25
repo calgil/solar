@@ -33,7 +33,11 @@ const router = createBrowserRouter([
           },
           {
             path: "staff/:uid",
-            element: <Staff />,
+            element: (
+              <ProtectedRoute>
+                <Staff />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "login",
