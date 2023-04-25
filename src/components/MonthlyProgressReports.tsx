@@ -28,13 +28,17 @@ export const MonthlyProgressReports = () => {
 
   const { users } = useUsers();
 
-  const apprentices = users.filter((user) => user.role === "apprentice");
+  const apprenticeNames = users
+    .filter((user) => user.role === "apprentice")
+    .map((app) => app.name);
 
   const [inputValue, setInputValue] = useState("");
 
   const pages = Array.from(Array(totalPages).keys());
 
   const handleSelect = (value: string) => {
+    console.log("fuck!!!!", value);
+
     setInputValue(value);
     filterByName(value);
   };
@@ -68,7 +72,7 @@ export const MonthlyProgressReports = () => {
           Filters
         </button>
         <ApprenticeSearch
-          options={apprentices}
+          options={apprenticeNames}
           onSelect={handleSelect}
           onInputChange={onInputChange}
           inputValue={inputValue}

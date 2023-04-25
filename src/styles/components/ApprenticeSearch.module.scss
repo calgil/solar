@@ -8,6 +8,32 @@
     @extend .input;
     padding: 8px 16px;
     padding-left: 32px;
+    position: relative;
+  }
+
+  .optionList {
+    width: 100%;
+    position: absolute;
+    top: 43px;
+    padding: 5px;
+    background-color: a.$backgroundWhite;
+    list-style: none;
+    border: 1px solid a.$solarMain;
+    border-radius: 8px;
+
+    .option {
+      padding: 4px;
+      padding-left: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .option.highlighted {
+      background-color: a.$yellow;
+    }
+  }
+
+  .optionList.closed {
+    display: none;
   }
 
   .searchImg {
@@ -20,31 +46,6 @@
 
     img {
       width: 100%;
-    }
-  }
-
-  .optionsContainer {
-    position: absolute;
-    z-index: 100;
-    top: 50px;
-    width: 100%;
-    padding: 3px 0;
-    background-color: white;
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
-
-    .option {
-      list-style: none;
-      cursor: pointer;
-      padding: 5px;
-      border-radius: 8px;
-
-      &:hover,
-      &:focus {
-        background-color: a.$yellow;
-      }
-    }
-    .option.focused {
-      background-color: red;
     }
   }
 }
