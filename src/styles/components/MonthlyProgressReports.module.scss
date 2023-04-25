@@ -1,23 +1,27 @@
 @use "../abstracts" as a;
 @use "../layouts";
 
-.adminActions {
-  margin-top: 50px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
+.reports {
+  margin-top: 30px;
+  transition: all 200ms ease-in-out;
 
-  .filterBtn {
-    @extend .filterBtn;
+  .adminActions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 
-    .filterImg {
-      max-width: 16px;
+    .filterBtn {
+      @extend .filterBtn;
+
+      .filterImg {
+        max-width: 16px;
+      }
     }
-  }
 
-  .link {
-    @extend .customLink;
-    background: transparent;
-    border: none;
+    .link {
+      @extend .customLink;
+      background: transparent;
+      border: none;
+    }
   }
 }

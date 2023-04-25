@@ -63,7 +63,7 @@ export const MonthlyProgressReports = () => {
   };
 
   return (
-    <div>
+    <div className={s.reports}>
       <div className={s.adminActions}>
         <button className={s.filterBtn}>
           <div className={s.filterImg}>
@@ -87,7 +87,7 @@ export const MonthlyProgressReports = () => {
           Clear Filters
         </button>
         <button className={s.link} onClick={handlePrint}>
-          Print
+          Print Report
         </button>
       </div>
       <MprTable mprs={mprs} tableRef={componentRef} />
