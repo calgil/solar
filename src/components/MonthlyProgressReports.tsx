@@ -11,6 +11,7 @@ import classNames from "classnames/bind";
 import { useUsers } from "../hooks/useUsers";
 import { ApprenticeSearch } from "./ApprenticeSearch";
 import { User } from "../types/user.type";
+import { MprTable } from "./mprTable";
 const cx = classNames.bind(s);
 
 export const MonthlyProgressReports = () => {
@@ -87,7 +88,8 @@ export const MonthlyProgressReports = () => {
           Clear Filters
         </button>
       </div>
-      <table className={s.table}>
+      <MprTable mprs={mprs} />
+      {/* <table className={s.table}>
         <thead className={s.headers}>
           <tr className={`${s.row} ${s.top}`}>
             <th>Name</th>
@@ -116,7 +118,7 @@ export const MonthlyProgressReports = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
       <div className={s.paginationContainer}>
         <div className={s.pagination}>
           <button

@@ -22,44 +22,44 @@
   }
 }
 
-.table {
-  margin: 30px 0;
-  font-family: a.$secondaryFont;
-  width: 100%;
-  text-align: center;
-  color: a.$solarMain;
-  border: 1px solid a.$tableBorder;
-  padding: 10px;
-  border-collapse: collapse;
+// .table {
+//   margin: 30px 0;
+//   font-family: a.$secondaryFont;
+//   width: 100%;
+//   text-align: center;
+//   color: a.$solarMain;
+//   border: 1px solid a.$tableBorder;
+//   padding: 10px;
+//   border-collapse: collapse;
 
-  .headers {
-    font-style: normal;
-    font-weight: 800;
-    font-size: 14px;
-    line-height: 19px;
+//   .headers {
+//     font-style: normal;
+//     font-weight: 800;
+//     font-size: 14px;
+//     line-height: 19px;
 
-    .row.top {
-      &:hover {
-        background-color: transparent;
-      }
-    }
-  }
+//     .row.top {
+//       &:hover {
+//         background-color: transparent;
+//       }
+//     }
+//   }
 
-  .body {
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 20px;
-  }
+//   .body {
+//     font-size: 15px;
+//     font-weight: 400;
+//     line-height: 20px;
+//   }
 
-  .row {
-    border: 1px solid a.$tableBorder;
-    height: 40px;
+//   .row {
+//     border: 1px solid a.$tableBorder;
+//     height: 40px;
 
-    &:hover {
-      background-color: a.$yellow;
-    }
-  }
-}
+//     &:hover {
+//       background-color: a.$yellow;
+//     }
+//   }
+// }
 
 .paginationContainer {
   display: flex;
