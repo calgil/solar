@@ -1,19 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useMprPagination } from "../hooks/useMprPagination";
 import s from "../styles/components/MonthlyProgressReports.module.scss";
-import { displayDate } from "../utils/displayDate";
 import filter from "../assets/filter.png";
-import search from "../assets/search.png";
-import leftArrow from "../assets/leftArrow.png";
-import rightArrow from "../assets/rightArrow.png";
-import { useState } from "react";
-import classNames from "classnames/bind";
+import { useRef, useState } from "react";
 import { useUsers } from "../hooks/useUsers";
 import { ApprenticeSearch } from "./ApprenticeSearch";
-import { User } from "../types/user.type";
 import { MprTable } from "./mprTable";
 import { PaginationButtons } from "./PaginationButtons";
-const cx = classNames.bind(s);
+import { useReactToPrint } from "react-to-print";
 
 export const MonthlyProgressReports = () => {
   const {
@@ -30,13 +24,17 @@ export const MonthlyProgressReports = () => {
 
   const { users } = useUsers();
 
+  const componentRef = useRef(null);
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
   const apprenticeNames = users
     .filter((user) => user.role === "apprentice")
     .map((app) => app.name);
 
   const [inputValue, setInputValue] = useState("");
-
-  const pages = Array.from(Array(totalPages).keys());
 
   const handleSelect = (value: string) => {
     console.log("fuck!!!!", value);
@@ -88,8 +86,11 @@ export const MonthlyProgressReports = () => {
         <button className={s.link} onClick={handleClearSearch}>
           Clear Filters
         </button>
+        <button className={s.link} onClick={handlePrint}>
+          Print
+        </button>
       </div>
-      <MprTable mprs={mprs} />
+      <MprTable mprs={mprs} tableRef={componentRef} />
       <PaginationButtons
         totalPages={totalPages}
         prev={prev}

@@ -5,11 +5,12 @@ import { displayDate } from "../utils/displayDate";
 
 type MprTableProps = {
   mprs: MprType[];
+  tableRef: React.RefObject<HTMLTableElement>;
 };
 
-export const MprTable = ({ mprs }: MprTableProps) => {
+export const MprTable = ({ mprs, tableRef }: MprTableProps) => {
   return (
-    <table className={s.table}>
+    <table className={s.table} ref={tableRef}>
       <thead className={s.headers}>
         <tr className={`${s.row} ${s.top}`}>
           <th>Name</th>
