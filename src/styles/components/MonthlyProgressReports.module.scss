@@ -15,30 +15,6 @@
     }
   }
 
-  .searchContainer {
-    position: relative;
-
-    .filterInput {
-      @extend .input;
-      max-width: 200px;
-      padding: 8px 16px;
-      padding-left: 32px;
-    }
-
-    .searchImg {
-      position: absolute;
-      left: 8px;
-      top: 42%;
-      transform: translateY(-50%);
-      width: 13px;
-      height: 16px;
-
-      img {
-        width: 100%;
-      }
-    }
-  }
-
   .link {
     @extend .customLink;
     background: transparent;

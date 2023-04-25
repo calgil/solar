@@ -8,6 +8,9 @@ import leftArrow from "../assets/leftArrow.png";
 import rightArrow from "../assets/rightArrow.png";
 import { useState } from "react";
 import classNames from "classnames/bind";
+import { useUsers } from "../hooks/useUsers";
+import { ApprenticeSearch } from "./ApprenticeSearch";
+import { User } from "../types/user.type";
 const cx = classNames.bind(s);
 
 export const MonthlyProgressReports = () => {
@@ -23,18 +26,21 @@ export const MonthlyProgressReports = () => {
     clearSearch,
   } = useMprPagination();
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const { users } = useUsers();
+
+  const apprentices = users.filter((user) => user.role === "apprentice");
+
+  const [inputValue, setInputValue] = useState("");
 
   const pages = Array.from(Array(totalPages).keys());
 
-  const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+  const handleSelect = (value: string) => {
+    setInputValue(value);
+    filterByName(value);
   };
 
-  const findAllByName = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("search for name", searchQuery);
-    filterByName(searchQuery);
+  const onInputChange = (value: string) => {
+    setInputValue(value);
   };
 
   const showUnapproved = () => {
@@ -48,8 +54,8 @@ export const MonthlyProgressReports = () => {
   };
 
   const handleClearSearch = () => {
-    setSearchQuery("");
     clearSearch();
+    setInputValue("");
   };
 
   return (
@@ -61,19 +67,12 @@ export const MonthlyProgressReports = () => {
           </div>
           Filters
         </button>
-        <div className={s.searchContainer}>
-          <form onSubmit={findAllByName}>
-            <input
-              className={s.filterInput}
-              type="text"
-              placeholder="Apprentice Name"
-              onChange={handleSearchQueryChange}
-            />
-          </form>
-          <div className={s.searchImg}>
-            <img src={search} alt="search" />
-          </div>
-        </div>
+        <ApprenticeSearch
+          options={apprentices}
+          onSelect={handleSelect}
+          onInputChange={onInputChange}
+          inputValue={inputValue}
+        />
         <button onClick={showUnapproved} className={s.link}>
           Supervisor Unapproved
         </button>

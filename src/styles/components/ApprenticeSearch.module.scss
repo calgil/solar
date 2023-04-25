@@ -1,0 +1,50 @@
+@use "../abstracts" as a;
+@use "../layouts";
+
+.searchContainer {
+  position: relative;
+
+  .searchInput {
+    @extend .input;
+    padding: 8px 16px;
+    padding-left: 32px;
+  }
+
+  .searchImg {
+    position: absolute;
+    left: 8px;
+    top: 42%;
+    transform: translateY(-50%);
+    width: 13px;
+    height: 16px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .optionsContainer {
+    position: absolute;
+    z-index: 100;
+    top: 50px;
+    width: 100%;
+    padding: 3px 0;
+    background-color: white;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+
+    .option {
+      list-style: none;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 8px;
+
+      &:hover,
+      &:focus {
+        background-color: a.$yellow;
+      }
+    }
+    .option.focused {
+      background-color: red;
+    }
+  }
+}
