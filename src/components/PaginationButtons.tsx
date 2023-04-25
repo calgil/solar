@@ -1,6 +1,4 @@
 /* eslint-disable react/react-in-jsx-scope */
-
-import { useMprPagination } from "../hooks/useMprPagination";
 import s from "../styles/components/PaginationButtons.module.scss";
 import leftArrow from "../assets/leftArrow.png";
 import rightArrow from "../assets/rightArrow.png";
@@ -24,13 +22,11 @@ export const PaginationButtons = ({
   const pages = Array.from(Array(totalPages).keys());
 
   return (
-    <div className={s.paginationContainer}>
+    <div
+      className={cx({ paginationContainer: true, hidden: totalPages === 1 })}
+    >
       <div className={s.pagination}>
-        <button
-          className={s.button}
-          onClick={prev}
-          //   disabled={currentPage === 1}
-        >
+        <button className={s.button} onClick={prev}>
           <img src={leftArrow} alt="left arrow" />
         </button>
         <div className={s.pageNumbers}>
@@ -46,11 +42,7 @@ export const PaginationButtons = ({
             );
           })}
         </div>
-        <button
-          className={s.button}
-          onClick={next}
-          //   disabled={currentPage === totalPages}
-        >
+        <button className={s.button} onClick={next}>
           <img src={rightArrow} alt="right arrow" />
         </button>
       </div>
