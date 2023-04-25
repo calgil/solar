@@ -33,6 +33,12 @@
     .name {
       width: 150px;
       font-weight: 700;
+      color: a.$primaryText;
+      text-decoration: none;
+
+      &:visited {
+        color: a.$primaryText;
+      }
     }
 
     .role {

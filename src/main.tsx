@@ -12,6 +12,7 @@ import { UnProtectedRoute } from "./pages/UnProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ForgotPassword from "./pages/forgot-password";
+import Staff from "./pages/staff";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
                 <Dashboard />
               </ProtectedRoute>
             ),
+          },
+          {
+            path: "staff/:uid",
+            element: <Staff />,
           },
           {
             path: "login",

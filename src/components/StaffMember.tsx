@@ -10,6 +10,7 @@ import {
 import { HoursDetails } from "./HoursDetails";
 import { DownArrow } from "./DownArrow";
 import { Player } from "@lottiefiles/react-lottie-player";
+import { Link } from "react-router-dom";
 
 type StaffMemberProps = {
   user: User;
@@ -44,7 +45,9 @@ export const StaffMember = ({ user }: StaffMemberProps) => {
     <div className={s.staffMember} onClick={handleExpandClick}>
       <div className={s.staffContainer}>
         <div className={s.staffInfo}>
-          <p className={s.name}>{capitalizeName(user.name)}</p>
+          <Link className={s.name} to={`staff/${user.id}`}>
+            {capitalizeName(user.name)}
+          </Link>
           <p className={s.role}>{capitalizeName(user.role)}</p>
         </div>
         <DownArrow expand={showDetails} />

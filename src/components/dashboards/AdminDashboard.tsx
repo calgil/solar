@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
 import s from "../../styles/components/AdminDashboard.module.scss";
-import { Staff } from "../Staff";
+import { DisplayStaff } from "../DisplayStaff";
 import { MonthlyProgressReports } from "../MonthlyProgressReports";
 import { AddBtn } from "../AddBtn";
 import { useUsers } from "../../hooks/useUsers";
@@ -40,7 +40,7 @@ export const AdminDashboard = () => {
         </Modal>
       </div>
       {showAllMprs && <MonthlyProgressReports />}
-      {!showAllMprs && <Staff />}
+      {!showAllMprs && <DisplayStaff />}
     </div>
   );
 };

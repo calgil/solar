@@ -6,7 +6,7 @@ import { StaffMember } from "./StaffMember";
 import filter from "../assets/filter.png";
 import search from "../assets/search.png";
 
-export const Staff = () => {
+export const DisplayStaff = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   //   TODO: Error/loading
