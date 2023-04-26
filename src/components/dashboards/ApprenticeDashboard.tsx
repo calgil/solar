@@ -14,10 +14,12 @@ import { User } from "../../types/user.type";
 
 type ApprenticeDashboardProps = {
   apprentice: User;
+  edit?: boolean;
 };
 
 export const ApprenticeDashboard = ({
   apprentice,
+  edit,
 }: ApprenticeDashboardProps) => {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,6 +59,7 @@ export const ApprenticeDashboard = ({
         </div>
       </div>
       <div className={s.action}>
+        {edit && <a className={s.editBtn}> Edit Profile</a>}
         <AddBtn text="Add Hours" onClick={openModal} />
       </div>
       <div className={s.details}>

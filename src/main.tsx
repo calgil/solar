@@ -12,8 +12,7 @@ import { UnProtectedRoute } from "./pages/UnProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ForgotPassword from "./pages/forgot-password";
-import Staff from "./pages/staff";
-import { fetchUserById } from "./firebase/users/fetchUserById";
+import Staff, { loader as staffLoader } from "./pages/staff";
 
 const router = createBrowserRouter([
   {
@@ -39,12 +38,7 @@ const router = createBrowserRouter([
                 <Staff />
               </ProtectedRoute>
             ),
-            loader: async ({ params }) => {
-              if (params.uid) {
-                const user = await fetchUserById(params.uid);
-                return { user };
-              }
-            },
+            loader: staffLoader,
           },
           {
             path: "login",

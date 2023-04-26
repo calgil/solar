@@ -1,23 +1,29 @@
 /* eslint-disable react/react-in-jsx-scope */
 
-import { useLoaderData } from "react-router-dom";
+import { LoaderFunction, useLoaderData } from "react-router-dom";
 import { fetchUserById } from "../firebase/users/fetchUserById";
 import { User } from "../types/user.type";
+import { ApprenticeDashboard } from "../components/dashboards/ApprenticeDashboard";
 
-export async function loader({ params }: { params: { uid: string } }) {
+// type LoaderData = {user: User}
+
+export const loader: LoaderFunction = async ({ params }) => {
   if (params.uid) {
     const user = await fetchUserById(params.uid);
-    if (user) {
-      return { user };
-    }
-    throw new Error("Invalid uid");
+    return { user };
   }
-  throw new Error("Invalid uid");
-}
+  throw new Error("Invalid params");
+};
 
 export default function Staff() {
-  const { user } = useLoaderData() as { user: User };
+  const { user } = useLoaderData() as Awaited<{ user: User }>;
   console.log(user);
 
-  return <div>Staff Member </div>;
+  return (
+    <>
+      {user?.role === "apprentice" && (
+        <ApprenticeDashboard apprentice={user} edit />
+      )}
+    </>
+  );
 }
