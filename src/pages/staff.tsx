@@ -15,6 +15,8 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export default function Staff() {
   const { user } = useLoaderData() as Awaited<{ user: User }>;
+  console.log({ user });
+
   return (
     <>
       {user?.role === "apprentice" && (
