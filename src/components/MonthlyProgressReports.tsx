@@ -5,7 +5,7 @@ import filter from "../assets/filter.png";
 import { useRef, useState } from "react";
 import { useUsers } from "../hooks/useUsers";
 import { ApprenticeSearch } from "./ApprenticeSearch";
-import { MprTable } from "./mprTable";
+import { MprTable } from "./MprTable";
 import { PaginationButtons } from "./PaginationButtons";
 import { useReactToPrint } from "react-to-print";
 
