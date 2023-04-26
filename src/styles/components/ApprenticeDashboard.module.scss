@@ -21,6 +21,7 @@
 
   .editBtn {
     border: none;
+    background-color: transparent;
     @extend .customLink;
   }
 }

@@ -31,6 +31,17 @@ export const ApprenticeDashboard = ({
     setIsModalOpen(true);
   };
 
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const closeEditModal = () => setIsEditModalOpen(false);
+
+  const openEditModal = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    setIsEditModalOpen(true);
+  };
+
   const [userMprs, setUserMprs] = useState<MprType[]>([]);
 
   useEffect(() => {
@@ -59,7 +70,11 @@ export const ApprenticeDashboard = ({
         </div>
       </div>
       <div className={s.action}>
-        {edit && <a className={s.editBtn}> Edit Profile</a>}
+        {edit && user?.role === "admin" && (
+          <button className={s.editBtn} onClick={openEditModal}>
+            Edit Profile
+          </button>
+        )}
         <AddBtn text="Add Hours" onClick={openModal} />
       </div>
       <div className={s.details}>
@@ -73,6 +88,13 @@ export const ApprenticeDashboard = ({
             mprs: userMprs,
           }}
         />
+        <Modal
+          isOpen={isEditModalOpen}
+          onClose={closeEditModal}
+          title="Edit Profile"
+        >
+          Edit!!
+        </Modal>
         <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
           {user && <AddHours user={user} closeModal={closeModal} />}
         </Modal>
