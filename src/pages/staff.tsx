@@ -10,7 +10,7 @@ export const loader: LoaderFunction = async ({ params }) => {
     const user = await fetchUserById(params.uid);
     return { user };
   }
-  throw new Error("Invalid params!");
+  throw new Error("Invalid params");
 };
 
 export default function Staff() {
