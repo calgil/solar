@@ -36,6 +36,10 @@
       color: a.$primaryText;
       text-decoration: none;
 
+      &:hover {
+        text-decoration: underline;
+      }
+
       &:visited {
         color: a.$primaryText;
       }

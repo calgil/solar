@@ -52,7 +52,7 @@ export const SupervisorDashboard = () => {
           <AddHours
             user={user}
             closeModal={closeModal}
-            supervisor
+            supervisor="supervisor"
             apprentices={apprentices}
           />
         )}

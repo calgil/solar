@@ -15,6 +15,7 @@ export const useUsers = () => {
       })
       .catch((err) => {
         console.error(err);
+        setIsLoading(false);
         setError(err);
       });
   };
