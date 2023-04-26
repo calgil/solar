@@ -6,6 +6,7 @@ export const useUsers = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState(null);
+  const supervisors = users.filter((user) => user.role === "supervisor");
 
   const getUsers = () => {
     fetchUsers()
@@ -25,5 +26,5 @@ export const useUsers = () => {
     getUsers();
   }, []);
 
-  return { isLoading, users, error };
+  return { isLoading, users, supervisors, error };
 };

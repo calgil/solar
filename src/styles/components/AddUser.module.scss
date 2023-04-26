@@ -29,9 +29,15 @@
 
   .submitContainer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding-right: 40px;
     margin-top: 15px;
+
+    .deleteBtn {
+      @extend .submitBtn;
+      background-color: a.$alert;
+      width: 150px;
+    }
 
     .submitBtn {
       @extend .submitBtn;

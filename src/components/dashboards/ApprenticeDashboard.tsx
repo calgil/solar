@@ -11,6 +11,7 @@ import { HoursDetails } from "../HoursDetails";
 import { fetchMprs } from "../../firebase/mpr/getApprenticeMprs";
 import { AddBtn } from "../AddBtn";
 import { User } from "../../types/user.type";
+import { AddUser } from "../AddUser";
 
 type ApprenticeDashboardProps = {
   apprentice: User;
@@ -91,9 +92,9 @@ export const ApprenticeDashboard = ({
         <Modal
           isOpen={isEditModalOpen}
           onClose={closeEditModal}
-          title="Edit Profile"
+          title={`Edit ${apprentice.name}'s Profile`}
         >
-          Edit!!
+          <AddUser closeModal={closeEditModal} userToEdit={apprentice} />
         </Modal>
         <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
           {user && <AddHours user={user} closeModal={closeModal} />}

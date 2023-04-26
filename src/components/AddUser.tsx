@@ -5,17 +5,27 @@ import s from "../styles/components/AddUser.module.scss";
 import { User } from "../types/user.type";
 import classNames from "classnames/bind";
 import { toast } from "react-toastify";
+import { useUsers } from "../hooks/useUsers";
+import { useAuth } from "../firebase/auth/auth.provider";
+import { updateUser } from "../firebase/users/updateUser";
 
 const cx = classNames.bind(s);
 
 type AddUserProps = {
-  supervisors: User[];
   closeModal: () => void;
+  userToEdit?: User;
 };
 
-export const AddUser = ({ supervisors, closeModal }: AddUserProps) => {
-  const [newUserRole, setNewUserRole] = useState<string>("");
-  const [newUserSupervisor, setNewUserSupervisor] = useState("");
+export const AddUser = ({ closeModal, userToEdit }: AddUserProps) => {
+  const { supervisors } = useUsers();
+  const { user } = useAuth();
+
+  const [newUserRole, setNewUserRole] = useState<string>(
+    userToEdit?.role || ""
+  );
+  const [newUserSupervisor, setNewUserSupervisor] = useState(
+    userToEdit?.supervisorId || ""
+  );
   const [newUserName, setNewUserName] = useState<string>("");
   const [newUserEmail, setNewUserEmail] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -24,11 +34,26 @@ export const AddUser = ({ supervisors, closeModal }: AddUserProps) => {
     e.preventDefault();
     setIsSubmitted(true);
 
-    if (!newUserRole || !newUserEmail || !newUserName) {
+    if (!userToEdit && (!newUserRole || !newUserEmail || !newUserName)) {
+      console.log("no username, role, or email");
+
       return;
     }
 
     if (newUserRole === "apprentice" && !newUserSupervisor) {
+      return;
+    }
+
+    if (userToEdit) {
+      console.log(
+        "edit user",
+        { newUserRole, newUserSupervisor },
+        userToEdit.id
+      );
+      updateUser({
+        id: userToEdit.id,
+        updates: { role: newUserRole, supervisorId: newUserSupervisor },
+      });
       return;
     }
 
@@ -46,6 +71,10 @@ export const AddUser = ({ supervisors, closeModal }: AddUserProps) => {
         console.error(error);
         toast.error("Could not create user");
       });
+  };
+
+  const handleDeleteProfile = () => {
+    console.log("delete");
   };
 
   const roleClass = cx({
@@ -93,6 +122,7 @@ export const AddUser = ({ supervisors, closeModal }: AddUserProps) => {
             className={s.input}
             name="supervisor"
             id="supervisor"
+            value={newUserSupervisor}
             onChange={(e) => setNewUserSupervisor(e.target.value)}
             required
           >
@@ -105,32 +135,45 @@ export const AddUser = ({ supervisors, closeModal }: AddUserProps) => {
           </select>
         </label>
       )}
-      <label className={nameClass} htmlFor="name">
-        Name *
-        <input
-          className={s.input}
-          id="name"
-          type="text"
-          onChange={(e) => setNewUserName(e.target.value)}
-          value={newUserName}
-          required
-          placeholder={!newUserName && isSubmitted ? "Please enter name" : ""}
-        />
-      </label>
-      <label className={emailClass} htmlFor="email">
-        Email *
-        <input
-          className={s.input}
-          id="email"
-          type="email"
-          onChange={(e) => setNewUserEmail(e.target.value)}
-          value={newUserEmail}
-          required
-          placeholder={!newUserEmail && isSubmitted ? "Please enter email" : ""}
-        />
-      </label>
+      {!userToEdit && (
+        <>
+          <label className={nameClass} htmlFor="name">
+            Name *
+            <input
+              className={s.input}
+              id="name"
+              type="text"
+              onChange={(e) => setNewUserName(e.target.value)}
+              value={newUserName}
+              required
+              placeholder={
+                !newUserName && isSubmitted ? "Please enter name" : ""
+              }
+            />
+          </label>
+          <label className={emailClass} htmlFor="email">
+            Email *
+            <input
+              className={s.input}
+              id="email"
+              type="email"
+              onChange={(e) => setNewUserEmail(e.target.value)}
+              value={newUserEmail}
+              required
+              placeholder={
+                !newUserEmail && isSubmitted ? "Please enter email" : ""
+              }
+            />
+          </label>
+        </>
+      )}
 
       <div className={s.submitContainer}>
+        {userToEdit && user?.role === "admin" && (
+          <button className={s.deleteBtn} onClick={handleDeleteProfile}>
+            Delete Profile
+          </button>
+        )}
         <input className={s.submitBtn} type="submit" value="Add User" />
       </div>
     </form>
