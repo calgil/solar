@@ -5,8 +5,6 @@ import { fetchUserById } from "../firebase/users/fetchUserById";
 import { User } from "../types/user.type";
 import { ApprenticeDashboard } from "../components/dashboards/ApprenticeDashboard";
 
-// type LoaderData = {user: User}
-
 export const loader: LoaderFunction = async ({ params }) => {
   if (params.uid) {
     const user = await fetchUserById(params.uid);
@@ -17,8 +15,6 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export default function Staff() {
   const { user } = useLoaderData() as Awaited<{ user: User }>;
-  console.log(user);
-
   return (
     <>
       {user?.role === "apprentice" && (

@@ -45,16 +45,11 @@ export const AddUser = ({ closeModal, userToEdit }: AddUserProps) => {
     }
 
     if (userToEdit) {
-      console.log(
-        "edit user",
-        { newUserRole, newUserSupervisor },
-        userToEdit.id
-      );
       updateUser({
         id: userToEdit.id,
         updates: { role: newUserRole, supervisorId: newUserSupervisor },
       });
-      return;
+      return closeModal();
     }
 
     createPendingUser({
@@ -174,7 +169,11 @@ export const AddUser = ({ closeModal, userToEdit }: AddUserProps) => {
             Delete Profile
           </button>
         )}
-        <input className={s.submitBtn} type="submit" value="Add User" />
+        <input
+          className={s.submitBtn}
+          type="submit"
+          value={userToEdit ? "Edit User" : "Add User"}
+        />
       </div>
     </form>
   );
