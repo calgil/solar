@@ -1,0 +1,28 @@
+@use "../abstracts" as a;
+
+.addBtn {
+  cursor: pointer;
+  background-color: a.$yellow;
+  border: 1px solid a.$accentDark;
+  border-radius: 8px;
+  padding: 8px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .plus {
+    padding: 3px;
+    background-color: black;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .plusImg {
+      width: 12px;
+    }
+  }
+}

@@ -1,24 +1,46 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
 import s from "../../styles/components/AdminDashboard.module.scss";
-import { AddUser } from "../AddUser";
+import { DisplayStaff } from "../DisplayStaff";
+import { MonthlyProgressReports } from "../MonthlyProgressReports";
+import { AddBtn } from "../AddBtn";
+import { useUsers } from "../../hooks/useUsers";
 import { Modal } from "../Modal";
-export const AdminDashboard = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+import { AddUser } from "../AddUser";
 
-  const closeModal = () => setIsModalOpen(false);
+export const AdminDashboard = () => {
+  const [showAllMprs, setShowAllMprs] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { users } = useUsers();
+
+  const supervisors = users.filter((user) => user.role === "supervisor");
 
   return (
     <div className={s.container}>
-      <h2 className={s.title}>Administrator Dashboard</h2>
-      <div className={s.adminActions}>
-        <button>Filter</button>
-        <input type="text" placeholder="Filter Staff" />
-        <button onClick={() => setIsModalOpen(true)}>Add User</button>
-        <Modal isOpen={isModalOpen} onClose={closeModal} title="Add New User">
-          <AddUser />
+      <div className={s.adminNav}>
+        <h2 className={s.title} onClick={() => setShowAllMprs(false)}>
+          Administrator Dashboard
+        </h2>
+        <div className={s.links}>
+          <a className={s.link} onClick={() => setShowAllMprs(true)}>
+            Monthly Progress Reports
+          </a>
+          <AddBtn text="Add User" onClick={() => setIsModalOpen(true)} />
+        </div>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="Add User"
+        >
+          <AddUser
+            supervisors={supervisors}
+            closeModal={() => setIsModalOpen(false)}
+          />
         </Modal>
       </div>
+      {showAllMprs && <MonthlyProgressReports />}
+      {!showAllMprs && <DisplayStaff />}
     </div>
   );
 };

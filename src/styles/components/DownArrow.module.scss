@@ -1,0 +1,9 @@
+.expandBtn {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.expandBtn.expand {
+  transform: scaleY(-1);
+}

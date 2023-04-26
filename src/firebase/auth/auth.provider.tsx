@@ -4,6 +4,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  sendPasswordResetEmail,
 } from "@firebase/auth";
 import { deleteDoc, doc, setDoc } from "@firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -11,12 +12,20 @@ import { getUserById } from "../../fetch/auth/getUserById";
 import { User } from "../../types/user.type";
 import { auth, db } from "../config";
 import { isEmailPending } from "../pendingUsers/isEmailPending";
+import { toast } from "react-toastify";
+
+export type NewUser = {
+  name: string;
+  role: string;
+  supervisorId?: string;
+};
 
 type AuthContextType = {
   user: User | null;
-  registerUser: (username: string, email: string, password: string) => void;
+  registerUser: (email: string, password: string) => void;
   loginUser: (email: string, password: string) => void;
   logout: () => void;
+  forgotPassword: (email: string) => void;
 };
 
 const AuthContext = createContext({} as AuthContextType);
@@ -24,11 +33,7 @@ const AuthContext = createContext({} as AuthContextType);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const registerUser = async (
-    username: string,
-    email: string,
-    password: string
-  ) => {
+  const registerUser = async (email: string, password: string) => {
     try {
       const userCred = await createUserWithEmailAndPassword(
         auth,
@@ -38,15 +43,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const user = userCred.user;
 
       if (!user) {
+        toast.error("Failed to create user");
         throw new Error("Failed to create user.");
       }
 
       const pendingUser = await isEmailPending(email);
 
-      const data = {
-        name: username,
-        role: pendingUser.user.role,
+      const data: NewUser = {
+        name: pendingUser.name,
+        role: pendingUser.role,
       };
+
+      if (pendingUser.supervisorId) {
+        data.supervisorId = pendingUser.supervisorId;
+      }
 
       await setDoc(doc(db, "users", user.uid), data);
       await deleteDoc(doc(db, "pending users", pendingUser.id));
@@ -58,6 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       setUser(currentUser);
+      toast.success("New account created");
     } catch (error) {
       console.error(error);
       throw new Error("Failed to create user.");
@@ -66,10 +77,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const loginUser = async (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
-      // .then((userCredential) => {
-      //   const user = userCredential.user;
-      // })
+      .then(() => {
+        toast.success("Welcome back!");
+      })
       .catch((err) => {
+        toast.error("Incorrect email or password");
         console.error(err);
       });
   };
@@ -77,6 +89,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = async () => {
     setUser(null);
     await signOut(auth);
+  };
+
+  const forgotPassword = (email: string) => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        toast.success("Password reset email sent");
+      })
+      .catch((error) => {
+        toast.error("Could not send reset email");
+        console.error(error);
+      });
   };
 
   useEffect(() => {
@@ -88,7 +111,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
         setUser(currentUser);
       }
-      // console.log("auth state changed", user);
     });
     return () => {
       unsubscribe();
@@ -96,7 +118,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, registerUser, loginUser, logout }}>
+    <AuthContext.Provider
+      value={{ user, registerUser, loginUser, logout, forgotPassword }}
+    >
       {children}
     </AuthContext.Provider>
   );

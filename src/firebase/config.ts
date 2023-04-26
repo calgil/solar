@@ -3,22 +3,17 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 // import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// TODO: move this to .env file
 const firebaseConfig = {
-  apiKey: "AIzaSyBAnqVitBWBGpRMzPElyn8gzxrP9mz8H00",
-  authDomain: "solar-d57fe.firebaseapp.com",
-  projectId: "solar-d57fe",
-  storageBucket: "solar-d57fe.appspot.com",
-  messagingSenderId: "232830881272",
-  appId: "1:232830881272:web:d25f672651ded38fc75a0d",
-  measurementId: "G-CWWW78JD3Z",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 

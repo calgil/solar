@@ -1,30 +1,148 @@
+@use "../layouts";
+@use "../abstracts" as a;
+
 .addHours {
   margin-top: 20px;
   display: flex;
   gap: 20px;
+  align-items: center;
+  width: 600px;
+  font-family: a.$secondaryFont;
 
-  .uploadContainer {
-    max-width: 100px;
-    max-height: 100px;
-    overflow: hidden;
+  .label {
+    display: block;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+    margin-top: 8px;
   }
 
-  .rightCol {
+  .label.invalid {
+    color: a.$alert;
+
+    .input {
+      color: a.$alert;
+    }
+  }
+
+  .error {
+    color: a.$alert;
+    margin-top: 10px;
+  }
+
+  .leftCol {
+    flex: 1 1;
+
     .dateContainer {
       display: flex;
       align-items: center;
-    }
+      gap: 10px;
 
-    .hours {
-      input,
-      label {
-        display: inline-block;
+      .input {
+        @extend .input;
       }
     }
 
-    .submitBtn {
-      display: block;
+    .fileContainer {
+      margin-top: 30px;
+      background-color: a.$backgroundGrey;
+      border-radius: 8px;
+      filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.25));
+
+      .inputContainer {
+        display: block;
+        position: relative;
+        width: 100%;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .filePreview {
+          max-width: 300px;
+
+          img {
+            width: 100%;
+          }
+        }
+
+        .uploadText {
+          position: absolute;
+          bottom: 33px;
+          font-family: a.$secondaryFont;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 19px;
+
+          .green {
+            color: a.$success;
+          }
+        }
+
+        .fileInput {
+          height: 100%;
+          opacity: 0;
+          position: absolute;
+          width: 100%;
+        }
+      }
     }
+    .fileContainer.invalid {
+      border: 1px solid a.$alert;
+    }
+
+    .uploadContainer {
+      max-width: 100px;
+      max-height: 100px;
+      overflow: hidden;
+    }
+  }
+
+  .rightCol {
     display: block;
+    width: 250px;
+
+    .input {
+      @extend .input;
+      max-width: 50px;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .hours {
+      margin-top: 20px;
+      padding-left: 5px;
+      padding-bottom: 5px;
+    }
+
+    .hours.invalid {
+      border: 1px solid a.$alert;
+      border-radius: 8px;
+    }
+
+    .checkbox {
+      @extend .checkbox;
+    }
+  }
+}
+
+.checkbox {
+  @extend .checkbox;
+}
+.checkbox.invalid {
+  color: a.$alert;
+}
+
+.submitContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 40px;
+
+  .submitBtn {
+    display: block;
+    @extend .submitBtn;
+    width: 70px;
+    margin-left: auto;
   }
 }

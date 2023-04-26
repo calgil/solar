@@ -3,27 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { AuthForm } from "../components/AuthForm";
 import { useAuth } from "../firebase/auth/auth.provider";
 import { InputType } from "../types/input.type";
+import { toast } from "react-toastify";
 
 /* eslint-disable react/react-in-jsx-scope */
 export default function Register() {
   const { registerUser } = useAuth();
-  const [usernameInput, setUsernameInput] = useState<string>("");
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
 
   const navigate = useNavigate();
 
   const inputData: InputType[] = [
-    {
-      id: "username",
-      labelText: "Username",
-      type: "text",
-      name: "username",
-      value: usernameInput,
-      placeholder: "Username",
-      onChange: (e) => setUsernameInput(e.target.value),
-      autoComplete: "off",
-    },
     {
       id: "email",
       labelText: "Email",
@@ -49,10 +39,9 @@ export default function Register() {
   const registerNewUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!emailInput || !passwordInput) {
-      return console.log("no email or password");
+      return toast.error("Please enter email and password");
     }
-    registerUser(usernameInput, emailInput, passwordInput);
-    setUsernameInput("");
+    registerUser(emailInput, passwordInput);
     setEmailInput("");
     setPasswordInput("");
     navigate("/");
@@ -61,10 +50,11 @@ export default function Register() {
     <AuthForm
       inputData={inputData}
       title="Create Account"
-      btnText="Create New User"
+      btnText="Create My Account"
       onSubmit={registerNewUser}
       linkText="Sign In"
       linkURL="/login"
+      showForgotPassword
     />
   );
 }

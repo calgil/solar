@@ -1,0 +1,64 @@
+@use "../abstracts" as a;
+
+.detailsContainer {
+  background-color: a.$backgroundWhite;
+  border: 1px solid a.$borderGrey;
+  border-radius: 8px;
+  margin-top: 20px;
+  padding: 10px 16px;
+  padding-top: 20px;
+  cursor: pointer;
+  font-family: a.$secondaryFont;
+
+  .collapsedView {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .hours {
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+
+    .title {
+      font-weight: 900;
+      line-height: 27.32px;
+      width: 173px;
+    }
+
+    .totalHours {
+      font-weight: 900;
+      font-style: normal;
+      font-size: 14px;
+      width: 124px;
+      line-height: 19px;
+    }
+
+    .categoryContainer {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+
+    .addBtn {
+      margin-right: 20px;
+    }
+  }
+
+  .mprsContainer {
+    .mprQuantity {
+      margin-top: 20px;
+      cursor: pointer;
+      font-family: a.$secondaryFont;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 19px;
+    }
+  }
+}

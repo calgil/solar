@@ -1,0 +1,48 @@
+@use "../abstracts" as a;
+
+.signature {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 200ms ease-in-out;
+  padding: 0 5px;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    border-bottom: 1px solid a.$accentDark;
+  }
+
+  .iconContainer {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 13px;
+    }
+  }
+
+  .iconContainer.success {
+    border: 1px solid a.$success;
+    background: linear-gradient(
+        0deg,
+        rgba(73, 145, 103, 0.2),
+        rgba(73, 145, 103, 0.2)
+      ),
+      #ffffff;
+  }
+
+  .iconContainer.alert {
+    border: 1px solid a.$alert;
+    background: linear-gradient(
+        0deg,
+        rgba(195, 47, 39, 0.2),
+        rgba(195, 47, 39, 0.2)
+      ),
+      #ffffff;
+  }
+}

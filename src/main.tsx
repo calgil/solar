@@ -7,8 +7,12 @@ import Dashboard from "./pages/dashboard";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Root from "./pages/root";
-import { ProtectedRoute } from "./ProtectedRoute";
-import { UnProtectedRoute } from "./UnProtectedRoute";
+import { ProtectedRoute } from "./pages/ProtectedRoute";
+import { UnProtectedRoute } from "./pages/UnProtectedRoute";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ForgotPassword from "./pages/forgot-password";
+import Staff, { loader as staffLoader } from "./pages/staff";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +32,15 @@ const router = createBrowserRouter([
             ),
           },
           {
+            path: "staff/:uid",
+            element: (
+              <ProtectedRoute>
+                <Staff />
+              </ProtectedRoute>
+            ),
+            loader: staffLoader,
+          },
+          {
             path: "login",
             element: (
               <UnProtectedRoute>
@@ -43,6 +56,14 @@ const router = createBrowserRouter([
               </UnProtectedRoute>
             ),
           },
+          {
+            path: "forgot-password",
+            element: (
+              <UnProtectedRoute>
+                <ForgotPassword />
+              </UnProtectedRoute>
+            ),
+          },
         ],
       },
     ],
@@ -54,5 +75,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
+    <ToastContainer />
   </React.StrictMode>
 );

@@ -1,4 +1,21 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito&family=Playfair+Display&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;800;900&family=Playfair+Display&display=swap");
+
+@font-face {
+  font-family: "Avenir";
+  src: url("../../fonts/AvenirRegular.ttf");
+}
+
+@font-face {
+  font-family: "Avenir Light";
+  src: url("../../fonts/avenir-light.ttf");
+}
+
+@font-face {
+  font-family: "Tahoma";
+  src: url("../../fonts/tahoma.ttf");
+}
 
 $primaryFont: "Playfair Display", serif;
-$secondaryFont: "Nunito", sans-serif;
+$secondaryFont: "Avenir", sans-serif;
+$secondaryFontLight: "Avenir Light";
+$alternativeFont: "Tahoma", sans-serif;

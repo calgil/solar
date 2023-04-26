@@ -1,0 +1,52 @@
+@use "../abstracts" as a;
+
+.staffMember {
+  width: 100%;
+  background-color: a.$backgroundLight;
+  padding: 16px 32px;
+  margin-bottom: 32px;
+  border: 1px solid a.$accentDark;
+  border-radius: 8px;
+  transition: all 200ms ease-in-out;
+  font-family: a.$secondaryFont;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.01);
+    border: 1px solid a.$yellow;
+  }
+}
+
+.staffContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .staffInfo {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-left: 20px;
+    font-family: a.$secondaryFont;
+    color: a.$secondaryText;
+
+    .name {
+      width: 150px;
+      font-weight: 700;
+      color: a.$primaryText;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &:visited {
+        color: a.$primaryText;
+      }
+    }
+
+    .role {
+      font-weight: 400;
+    }
+  }
+}

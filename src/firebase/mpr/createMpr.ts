@@ -1,34 +1,60 @@
 import { addDoc, collection } from "firebase/firestore";
-import { mprType } from "../../types/mpr.type";
 import { db } from "../config";
+import { toast } from "react-toastify";
+
+export type UploadMpr = {
+  id?: string;
+  apprenticeId: string;
+  apprenticeName: string;
+  date: Date;
+  photoUrl: string;
+  psHours: number;
+  oresHours: number;
+  bosHours: number;
+  otherHours: number;
+  totalHours: number;
+  apprenticeSignature: boolean;
+  supervisorSignature: boolean;
+  supervisorId: string;
+  adminApproval: boolean;
+};
 
 export const createMpr = async ({
-  userId,
-  username,
+  apprenticeId,
+  apprenticeName,
   date,
   photoUrl,
   psHours,
-  resHours,
+  oresHours,
   bosHours,
   otherHours,
   totalHours,
   apprenticeSignature,
   supervisorSignature,
-}: mprType) => {
+  supervisorId,
+  adminApproval,
+}: UploadMpr) => {
   const data = {
-    userId,
-    username,
+    apprenticeId,
+    apprenticeName,
     date,
     photoUrl,
     psHours,
-    resHours,
+    oresHours,
     bosHours,
     otherHours,
     totalHours,
     apprenticeSignature,
     supervisorSignature,
+    supervisorId,
+    adminApproval,
   };
-  console.log(data);
 
-  await addDoc(collection(db, "mprs"), data);
+  try {
+    await addDoc(collection(db, "mprs"), data);
+    toast.success("MPR created successfully!");
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to create MPR");
+  }
 };

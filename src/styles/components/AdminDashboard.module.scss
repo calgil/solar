@@ -1,19 +1,30 @@
 @use "../layouts";
+@use "../abstracts" as a;
 
 .container {
   @extend .container;
+  padding-top: 16px;
 }
 
-.title {
-  font-size: 1.5625rem;
-  font-weight: 600;
-  line-height: 33px;
-}
-
-.adminActions {
-  margin-top: 50px;
-  max-width: 500px;
+.adminNav {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
+
+  .title {
+    font-size: 1.5625rem;
+    font-weight: 600;
+    line-height: 33px;
+    cursor: pointer;
+  }
+
+  .links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    .link {
+      @extend .customLink;
+    }
+  }
 }

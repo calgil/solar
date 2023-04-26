@@ -2,12 +2,13 @@
 
 .formContainer {
   background-color: a.$backgroundLight;
-  height: 100vh;
+  height: 85vh;
   width: 100%;
   padding: 0 15px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: a.$secondaryFont;
 
   .form {
     max-width: 700px;
@@ -18,15 +19,22 @@
     padding: 40px;
   }
 
+  .portal {
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
   .titleBg {
     background-color: a.$accentDark;
     width: 100%;
-    height: 93px;
-    display: flex;
-    align-items: center;
-    padding-left: 26px;
+    padding: 20px;
     margin-bottom: 10px;
     border-radius: 4px;
+
+    .portal {
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
 
     .title {
       font-size: 3rem;
@@ -34,16 +42,18 @@
       background-repeat: no-repeat;
       background-position: left center;
       padding-left: 20px;
-      height: 100%;
       display: flex;
       align-items: center;
+      height: 75px;
       // TODO: @520 reduce font size
     }
   }
 
   .link {
+    display: block;
+    margin-bottom: 10px;
     color: a.$accentDark;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .submitBtnContainer {
@@ -52,7 +62,6 @@
     align-items: center;
 
     .submitBtn {
-      font-family: a.$secondaryFont;
       font-size: 1.25rem;
       background-color: a.$accentLight;
       padding: 10px 24px;

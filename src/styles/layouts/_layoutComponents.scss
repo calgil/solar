@@ -1,5 +1,113 @@
+@use "../abstracts" as a;
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 15px;
+}
+
+.input {
+  width: 100%;
+  color: a.$solarMain;
+  font-family: a.$secondaryFont;
+  border: 1px solid a.$solarMain;
+  border-radius: 4px;
+  line-height: 1.5;
+  padding: 10px;
+
+  &:focus {
+    outline: 1px solid a.$accentLight;
+  }
+}
+
+.submitBtn {
+  background-color: a.$success;
+  color: a.$whiteText;
+  border: 1px solid a.$solarMain;
+  border-radius: 8px;
+  padding: 10px;
+  width: 100px;
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
+
+  &:focus,
+  &:hover {
+    outline: 1px solid a.$solarMain;
+    transform: scale(1.02);
+  }
+}
+
+.customLink {
+  font-family: a.$secondaryFont;
+  font-size: 14px;
+  line-height: 19px;
+  color: a.$solarMain;
+  cursor: pointer;
+  padding-right: 20px;
+
+  &:hover {
+    border-bottom: 1px solid a.$accentDark;
+  }
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  margin-top: 16px;
+  font-family: a.$alternativeFont;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18px;
+
+  > span {
+    padding: 0.5rem 0.25rem;
+  }
+
+  > input[type="checkbox"] {
+    height: 20px;
+    min-width: 20px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    border: 1px solid a.$borderGrey;
+    border-radius: 4px;
+    outline: none;
+    transition-duration: 0.3s;
+    background-color: transparent;
+    cursor: pointer;
+
+    &:checked {
+      border: 1px solid a.$borderGrey;
+      background-color: a.$backgroundOrange;
+    }
+
+    &:active {
+      border: 2px solid a.$borderGrey;
+    }
+
+    &:focus {
+      border: 1px solid a.$accentLight;
+    }
+  }
+}
+
+.filterBtn {
+  background-color: a.$backgroundWhite;
+  border: 2px solid a.$solarMain;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  line-height: 19px;
+  font-weight: 900;
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.08);
+  }
 }

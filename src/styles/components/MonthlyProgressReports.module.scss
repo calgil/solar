@@ -1,0 +1,27 @@
+@use "../abstracts" as a;
+@use "../layouts";
+
+.reports {
+  margin-top: 30px;
+  transition: all 200ms ease-in-out;
+
+  .adminActions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .filterBtn {
+      @extend .filterBtn;
+
+      .filterImg {
+        max-width: 16px;
+      }
+    }
+
+    .link {
+      @extend .customLink;
+      background: transparent;
+      border: none;
+    }
+  }
+}

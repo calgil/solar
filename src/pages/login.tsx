@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthForm } from "../components/AuthForm";
 import { useAuth } from "../firebase/auth/auth.provider";
 import { InputType } from "../types/input.type";
+import { toast } from "react-toastify";
 
 /* eslint-disable react/react-in-jsx-scope */
 export default function Login() {
@@ -38,7 +39,7 @@ export default function Login() {
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!emailInput || !passwordInput) {
-      return console.log("must enter email and password");
+      return toast.error("Please enter email and password");
     }
     loginUser(emailInput, passwordInput);
     navigate("/");
@@ -53,6 +54,7 @@ export default function Login() {
       onSubmit={login}
       linkText="Create Account"
       linkURL="/register"
+      showForgotPassword
     />
   );
 }

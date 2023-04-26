@@ -12,6 +12,7 @@ type AuthFormProps = {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   linkText: string;
   linkURL: string;
+  showForgotPassword: boolean;
 };
 
 export const AuthForm = ({
@@ -21,11 +22,14 @@ export const AuthForm = ({
   btnText,
   linkText,
   linkURL,
+  showForgotPassword,
 }: AuthFormProps) => {
   return (
     <div className={s.formContainer}>
       <form className={s.form} onSubmit={onSubmit}>
+        <h2 className={s.portal}>LRT Apprenticeship Program Portal</h2>
         <div className={s.titleBg}>
+          {/* <h2 className={s.portal}>LRT Apprenticeship Program Portal</h2> */}
           <h2
             className={s.title}
             style={{ backgroundImage: `url(${titleBg})` }}
@@ -36,9 +40,16 @@ export const AuthForm = ({
         {inputData.map((input) => (
           <InputBase key={input.id} input={input} />
         ))}
-        <Link className={s.link} to={linkURL}>
-          {linkText}
-        </Link>
+        <div className={s.linkContainer}>
+          <Link className={s.link} to={linkURL}>
+            {linkText}
+          </Link>
+          {showForgotPassword && (
+            <Link className={s.link} to="/forgot-password">
+              Forgot Password
+            </Link>
+          )}
+        </div>
         <div className={s.submitBtnContainer}>
           <input className={s.submitBtn} type="submit" value={btnText} />
         </div>

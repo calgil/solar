@@ -1,72 +1,104 @@
+/* eslint-disable react/react-in-jsx-scope */
 import s from "../../styles/components/ApprenticeDashboard.module.scss";
 import { useAuth } from "../../firebase/auth/auth.provider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
 import { capitalizeName } from "../../utils/capitalizeName";
-import { mprType } from "../../types/mpr.type";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { db } from "../../firebase/config";
+import { MprType } from "../../types/mpr.type";
+import { HoursOverview } from "../HoursOverview";
+import { HoursDetails } from "../HoursDetails";
+import { fetchMprs } from "../../firebase/mpr/getApprenticeMprs";
+import { AddBtn } from "../AddBtn";
+import { User } from "../../types/user.type";
+import { AddUser } from "../AddUser";
 
-/* eslint-disable react/react-in-jsx-scope */
-export const ApprenticeDashboard = () => {
+type ApprenticeDashboardProps = {
+  apprentice: User;
+  edit?: boolean;
+};
+
+export const ApprenticeDashboard = ({
+  apprentice,
+  edit,
+}: ApprenticeDashboardProps) => {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const closeModal = () => setIsModalOpen(false);
 
-  const [userMprs, setUserMprs] = useState<mprType[]>([]);
-
-  const fetchMprs = async () => {
-    const mprsQuery = query(
-      collection(db, "mprs"),
-      where("userId", "==", user?.id)
-    );
-    const unsubscribe = onSnapshot(mprsQuery, (mprsSnapshot) => {
-      const mprsData = mprsSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as mprType[];
-      setUserMprs(mprsData);
-    });
-    return () => unsubscribe;
+  const openModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    setIsModalOpen(true);
   };
 
-  if (user?.id && !userMprs.length) {
-    const unsubscribePromise = fetchMprs();
-    unsubscribePromise.then((unsubscribe) => {
-      return () => {
-        unsubscribe();
-      };
-    });
-  }
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const closeEditModal = () => setIsEditModalOpen(false);
+
+  const openEditModal = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    setIsEditModalOpen(true);
+  };
+
+  const [userMprs, setUserMprs] = useState<MprType[]>([]);
+
+  useEffect(() => {
+    if (apprentice) {
+      const unsubscribe = fetchMprs(apprentice.id, setUserMprs);
+      return () => unsubscribe();
+    }
+  }, [apprentice]);
+
+  const totalHours = userMprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
+  const psHours = userMprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
+  const oresHours = userMprs.reduce((acc, mpr) => acc + mpr.oresHours, 0);
+  const bosHours = userMprs.reduce((acc, mpr) => acc + mpr.bosHours, 0);
+  const otherHours = userMprs.reduce((acc, mpr) => acc + mpr.otherHours, 0);
 
   return (
     <div>
       <div className={s.overview}>
-        <h2>{capitalizeName(user?.name)}&apos;s Dashboard</h2>
+        <h2>{capitalizeName(apprentice.name)}&apos;s Dashboard</h2>
         <div className={s.totals}>
-          <div>Hours</div>
-          <div>Certs and Education</div>
-          <div>Test</div>
+          <HoursOverview
+            hours={{ totalHours, psHours, oresHours, bosHours, otherHours }}
+          />
+          {/* <div>Certs and Education</div> */}
+          {/* <div>Test</div> */}
         </div>
       </div>
+      <div className={s.action}>
+        {edit && user?.role === "admin" && (
+          <button className={s.editBtn} onClick={openEditModal}>
+            Edit Profile
+          </button>
+        )}
+        <AddBtn text="Add Hours" onClick={openModal} />
+      </div>
       <div className={s.details}>
-        <div className={s.hoursDetail}>
-          Hours
-          <button onClick={() => setIsModalOpen(true)}>Add hours</button>
-          <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
-            {user && <AddHours user={user} />}
-          </Modal>
-        </div>
-        <div className={s.allMprs}>
-          {userMprs.map((mpr) => (
-            <div key={mpr.id}>
-              <p>{mpr.date}</p>
-              <p>{mpr.totalHours}</p>
-            </div>
-          ))}
-        </div>
+        <HoursDetails
+          apprenticeData={{
+            totalHours,
+            psHours,
+            oresHours,
+            bosHours,
+            otherHours,
+            mprs: userMprs,
+          }}
+        />
+        <Modal
+          isOpen={isEditModalOpen}
+          onClose={closeEditModal}
+          title={`Edit ${apprentice.name}'s Profile`}
+        >
+          <AddUser closeModal={closeEditModal} userToEdit={apprentice} />
+        </Modal>
+        <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
+          {user && <AddHours user={user} closeModal={closeModal} />}
+        </Modal>
       </div>
     </div>
   );

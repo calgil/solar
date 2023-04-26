@@ -1,8 +1,46 @@
+@use "../layouts";
+@use "../abstracts" as a;
+
 .addUser {
   margin-top: 20px;
-  input,
+  font-family: a.$secondaryFont;
+  .input,
   select {
     display: block;
     margin: 5px 0;
+  }
+
+  .input {
+    @extend .input;
+  }
+
+  .label.invalid {
+    color: a.$alert;
+
+    .input {
+      border: 1px solid a.$alert;
+      color: a.$alert;
+    }
+
+    .input::placeholder {
+      color: a.$alert;
+    }
+  }
+
+  .submitContainer {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 40px;
+    margin-top: 15px;
+
+    .deleteBtn {
+      @extend .submitBtn;
+      background-color: a.$alert;
+      width: 150px;
+    }
+
+    .submitBtn {
+      @extend .submitBtn;
+    }
   }
 }

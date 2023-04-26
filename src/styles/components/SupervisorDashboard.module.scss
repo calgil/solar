@@ -1,0 +1,22 @@
+@use "../layouts";
+@use "../abstracts" as a;
+
+.apprenticeSummary {
+  padding: 30px;
+
+  .action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .title {
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 33px;
+  }
+
+  .apprenticeContainer {
+    margin-top: 24px;
+  }
+}

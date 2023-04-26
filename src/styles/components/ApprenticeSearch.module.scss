@@ -1,0 +1,51 @@
+@use "../abstracts" as a;
+@use "../layouts";
+
+.searchContainer {
+  position: relative;
+
+  .searchInput {
+    @extend .input;
+    padding: 8px 16px;
+    padding-left: 32px;
+    position: relative;
+  }
+
+  .optionList {
+    width: 100%;
+    position: absolute;
+    top: 43px;
+    padding: 5px;
+    background-color: a.$backgroundWhite;
+    list-style: none;
+    border: 1px solid a.$solarMain;
+    border-radius: 8px;
+
+    .option {
+      padding: 4px;
+      padding-left: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .option.highlighted {
+      background-color: a.$yellow;
+    }
+  }
+
+  .optionList.closed {
+    display: none;
+  }
+
+  .searchImg {
+    position: absolute;
+    left: 8px;
+    top: 42%;
+    transform: translateY(-50%);
+    width: 13px;
+    height: 16px;
+
+    img {
+      width: 100%;
+    }
+  }
+}
