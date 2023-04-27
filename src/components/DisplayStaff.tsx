@@ -1,22 +1,24 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
-import { useUsers } from "../hooks/useUsers";
 import s from "../styles/components/Staff.module.scss";
 import { StaffMember } from "./StaffMember";
 import filter from "../assets/filter.png";
 import search from "../assets/search.png";
+import { Modal } from "./Modal";
+import { StaffFilter } from "./StaffFilter";
+import { useStaffData } from "../hooks/useStaffData";
 
 export const DisplayStaff = () => {
+  const { apprenticeData } = useStaffData();
+
   const [searchQuery, setSearchQuery] = useState("");
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
-  //   TODO: Error/loading
-  const { users } = useUsers();
-
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.role.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = apprenticeData.filter((data) =>
+    data.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  console.log({ apprenticeData });
 
   const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -25,7 +27,10 @@ export const DisplayStaff = () => {
   return (
     <div className={s.staff}>
       <div className={s.adminActions}>
-        <button className={s.filterBtn}>
+        <button
+          onClick={() => setIsFilterModalOpen(true)}
+          className={s.filterBtn}
+        >
           <div className={s.filterImg}>
             <img src={filter} alt="filter" />
           </div>
@@ -44,10 +49,18 @@ export const DisplayStaff = () => {
         </div>
       </div>
       <div className={s.staffContainer}>
-        {filteredUsers.map((user) => (
-          <StaffMember key={user.id} user={user} />
+        {apprenticeData.map((data) => (
+          <StaffMember key={data.apprenticeId} data={data} />
         ))}
       </div>
+      <Modal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        title="Filter"
+        filter
+      >
+        <StaffFilter />
+      </Modal>
     </div>
   );
 };

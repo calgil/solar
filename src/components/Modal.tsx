@@ -4,6 +4,8 @@ import { ReactNode, useRef } from "react";
 import { useClickOutside } from "../hooks/useClickOutside";
 import s from "../styles/components/Modal.module.scss";
 import close from "../assets/close.png";
+import classNames from "classnames/bind";
+const cx = classNames.bind(s);
 
 type PortalProps = {
   children: React.ReactNode;
@@ -22,9 +24,16 @@ type ModalProps = {
   onClose: () => void;
   children: ReactNode;
   title: string;
+  filter?: boolean;
 };
 
-export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+export const Modal = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+  filter,
+}: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,9 +47,15 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
     dependencies: [onClose],
   });
   if (!isOpen) return null;
+
+  const overlayClass = cx({
+    modalOverlay: true,
+    filter: filter,
+  });
+
   return (
     <Portal>
-      <div className={s.modalOverlay}>
+      <div className={overlayClass}>
         <div ref={modalRef} className={s.modal}>
           <div className={s.modalHeader}>
             <h4 className={s.title}>{title}</h4>

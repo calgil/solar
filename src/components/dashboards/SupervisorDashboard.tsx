@@ -38,11 +38,12 @@ export const SupervisorDashboard = () => {
       <div className={s.action}>
         <AddBtn text="Add Hours" onClick={() => setIsModalOpen(true)} />
       </div>
-      <div className={s.apprenticeContainer}>
+      {/* Figure out how to use useStaffData to get data and pass to this component */}
+      {/* <div className={s.apprenticeContainer}>
         {apprentices.map((app) => (
           <StaffMember key={app.id} user={app} />
         ))}
-      </div>
+      </div> */}
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
