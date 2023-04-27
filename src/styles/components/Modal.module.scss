@@ -40,15 +40,19 @@
           background-color: a.$yellow;
           border-radius: 50%;
         }
-      }
 
-      .close {
-        width: 20px;
-        height: 20px;
-        transition: all 200ms ease-in-out;
+        .close {
+          width: 20px;
+          height: 20px;
+          transition: all 200ms ease-in-out;
 
-        &:hover {
-          transform: scale(1.15);
+          &:hover {
+            transform: scale(1.15);
+          }
+
+          img {
+            width: 100%;
+          }
         }
       }
     }
@@ -66,9 +70,20 @@
   .modal {
     min-width: 300px;
 
-    .title {
-      font-size: 18px;
-      line-height: 24px;
+    .modalHeader {
+      padding: 10px 32px;
+
+      .title {
+        font-size: 18px;
+        line-height: 24px;
+      }
+
+      .closeBtn {
+        .close {
+          width: 15px;
+          height: 15px;
+        }
+      }
     }
   }
 }
