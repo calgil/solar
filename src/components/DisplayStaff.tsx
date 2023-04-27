@@ -1,6 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
-import { useUsers } from "../hooks/useUsers";
 import s from "../styles/components/Staff.module.scss";
 import { StaffMember } from "./StaffMember";
 import filter from "../assets/filter.png";
@@ -12,25 +11,16 @@ import { useStaffData } from "../hooks/useStaffData";
 export const DisplayStaff = () => {
   const { apprenticeData } = useStaffData();
 
-  // const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
-  //   TODO: Error/loading
-  // const { users } = useUsers();
+  const filteredData = apprenticeData.filter((data) =>
+    data.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  // const filteredUsers = users.filter(
-  //   (user) =>
-  //     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //     user.role.toLowerCase().includes(searchQuery.toLowerCase())
-  // );
-
-  // const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setSearchQuery(e.target.value);
-  // };
-
-  // step 1 find the user id of any apprentice that has posted an mpr within the last 90 days(default)
-  // step 2 get those users by id
-  // step 3 get their data
+  const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
 
   return (
     <div className={s.staff}>
@@ -49,7 +39,7 @@ export const DisplayStaff = () => {
             className={s.filterInput}
             type="text"
             placeholder="Filter Staff"
-            // onChange={handleSearchQueryChange}
+            onChange={handleSearchQueryChange}
           />
           <div className={s.searchImg}>
             <img src={search} alt="search" />
@@ -57,7 +47,7 @@ export const DisplayStaff = () => {
         </div>
       </div>
       <div className={s.staffContainer}>
-        {apprenticeData.map((data) => (
+        {filteredData.map((data) => (
           <StaffMember key={data.apprenticeId} data={data} />
         ))}
       </div>
