@@ -3,7 +3,11 @@ import { useState } from "react";
 import { useStaffData } from "../hooks/useStaffData";
 import s from "../styles/components/StaffFilter.module.scss";
 
-export const StaffFilter = () => {
+type StaffFilterProps = {
+  closeModal: () => void;
+};
+
+export const StaffFilter = ({ closeModal }: StaffFilterProps) => {
   const { pastSixMonths, pastThreeMonths } = useStaffData();
 
   const [dateRange, setDateRange] = useState("");
@@ -15,7 +19,8 @@ export const StaffFilter = () => {
       return await pastThreeMonths();
     }
     if (dateRange === "6") {
-      return pastSixMonths();
+      pastSixMonths();
+      return closeModal();
     }
     console.log("apply filters");
   };

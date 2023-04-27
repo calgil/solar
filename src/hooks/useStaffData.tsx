@@ -23,7 +23,7 @@ export const useStaffData = (): QueryResult => {
   const [apprenticeData, setApprenticeData] = useState<ApprenticeMprData[]>([]);
 
   const threeMonthsAgo = new Date();
-  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 6);
 
   const fetchMprs = async (beforeDate: Date = threeMonthsAgo) => {
     try {
@@ -35,8 +35,6 @@ export const useStaffData = (): QueryResult => {
       const apprenticeIds = new Set(
         documentSnapshots.docs.map((doc) => doc.data().apprenticeId)
       );
-
-      console.log({ apprenticeIds });
 
       const apprenticeDataPromise = Array.from(apprenticeIds).map(
         async (id) => {
@@ -51,10 +49,8 @@ export const useStaffData = (): QueryResult => {
         }
       );
 
-      Promise.all(apprenticeDataPromise).then((data) => {
-        console.log({ data });
-        setApprenticeData(data);
-      });
+      const data = await Promise.all(apprenticeDataPromise);
+      setApprenticeData(data);
     } catch (error) {
       console.error(error);
       throw new Error("Could not fetch mprs");
@@ -74,10 +70,7 @@ export const useStaffData = (): QueryResult => {
   };
 
   useEffect(() => {
-    const fetchAndSetData = async () => {
-      await fetchMprs();
-    };
-    fetchAndSetData();
+    fetchMprs();
   }, []);
 
   return { apprenticeData, pastThreeMonths, pastSixMonths };
