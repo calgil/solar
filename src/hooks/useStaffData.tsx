@@ -8,6 +8,7 @@ import {
 
 export type QueryResult = {
   apprenticeData: ApprenticeMprData[];
+  pastThreeMonths: () => void;
   pastSixMonths: () => void;
 };
 
@@ -21,7 +22,10 @@ export type ApprenticeMprData = {
 export const useStaffData = (): QueryResult => {
   const [apprenticeData, setApprenticeData] = useState<ApprenticeMprData[]>([]);
 
-  const fetchMprs = async (beforeDate: Date) => {
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+
+  const fetchMprs = async (beforeDate: Date = threeMonthsAgo) => {
     try {
       const collectionRef = collection(db, "mprs");
       const queryRef = query(collectionRef, where("date", ">=", beforeDate));
@@ -31,6 +35,8 @@ export const useStaffData = (): QueryResult => {
       const apprenticeIds = new Set(
         documentSnapshots.docs.map((doc) => doc.data().apprenticeId)
       );
+
+      console.log({ apprenticeIds });
 
       const apprenticeDataPromise = Array.from(apprenticeIds).map(
         async (id) => {
@@ -45,8 +51,10 @@ export const useStaffData = (): QueryResult => {
         }
       );
 
-      const apprenticeInfo = await Promise.all(apprenticeDataPromise);
-      setApprenticeData(apprenticeInfo);
+      Promise.all(apprenticeDataPromise).then((data) => {
+        console.log({ data });
+        setApprenticeData(data);
+      });
     } catch (error) {
       console.error(error);
       throw new Error("Could not fetch mprs");
@@ -54,20 +62,23 @@ export const useStaffData = (): QueryResult => {
   };
 
   const pastThreeMonths = () => {
-    const threeMonthsAgo = new Date();
-    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-    fetchMprs(threeMonthsAgo);
+    console.log("three months");
+    fetchMprs();
   };
 
   const pastSixMonths = () => {
+    console.log("six months");
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
     fetchMprs(sixMonthsAgo);
   };
 
   useEffect(() => {
-    pastThreeMonths();
+    const fetchAndSetData = async () => {
+      await fetchMprs();
+    };
+    fetchAndSetData();
   }, []);
 
-  return { apprenticeData, pastSixMonths };
+  return { apprenticeData, pastThreeMonths, pastSixMonths };
 };

@@ -18,6 +18,8 @@ export const DisplayStaff = () => {
     data.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  console.log({ apprenticeData });
+
   const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
@@ -47,7 +49,7 @@ export const DisplayStaff = () => {
         </div>
       </div>
       <div className={s.staffContainer}>
-        {filteredData.map((data) => (
+        {apprenticeData.map((data) => (
           <StaffMember key={data.apprenticeId} data={data} />
         ))}
       </div>

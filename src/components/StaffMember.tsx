@@ -12,8 +12,6 @@ type StaffMemberProps = {
 };
 
 export const StaffMember = ({ data }: StaffMemberProps) => {
-  console.log({ data });
-
   const [showDetails, setShowDetails] = useState(false);
 
   const handleExpandClick = async () => {
