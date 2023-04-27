@@ -5,9 +5,12 @@ import s from "../styles/components/Staff.module.scss";
 import { StaffMember } from "./StaffMember";
 import filter from "../assets/filter.png";
 import search from "../assets/search.png";
+import { Modal } from "./Modal";
+import { StaffFilter } from "./StaffFilter";
 
 export const DisplayStaff = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   //   TODO: Error/loading
   const { users } = useUsers();
@@ -25,7 +28,10 @@ export const DisplayStaff = () => {
   return (
     <div className={s.staff}>
       <div className={s.adminActions}>
-        <button className={s.filterBtn}>
+        <button
+          onClick={() => setIsFilterModalOpen(true)}
+          className={s.filterBtn}
+        >
           <div className={s.filterImg}>
             <img src={filter} alt="filter" />
           </div>
@@ -48,6 +54,14 @@ export const DisplayStaff = () => {
           <StaffMember key={user.id} user={user} />
         ))}
       </div>
+      <Modal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        title="Filter"
+        filter
+      >
+        <StaffFilter />
+      </Modal>
     </div>
   );
 };
