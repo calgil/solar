@@ -59,7 +59,7 @@ export const DisplayStaff = () => {
         title="Filter"
         filter
       >
-        <StaffFilter />
+        <StaffFilter closeModal={() => setIsFilterModalOpen(false)} />
       </Modal>
     </div>
   );
