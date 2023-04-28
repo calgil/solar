@@ -22,7 +22,7 @@ export default function Login() {
       value: emailInput,
       placeholder: "Email",
       onChange: (e) => setEmailInput(e.target.value),
-      autoComplete: "off",
+      autoComplete: "on",
     },
     {
       id: "password",
@@ -32,7 +32,7 @@ export default function Login() {
       value: passwordInput,
       placeholder: "Password",
       onChange: (e) => setPasswordInput(e.target.value),
-      autoComplete: "off",
+      autoComplete: "on",
     },
   ];
 

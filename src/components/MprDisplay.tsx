@@ -22,9 +22,15 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
         <p className={s.totalHours}>{mpr.totalHours} Hours</p>
         <div className={s.categoryContainer}>
           <HourCategory
-            category="PS"
+            category="PV"
             hoursEarned={mpr.psHours}
             totalHours={1000}
+            showPercentage={false}
+          />
+          <HourCategory
+            category="Other RE"
+            hoursEarned={mpr.oresHours}
+            totalHours={500}
             showPercentage={false}
           />
           <HourCategory
@@ -33,12 +39,7 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
             totalHours={1500}
             showPercentage={false}
           />
-          <HourCategory
-            category="ORES"
-            hoursEarned={mpr.oresHours}
-            totalHours={500}
-            showPercentage={false}
-          />
+
           <HourCategory
             category="Other"
             hoursEarned={mpr.otherHours}
