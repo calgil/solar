@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import s from "../../styles/components/SupervisorDashboard.module.scss";
 import { User } from "../../types/user.type";
 import { fetchUsers } from "../../firebase/users/fetchUsers";
-import { useAuth } from "../../firebase/auth/auth.provider";
+import { useAuth } from "../../providers/auth.provider";
 import { StaffMember } from "../StaffMember";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";

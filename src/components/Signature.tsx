@@ -5,7 +5,7 @@ import alert from "../assets/alert.png";
 import classNames from "classnames/bind";
 import { useState } from "react";
 import { Modal } from "./Modal";
-import { useAuth } from "../firebase/auth/auth.provider";
+import { useAuth } from "../providers/auth.provider";
 import { MprType } from "../types/mpr.type";
 import { AddHours } from "./AddHours";
 

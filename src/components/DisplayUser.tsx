@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useRef, useState } from "react";
 import s from "../styles/components/DisplayUser.module.scss";
-import { useAuth } from "../firebase/auth/auth.provider";
+import { useAuth } from "../providers/auth.provider";
 import { useClickOutside } from "../hooks/useClickOutside";
 import { capitalizeName } from "../utils/capitalizeName";
 import { DownArrow } from "./DownArrow";

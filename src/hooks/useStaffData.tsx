@@ -69,6 +69,8 @@ export const useStaffData = (): QueryResult => {
   };
 
   useEffect(() => {
+    console.log("use Effect ran");
+
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
     fetchMprs(threeMonthsAgo);

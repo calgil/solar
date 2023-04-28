@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import s from "../../styles/components/ApprenticeDashboard.module.scss";
-import { useAuth } from "../../firebase/auth/auth.provider";
+import { useAuth } from "../../providers/auth.provider";
 import { useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
@@ -8,7 +8,7 @@ import { capitalizeName } from "../../utils/capitalizeName";
 import { MprType } from "../../types/mpr.type";
 import { HoursOverview } from "../HoursOverview";
 import { HoursDetails } from "../HoursDetails";
-import { fetchMprs } from "../../firebase/mpr/getApprenticeMprs";
+import { fetchMprs } from "../../firebase/mpr/fetchMprs";
 import { AddBtn } from "../AddBtn";
 import { User } from "../../types/user.type";
 import { AddUser } from "../AddUser";

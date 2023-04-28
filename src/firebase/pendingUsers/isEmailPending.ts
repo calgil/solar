@@ -1,5 +1,5 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { NewUser } from "../auth/auth.provider";
+import { NewUser } from "../../providers/auth.provider";
 import { db } from "../config";
 
 export const isEmailPending = async (email: string) => {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthForm } from "../components/AuthForm";
-import { useAuth } from "../firebase/auth/auth.provider";
+import { useAuth } from "../providers/auth.provider";
 import { InputType } from "../types/input.type";
 import { toast } from "react-toastify";
 
