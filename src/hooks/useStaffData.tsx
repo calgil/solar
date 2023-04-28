@@ -22,10 +22,7 @@ export type ApprenticeMprData = {
 export const useStaffData = (): QueryResult => {
   const [apprenticeData, setApprenticeData] = useState<ApprenticeMprData[]>([]);
 
-  const threeMonthsAgo = new Date();
-  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 6);
-
-  const fetchMprs = async (beforeDate: Date = threeMonthsAgo) => {
+  const fetchMprs = async (beforeDate: Date) => {
     try {
       const collectionRef = collection(db, "mprs");
       const queryRef = query(collectionRef, where("date", ">=", beforeDate));
@@ -59,7 +56,9 @@ export const useStaffData = (): QueryResult => {
 
   const pastThreeMonths = () => {
     console.log("three months");
-    fetchMprs();
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+    fetchMprs(threeMonthsAgo);
   };
 
   const pastSixMonths = () => {
@@ -70,7 +69,9 @@ export const useStaffData = (): QueryResult => {
   };
 
   useEffect(() => {
-    fetchMprs();
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+    fetchMprs(threeMonthsAgo);
   }, []);
 
   return { apprenticeData, pastThreeMonths, pastSixMonths };
