@@ -18,6 +18,7 @@ export type NewUser = {
   name: string;
   role: string;
   supervisorId?: string;
+  status: "active";
 };
 
 type AuthContextType = {
@@ -52,6 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const data: NewUser = {
         name: pendingUser.name,
         role: pendingUser.role,
+        status: "active",
       };
 
       if (pendingUser.supervisorId) {
