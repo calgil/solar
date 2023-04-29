@@ -11,15 +11,18 @@ type SearchProps = {
   onSelect: (selected: string) => void;
   onInputChange: (value: string) => void;
   inputValue: string;
+  clearSearch: () => void;
 };
 
 export const ApprenticeSearch = ({
   onSelect,
   onInputChange,
   inputValue,
+  clearSearch,
 }: SearchProps) => {
   const { apprentices } = useUsers();
   const apprenticeNames = apprentices.map((apprentice) => apprentice.name);
+  console.log({ inputValue });
 
   const {
     getInputProps,
@@ -53,11 +56,14 @@ export const ApprenticeSearch = ({
         value={inputValue}
         type="text"
         placeholder="Apprentice Name"
-        {...getInputProps()}
+        {...getInputProps({ value: inputValue })}
       />
       <div className={s.searchImg}>
         <img src={search} alt="search" />
       </div>
+      <button className={s.clearBtn} onClick={clearSearch}>
+        X
+      </button>
       <ul
         className={cx({ optionList: true, closed: !isOpen })}
         {...getMenuProps()}

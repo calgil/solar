@@ -9,6 +9,8 @@ import {
 export type QueryResult = {
   apprenticeData: ApprenticeMprData[];
   handleFilterChange: (newFilter: number) => void;
+  fetchApprenticeByName: (name: string) => void;
+  clear: () => void;
 };
 
 export type ApprenticeMprData = {
@@ -39,7 +41,7 @@ export const useStaffData = (): QueryResult => {
           const apprenticeId = data.mprs[0].apprenticeId;
           const name = data.mprs[0].apprenticeName;
           const hasUnapprovedMpr = data.mprs.some(
-            (mpr) => !mpr.supervisorSignature || !mpr.adminApproval
+            (mpr) => !mpr.supervisorSignature
           );
           return { apprenticeId, name, data, hasUnapprovedMpr };
         }
@@ -62,17 +64,46 @@ export const useStaffData = (): QueryResult => {
     return setApprenticeData(data);
   };
 
+  const fetchApprenticeByName = async (name: string): Promise<void> => {
+    try {
+      const usersCollection = collection(db, "users");
+      const queryRef = query(usersCollection, where("name", "==", name));
+      const userSnapshot = await getDocs(queryRef);
+      const user = userSnapshot.docs[0];
+      if (!user) {
+        return;
+      }
+      const data = await getApprenticeData(user.id);
+      return setApprenticeData([
+        {
+          apprenticeId: user.id,
+          data,
+          name,
+          hasUnapprovedMpr: data.mprs.some((mpr) => !mpr.supervisorSignature),
+        },
+      ]);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Could not get user by name");
+    }
+  };
+
+  const getInitData = async () => {
+    const beforeDate = new Date();
+    beforeDate.setMonth(beforeDate.getMonth() - 6);
+    const data = await fetchMprs(beforeDate);
+    setApprenticeData(data);
+  };
+
+  const clear = () => {
+    getInitData();
+  };
+
   useEffect(() => {
     console.log("use Effect ran");
 
-    const getInitData = async () => {
-      const beforeDate = new Date();
-      beforeDate.setMonth(beforeDate.getMonth() - 6);
-      const data = await fetchMprs(beforeDate);
-      setApprenticeData(data);
-    };
     getInitData();
   }, [filters]);
 
-  return { apprenticeData, handleFilterChange };
+  return { apprenticeData, handleFilterChange, fetchApprenticeByName, clear };
 };

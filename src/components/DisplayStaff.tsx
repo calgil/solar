@@ -12,15 +12,23 @@ export const DisplayStaff = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { apprenticeData, handleFilterChange } = useStaffData();
+  const { apprenticeData, handleFilterChange, fetchApprenticeByName, clear } =
+    useStaffData();
 
   const handleSearch = (name: string) => {
     setSearchQuery(name);
-    console.log("Find name", name);
+    fetchApprenticeByName(name);
   };
 
   const handleNameChange = (value: string) => {
+    console.log("change", value);
+
     setSearchQuery(value);
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    clear();
   };
 
   return (
@@ -39,6 +47,7 @@ export const DisplayStaff = () => {
           onSelect={handleSearch}
           onInputChange={handleNameChange}
           inputValue={searchQuery}
+          clearSearch={handleClearSearch}
         />
       </div>
       <div className={s.staffContainer}>

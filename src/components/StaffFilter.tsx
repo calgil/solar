@@ -38,7 +38,9 @@ export const StaffFilter = ({ closeModal, handleFilter }: StaffFilterProps) => {
           {/* TODO: All All filter */}
         </select>
       </label>
-      <input value="Apply Filters" type="submit" />
+      <div className={s.submitContainer}>
+        <input className={s.submitBtn} value="Apply Filters" type="submit" />
+      </div>
     </form>
   );
 };

@@ -11,6 +11,28 @@
     position: relative;
   }
 
+  .searchImg {
+    position: absolute;
+    left: 8px;
+    top: 42%;
+    transform: translateY(-50%);
+    width: 13px;
+    height: 16px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .clearBtn {
+    position: absolute;
+    right: 6px;
+    top: 11px;
+    border: none;
+    background-color: a.$backgroundWhite;
+    cursor: pointer;
+  }
+
   .optionList {
     width: 100%;
     position: absolute;
@@ -34,18 +56,5 @@
 
   .optionList.closed {
     display: none;
-  }
-
-  .searchImg {
-    position: absolute;
-    left: 8px;
-    top: 42%;
-    transform: translateY(-50%);
-    width: 13px;
-    height: 16px;
-
-    img {
-      width: 100%;
-    }
   }
 }
