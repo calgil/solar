@@ -37,8 +37,6 @@ export const MonthlyProgressReports = () => {
   const [inputValue, setInputValue] = useState("");
 
   const handleSelect = (value: string) => {
-    console.log("fuck!!!!", value);
-
     setInputValue(value);
     filterByName(value);
   };

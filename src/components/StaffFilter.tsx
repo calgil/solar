@@ -5,18 +5,17 @@ import s from "../styles/components/StaffFilter.module.scss";
 
 type StaffFilterProps = {
   closeModal: () => void;
+  handleFilter: (newFilter: number) => void;
 };
 
-export const StaffFilter = ({ closeModal }: StaffFilterProps) => {
-  const { handleFilterChange } = useStaffData();
-
+export const StaffFilter = ({ closeModal, handleFilter }: StaffFilterProps) => {
   const [dateRange, setDateRange] = useState(0);
 
   const applyFilters = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (dateRange) {
-      handleFilterChange(dateRange);
+      handleFilter(dateRange);
     }
 
     closeModal();

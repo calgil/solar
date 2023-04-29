@@ -20,7 +20,7 @@ export type ApprenticeMprData = {
 
 export const useStaffData = (): QueryResult => {
   const [apprenticeData, setApprenticeData] = useState<ApprenticeMprData[]>([]);
-  const [filters, setFilters] = useState(0);
+  const [filters] = useState(0);
 
   const fetchMprs = async (beforeDate: Date) => {
     try {
@@ -49,9 +49,6 @@ export const useStaffData = (): QueryResult => {
       console.log({ data });
 
       return data;
-
-      // setApprenticeData(data);
-      // console.log({ apprenticeData });
     } catch (error) {
       console.error(error);
       throw new Error("Could not fetch mprs");
