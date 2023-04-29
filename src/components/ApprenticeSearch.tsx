@@ -4,6 +4,7 @@ import search from "../assets/search.png";
 import classNames from "classnames/bind";
 import { useCombobox } from "downshift";
 import { useUsers } from "../hooks/useUsers";
+import close from "../assets/close.png";
 
 const cx = classNames.bind(s);
 
@@ -22,7 +23,6 @@ export const ApprenticeSearch = ({
 }: SearchProps) => {
   const { apprentices } = useUsers();
   const apprenticeNames = apprentices.map((apprentice) => apprentice.name);
-  console.log({ inputValue });
 
   const {
     getInputProps,
@@ -41,6 +41,9 @@ export const ApprenticeSearch = ({
     onInputValueChange({ inputValue }) {
       if (inputValue) {
         onInputChange(inputValue);
+      }
+      if (!inputValue) {
+        onInputChange("");
       }
     },
   });
@@ -62,7 +65,9 @@ export const ApprenticeSearch = ({
         <img src={search} alt="search" />
       </div>
       <button className={s.clearBtn} onClick={clearSearch}>
-        X
+        <div className={s.close}>
+          <img src={close} alt="close" />
+        </div>
       </button>
       <ul
         className={cx({ optionList: true, closed: !isOpen })}

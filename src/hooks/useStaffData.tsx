@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useEffect, useState } from "react";
 import {
@@ -8,7 +8,7 @@ import {
 
 export type QueryResult = {
   apprenticeData: ApprenticeMprData[];
-  handleFilterChange: (newFilter: number) => void;
+  handleFilterChange: (dateRange: number, approval?: boolean) => void;
   fetchApprenticeByName: (name: string) => void;
   clear: () => void;
 };
@@ -24,10 +24,18 @@ export const useStaffData = (): QueryResult => {
   const [apprenticeData, setApprenticeData] = useState<ApprenticeMprData[]>([]);
   const [filters] = useState(0);
 
-  const fetchMprs = async (beforeDate: Date) => {
+  const fetchMprs = async (beforeDate?: Date, approval?: boolean) => {
     try {
       const collectionRef = collection(db, "mprs");
-      const queryRef = query(collectionRef, where("date", ">=", beforeDate));
+      let queryRef = query(collectionRef);
+      if (beforeDate) {
+        queryRef = query(queryRef, where("date", ">=", beforeDate));
+      }
+      if (approval) {
+        queryRef = query(queryRef, where("supervisorSignature", "==", true));
+      }
+      queryRef = query(queryRef, orderBy("date"));
+      queryRef = query(queryRef, orderBy("apprenticeName"));
 
       const documentSnapshots = await getDocs(queryRef);
 
@@ -57,10 +65,16 @@ export const useStaffData = (): QueryResult => {
     }
   };
 
-  const handleFilterChange = async (months: number) => {
+  const handleFilterChange = async (months: number, approval?: boolean) => {
+    console.log("filter change", approval);
+
+    if (months === -1) {
+      const data = await fetchMprs(undefined, approval);
+      return setApprenticeData(data);
+    }
     const beforeDate = new Date();
     beforeDate.setMonth(beforeDate.getMonth() - months);
-    const data = await fetchMprs(beforeDate);
+    const data = await fetchMprs(beforeDate, approval);
     return setApprenticeData(data);
   };
 

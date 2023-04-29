@@ -27,10 +27,23 @@
   .clearBtn {
     position: absolute;
     right: 6px;
-    top: 11px;
+    top: 13px;
     border: none;
     background-color: a.$backgroundWhite;
     cursor: pointer;
+
+    .close {
+      width: 10px;
+      transition: all 200ms ease-in-out;
+
+      &:hover {
+        transform: scale(1.15);
+      }
+
+      img {
+        width: 100%;
+      }
+    }
   }
 
   .optionList {
