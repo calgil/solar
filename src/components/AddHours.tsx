@@ -356,8 +356,8 @@ export const AddHours = ({
                 className={cx(s.input, s.date)}
                 type="number"
                 name="year"
-                min="2020"
-                max="2060"
+                min="1970"
+                max="3000"
                 step="1"
                 value={year}
                 onChange={(e) => setYear(parseInt(e.target.value))}

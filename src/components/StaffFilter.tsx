@@ -1,6 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
-import { useStaffData } from "../hooks/useStaffData";
 import s from "../styles/components/StaffFilter.module.scss";
 
 type StaffFilterProps = {
@@ -9,7 +8,7 @@ type StaffFilterProps = {
 };
 
 export const StaffFilter = ({ closeModal, handleFilter }: StaffFilterProps) => {
-  const [dateRange, setDateRange] = useState(0);
+  const [dateRange, setDateRange] = useState(6);
 
   const applyFilters = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,13 +28,14 @@ export const StaffFilter = ({ closeModal, handleFilter }: StaffFilterProps) => {
           id="dateRange"
           onChange={(e) => setDateRange(+e.target.value)}
           className={s.input}
+          value={dateRange}
         >
           <option value="">- Choose a Date Range</option>
-          <option value={3}>Past Three Months</option>
           <option value={6}>Past Six Months</option>
           <option value={12}>Past Year</option>
           <option value={24}>Past 2 Years</option>
           <option value={60}>Past 5 Years</option>
+          {/* TODO: All All filter */}
         </select>
       </label>
       <input value="Apply Filters" type="submit" />
