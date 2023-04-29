@@ -3,7 +3,6 @@ import { useMprPagination } from "../hooks/useMprPagination";
 import s from "../styles/components/MonthlyProgressReports.module.scss";
 import filter from "../assets/filter.png";
 import { useRef, useState } from "react";
-import { useUsers } from "../hooks/useUsers";
 import { ApprenticeSearch } from "./ApprenticeSearch";
 import { MprTable } from "./MprTable";
 import { PaginationButtons } from "./PaginationButtons";
@@ -22,17 +21,11 @@ export const MonthlyProgressReports = () => {
     clearSearch,
   } = useMprPagination();
 
-  const { users } = useUsers();
-
   const componentRef = useRef(null);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-
-  const apprenticeNames = users
-    .filter((user) => user.role === "apprentice")
-    .map((app) => app.name);
 
   const [inputValue, setInputValue] = useState("");
 
@@ -70,7 +63,7 @@ export const MonthlyProgressReports = () => {
           Filters
         </button>
         <ApprenticeSearch
-          options={apprenticeNames}
+          // options={apprenticeNames}
           onSelect={handleSelect}
           onInputChange={onInputChange}
           inputValue={inputValue}

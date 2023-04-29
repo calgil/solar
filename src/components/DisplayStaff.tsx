@@ -3,18 +3,25 @@ import { useState } from "react";
 import s from "../styles/components/Staff.module.scss";
 import { StaffMember } from "./StaffMember";
 import filter from "../assets/filter.png";
-// import search from "../assets/search.png";
 import { Modal } from "./Modal";
 import { StaffFilter } from "./StaffFilter";
 import { useStaffData } from "../hooks/useStaffData";
+import { ApprenticeSearch } from "./ApprenticeSearch";
 
 export const DisplayStaff = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { apprenticeData, handleFilterChange } = useStaffData();
-  console.log("display", { apprenticeData });
 
-  console.log({ apprenticeData });
+  const handleSearch = (name: string) => {
+    setSearchQuery(name);
+    console.log("Find name", name);
+  };
+
+  const handleNameChange = (value: string) => {
+    setSearchQuery(value);
+  };
 
   return (
     <div className={s.staff}>
@@ -28,6 +35,11 @@ export const DisplayStaff = () => {
           </div>
           Filters
         </button>
+        <ApprenticeSearch
+          onSelect={handleSearch}
+          onInputChange={handleNameChange}
+          inputValue={searchQuery}
+        />
       </div>
       <div className={s.staffContainer}>
         {apprenticeData.map((data) => (

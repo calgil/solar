@@ -3,22 +3,24 @@ import s from "../styles/components/ApprenticeSearch.module.scss";
 import search from "../assets/search.png";
 import classNames from "classnames/bind";
 import { useCombobox } from "downshift";
+import { useUsers } from "../hooks/useUsers";
 
 const cx = classNames.bind(s);
 
 type SearchProps = {
-  options: string[];
   onSelect: (selected: string) => void;
   onInputChange: (value: string) => void;
   inputValue: string;
 };
 
 export const ApprenticeSearch = ({
-  options,
   onSelect,
   onInputChange,
   inputValue,
 }: SearchProps) => {
+  const { apprentices } = useUsers();
+  const apprenticeNames = apprentices.map((apprentice) => apprentice.name);
+
   const {
     getInputProps,
     getMenuProps,
@@ -26,7 +28,7 @@ export const ApprenticeSearch = ({
     isOpen,
     getItemProps,
   } = useCombobox({
-    items: options,
+    items: apprenticeNames,
     selectedItem: null,
     onSelectedItemChange: ({ selectedItem }) => {
       if (selectedItem) {
@@ -40,7 +42,7 @@ export const ApprenticeSearch = ({
     },
   });
 
-  const filteredOptions = options.filter((option) =>
+  const filteredOptions = apprenticeNames.filter((option) =>
     option.toLowerCase().includes(inputValue.toLowerCase())
   );
 
