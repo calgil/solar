@@ -8,21 +8,18 @@ type StaffFilterProps = {
 };
 
 export const StaffFilter = ({ closeModal }: StaffFilterProps) => {
-  const { pastSixMonths, pastThreeMonths } = useStaffData();
+  const { handleFilterChange } = useStaffData();
 
-  const [dateRange, setDateRange] = useState("");
+  const [dateRange, setDateRange] = useState(0);
 
   const applyFilters = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (dateRange === "3") {
-      return await pastThreeMonths();
+    if (dateRange) {
+      handleFilterChange(dateRange);
     }
-    if (dateRange === "6") {
-      pastSixMonths();
-      return closeModal();
-    }
-    console.log("apply filters");
+
+    closeModal();
   };
   return (
     <form className={s.staffFilter} onSubmit={applyFilters}>
@@ -31,13 +28,15 @@ export const StaffFilter = ({ closeModal }: StaffFilterProps) => {
         <select
           name="dateRange"
           id="dateRange"
-          onChange={(e) => setDateRange(e.target.value)}
+          onChange={(e) => setDateRange(+e.target.value)}
           className={s.input}
         >
           <option value="">- Choose a Date Range</option>
-          <option value="3">Past Three Months</option>
-          <option value="6">Past Six Months</option>
-          <option value="12">Past Year</option>
+          <option value={3}>Past Three Months</option>
+          <option value={6}>Past Six Months</option>
+          <option value={12}>Past Year</option>
+          <option value={24}>Past 2 Years</option>
+          <option value={60}>Past 5 Years</option>
         </select>
       </label>
       <input value="Apply Filters" type="submit" />

@@ -8,8 +8,7 @@ import {
 
 export type QueryResult = {
   apprenticeData: ApprenticeMprData[];
-  pastThreeMonths: () => void;
-  pastSixMonths: () => void;
+  handleFilterChange: (newFilter: number) => void;
 };
 
 export type ApprenticeMprData = {
@@ -21,6 +20,7 @@ export type ApprenticeMprData = {
 
 export const useStaffData = (): QueryResult => {
   const [apprenticeData, setApprenticeData] = useState<ApprenticeMprData[]>([]);
+  const [filters, setFilters] = useState(0);
 
   const fetchMprs = async (beforeDate: Date) => {
     try {
@@ -41,40 +41,41 @@ export const useStaffData = (): QueryResult => {
           const hasUnapprovedMpr = data.mprs.some(
             (mpr) => !mpr.supervisorSignature || !mpr.adminApproval
           );
-
           return { apprenticeId, name, data, hasUnapprovedMpr };
         }
       );
 
       const data = await Promise.all(apprenticeDataPromise);
-      setApprenticeData(data);
+      console.log({ data });
+
+      return data;
+
+      // setApprenticeData(data);
+      // console.log({ apprenticeData });
     } catch (error) {
       console.error(error);
       throw new Error("Could not fetch mprs");
     }
   };
 
-  const pastThreeMonths = () => {
-    console.log("three months");
-    const threeMonthsAgo = new Date();
-    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-    fetchMprs(threeMonthsAgo);
-  };
-
-  const pastSixMonths = () => {
-    console.log("six months");
-    const sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-    fetchMprs(sixMonthsAgo);
+  const handleFilterChange = async (months: number) => {
+    const beforeDate = new Date();
+    beforeDate.setMonth(beforeDate.getMonth() - months);
+    const data = await fetchMprs(beforeDate);
+    return setApprenticeData(data);
   };
 
   useEffect(() => {
     console.log("use Effect ran");
 
-    const threeMonthsAgo = new Date();
-    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-    fetchMprs(threeMonthsAgo);
-  }, []);
+    const getInitData = async () => {
+      const beforeDate = new Date();
+      beforeDate.setMonth(beforeDate.getMonth() - 6);
+      const data = await fetchMprs(beforeDate);
+      setApprenticeData(data);
+    };
+    getInitData();
+  }, [filters]);
 
-  return { apprenticeData, pastThreeMonths, pastSixMonths };
+  return { apprenticeData, handleFilterChange };
 };
