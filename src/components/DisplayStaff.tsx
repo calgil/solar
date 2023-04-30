@@ -7,6 +7,9 @@ import { Modal } from "./Modal";
 import { StaffFilter } from "./StaffFilter";
 import { useStaffData } from "../hooks/useStaffData";
 import { ApprenticeSearch } from "./ApprenticeSearch";
+import { AddHours } from "./AddHours";
+import { useUsers } from "../hooks/useUsers";
+import { useAuth } from "../providers/auth.provider";
 
 export const DisplayStaff = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,6 +17,8 @@ export const DisplayStaff = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
 
+  const { user } = useAuth();
+  const { apprentices } = useUsers();
   const { apprenticeData, handleFilterChange, fetchApprenticeByName, clear } =
     useStaffData();
 
@@ -60,6 +65,20 @@ export const DisplayStaff = () => {
           <StaffMember key={data.apprenticeId} data={data} />
         ))}
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Add Hours"
+      >
+        {user && (
+          <AddHours
+            user={user}
+            closeModal={() => setIsModalOpen(false)}
+            supervisor="admin"
+            apprentices={apprentices}
+          />
+        )}
+      </Modal>
       <Modal
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
