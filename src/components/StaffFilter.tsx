@@ -5,9 +5,14 @@ import s from "../styles/components/StaffFilter.module.scss";
 type StaffFilterProps = {
   closeModal: () => void;
   handleFilter: (dateRange: number, approval?: boolean) => void;
+  clear: () => void;
 };
 
-export const StaffFilter = ({ closeModal, handleFilter }: StaffFilterProps) => {
+export const StaffFilter = ({
+  closeModal,
+  handleFilter,
+  clear,
+}: StaffFilterProps) => {
   const [dateRange, setDateRange] = useState(6);
   const [approval, setApproval] = useState(false);
 
@@ -58,7 +63,9 @@ export const StaffFilter = ({ closeModal, handleFilter }: StaffFilterProps) => {
       <div className={s.submitContainer}>
         <input className={s.submitBtn} value="Apply Filters" type="submit" />
       </div>
-      <p className={s.reset}>Reset Filters</p>
+      <p className={s.reset} onClick={() => clear()}>
+        Reset Filters
+      </p>
     </form>
   );
 };

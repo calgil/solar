@@ -64,6 +64,7 @@ export const DisplayStaff = () => {
         <StaffFilter
           closeModal={() => setIsFilterModalOpen(false)}
           handleFilter={handleFilterChange}
+          clear={clear}
         />
       </Modal>
     </div>

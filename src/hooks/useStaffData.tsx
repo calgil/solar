@@ -114,8 +114,6 @@ export const useStaffData = (): QueryResult => {
   };
 
   useEffect(() => {
-    console.log("use Effect ran");
-
     getInitData();
   }, [filters]);
 
