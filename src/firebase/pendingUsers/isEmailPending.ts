@@ -17,6 +17,7 @@ export const isEmailPending = async (email: string) => {
   const user: NewUser = {
     name,
     role,
+    status: "active",
   };
 
   if (supervisor) {
