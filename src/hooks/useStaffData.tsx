@@ -56,8 +56,6 @@ export const useStaffData = (): QueryResult => {
       );
 
       const data = await Promise.all(apprenticeDataPromise);
-      console.log({ data });
-
       return data;
     } catch (error) {
       console.error(error);
@@ -66,8 +64,6 @@ export const useStaffData = (): QueryResult => {
   };
 
   const handleFilterChange = async (months: number, approval?: boolean) => {
-    console.log("filter change", approval);
-
     if (months === -1) {
       const data = await fetchMprs(undefined, approval);
       return setApprenticeData(data);

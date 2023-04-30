@@ -15,5 +15,4 @@ export type MprType = {
   apprenticeSignature: boolean;
   supervisorSignature: boolean;
   supervisorId: string;
-  adminApproval: boolean;
 };

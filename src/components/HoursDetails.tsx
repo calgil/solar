@@ -45,7 +45,7 @@ export const HoursDetails = ({ apprenticeData }: HoursDetailsProps) => {
           <div className={s.categoryContainer}>
             <HourCategory
               category="PV"
-              hoursEarned={apprenticeData.psHours}
+              hoursEarned={apprenticeData.pvHours}
               totalHours={REQUIRED_HOURS.PVHours}
               showPercentage
             />
