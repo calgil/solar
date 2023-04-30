@@ -65,13 +65,13 @@
   }
 
   > input[type="checkbox"] {
+    position: relative;
     height: 20px;
-    min-width: 20px;
+    width: 20px;
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    -o-appearance: none;
-    appearance: none;
-    border: 1px solid a.$borderGrey;
+    border: 2px solid a.$borderGrey;
     border-radius: 4px;
     outline: none;
     transition-duration: 0.3s;
@@ -89,6 +89,17 @@
 
     &:focus {
       border: 1px solid a.$accentLight;
+    }
+
+    &:checked::before {
+      content: "\2713";
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 20px;
+      color: white;
     }
   }
 }
