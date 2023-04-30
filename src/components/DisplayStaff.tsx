@@ -3,25 +3,32 @@ import { useState } from "react";
 import s from "../styles/components/Staff.module.scss";
 import { StaffMember } from "./StaffMember";
 import filter from "../assets/filter.png";
-import search from "../assets/search.png";
 import { Modal } from "./Modal";
 import { StaffFilter } from "./StaffFilter";
 import { useStaffData } from "../hooks/useStaffData";
+import { ApprenticeSearch } from "./ApprenticeSearch";
 
 export const DisplayStaff = () => {
-  const { apprenticeData } = useStaffData();
-
-  const [searchQuery, setSearchQuery] = useState("");
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredData = apprenticeData.filter((data) =>
-    data.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const { apprenticeData, handleFilterChange, fetchApprenticeByName, clear } =
+    useStaffData();
 
-  console.log({ apprenticeData });
+  const handleSearch = (name: string) => {
+    setSearchQuery(name);
+    fetchApprenticeByName(name);
+  };
 
-  const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+  const handleNameChange = (value: string) => {
+    console.log("change", value);
+
+    setSearchQuery(value);
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    clear();
   };
 
   return (
@@ -36,17 +43,12 @@ export const DisplayStaff = () => {
           </div>
           Filters
         </button>
-        <div className={s.searchContainer}>
-          <input
-            className={s.filterInput}
-            type="text"
-            placeholder="Filter Staff"
-            onChange={handleSearchQueryChange}
-          />
-          <div className={s.searchImg}>
-            <img src={search} alt="search" />
-          </div>
-        </div>
+        <ApprenticeSearch
+          onSelect={handleSearch}
+          onInputChange={handleNameChange}
+          inputValue={searchQuery}
+          clearSearch={handleClearSearch}
+        />
       </div>
       <div className={s.staffContainer}>
         {apprenticeData.map((data) => (
@@ -59,7 +61,11 @@ export const DisplayStaff = () => {
         title="Filter"
         filter
       >
-        <StaffFilter closeModal={() => setIsFilterModalOpen(false)} />
+        <StaffFilter
+          closeModal={() => setIsFilterModalOpen(false)}
+          handleFilter={handleFilterChange}
+          clear={clear}
+        />
       </Modal>
     </div>
   );

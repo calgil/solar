@@ -6,7 +6,7 @@ import { User } from "../types/user.type";
 import classNames from "classnames/bind";
 import { toast } from "react-toastify";
 import { useUsers } from "../hooks/useUsers";
-import { useAuth } from "../firebase/auth/auth.provider";
+import { useAuth } from "../providers/auth.provider";
 import { updateUser } from "../firebase/users/updateUser";
 
 const cx = classNames.bind(s);

@@ -1,15 +1,15 @@
 export type RequiredHours = {
   totalHours: number;
-  PSHours: number;
+  PVHours: number;
   BOSHours: number;
-  ORESHours: number;
+  OtherREHours: number;
   otherHours: number;
 };
 
 export const REQUIRED_HOURS: RequiredHours = {
   totalHours: 4000,
-  PSHours: 1000,
+  PVHours: 1000,
   BOSHours: 1500,
-  ORESHours: 500,
+  OtherREHours: 500,
   otherHours: 1000,
 };

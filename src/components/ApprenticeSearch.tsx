@@ -3,22 +3,27 @@ import s from "../styles/components/ApprenticeSearch.module.scss";
 import search from "../assets/search.png";
 import classNames from "classnames/bind";
 import { useCombobox } from "downshift";
+import { useUsers } from "../hooks/useUsers";
+import close from "../assets/close.png";
 
 const cx = classNames.bind(s);
 
 type SearchProps = {
-  options: string[];
   onSelect: (selected: string) => void;
   onInputChange: (value: string) => void;
   inputValue: string;
+  clearSearch: () => void;
 };
 
 export const ApprenticeSearch = ({
-  options,
   onSelect,
   onInputChange,
   inputValue,
+  clearSearch,
 }: SearchProps) => {
+  const { apprentices } = useUsers();
+  const apprenticeNames = apprentices.map((apprentice) => apprentice.name);
+
   const {
     getInputProps,
     getMenuProps,
@@ -26,7 +31,7 @@ export const ApprenticeSearch = ({
     isOpen,
     getItemProps,
   } = useCombobox({
-    items: options,
+    items: apprenticeNames,
     selectedItem: null,
     onSelectedItemChange: ({ selectedItem }) => {
       if (selectedItem) {
@@ -37,10 +42,13 @@ export const ApprenticeSearch = ({
       if (inputValue) {
         onInputChange(inputValue);
       }
+      if (!inputValue) {
+        onInputChange("");
+      }
     },
   });
 
-  const filteredOptions = options.filter((option) =>
+  const filteredOptions = apprenticeNames.filter((option) =>
     option.toLowerCase().includes(inputValue.toLowerCase())
   );
 
@@ -51,11 +59,16 @@ export const ApprenticeSearch = ({
         value={inputValue}
         type="text"
         placeholder="Apprentice Name"
-        {...getInputProps()}
+        {...getInputProps({ value: inputValue })}
       />
       <div className={s.searchImg}>
         <img src={search} alt="search" />
       </div>
+      <button className={s.clearBtn} onClick={clearSearch}>
+        <div className={s.close}>
+          <img src={close} alt="close" />
+        </div>
+      </button>
       <ul
         className={cx({ optionList: true, closed: !isOpen })}
         {...getMenuProps()}

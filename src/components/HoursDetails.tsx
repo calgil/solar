@@ -44,9 +44,15 @@ export const HoursDetails = ({ apprenticeData }: HoursDetailsProps) => {
           <p className={s.totalHours}>{apprenticeData.totalHours}/4000</p>
           <div className={s.categoryContainer}>
             <HourCategory
-              category="PS"
-              hoursEarned={apprenticeData.psHours}
-              totalHours={REQUIRED_HOURS.PSHours}
+              category="PV"
+              hoursEarned={apprenticeData.pvHours}
+              totalHours={REQUIRED_HOURS.PVHours}
+              showPercentage
+            />
+            <HourCategory
+              category="Other RE"
+              hoursEarned={apprenticeData.oresHours}
+              totalHours={REQUIRED_HOURS.OtherREHours}
               showPercentage
             />
             <HourCategory
@@ -55,12 +61,7 @@ export const HoursDetails = ({ apprenticeData }: HoursDetailsProps) => {
               totalHours={REQUIRED_HOURS.BOSHours}
               showPercentage
             />
-            <HourCategory
-              category="ORES"
-              hoursEarned={apprenticeData.oresHours}
-              totalHours={REQUIRED_HOURS.ORESHours}
-              showPercentage
-            />
+
             <HourCategory
               category="Other"
               hoursEarned={apprenticeData.otherHours}

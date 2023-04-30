@@ -6,8 +6,32 @@
   flex-direction: column;
   align-items: flex-start;
   margin-top: 20px;
+  font-family: a.$secondaryFont;
 
-  .input {
-    @extend .input;
+  .label {
+    margin-top: 10px;
+    width: 100%;
+
+    .input {
+      @extend .input;
+      margin-top: 5px;
+    }
+  }
+
+  .submitContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    .submitBtn {
+      @extend .submitBtn;
+    }
+  }
+  .reset {
+    @extend .customLink;
+    padding: 0;
+    margin: 0 auto;
+    margin-top: 20px;
   }
 }

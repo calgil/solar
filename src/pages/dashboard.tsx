@@ -3,7 +3,7 @@
 import { AdminDashboard } from "../components/dashboards/AdminDashboard";
 import { ApprenticeDashboard } from "../components/dashboards/ApprenticeDashboard";
 import { SupervisorDashboard } from "../components/dashboards/SupervisorDashboard";
-import { useAuth } from "../firebase/auth/auth.provider";
+import { useAuth } from "../providers/auth.provider";
 
 export default function Dashboard() {
   const { user } = useAuth();

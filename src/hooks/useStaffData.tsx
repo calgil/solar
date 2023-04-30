@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useEffect, useState } from "react";
 import {
@@ -8,8 +8,9 @@ import {
 
 export type QueryResult = {
   apprenticeData: ApprenticeMprData[];
-  pastThreeMonths: () => void;
-  pastSixMonths: () => void;
+  handleFilterChange: (dateRange: number, approval?: boolean) => void;
+  fetchApprenticeByName: (name: string) => void;
+  clear: () => void;
 };
 
 export type ApprenticeMprData = {
@@ -21,14 +22,20 @@ export type ApprenticeMprData = {
 
 export const useStaffData = (): QueryResult => {
   const [apprenticeData, setApprenticeData] = useState<ApprenticeMprData[]>([]);
+  const [filters] = useState(0);
 
-  const threeMonthsAgo = new Date();
-  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 6);
-
-  const fetchMprs = async (beforeDate: Date = threeMonthsAgo) => {
+  const fetchMprs = async (beforeDate?: Date, approval?: boolean) => {
     try {
       const collectionRef = collection(db, "mprs");
-      const queryRef = query(collectionRef, where("date", ">=", beforeDate));
+      let queryRef = query(collectionRef);
+      if (beforeDate) {
+        queryRef = query(queryRef, where("date", ">=", beforeDate));
+      }
+      if (approval) {
+        queryRef = query(queryRef, where("supervisorSignature", "==", true));
+      }
+      queryRef = query(queryRef, orderBy("date"));
+      queryRef = query(queryRef, orderBy("apprenticeName"));
 
       const documentSnapshots = await getDocs(queryRef);
 
@@ -42,36 +49,69 @@ export const useStaffData = (): QueryResult => {
           const apprenticeId = data.mprs[0].apprenticeId;
           const name = data.mprs[0].apprenticeName;
           const hasUnapprovedMpr = data.mprs.some(
-            (mpr) => !mpr.supervisorSignature || !mpr.adminApproval
+            (mpr) => !mpr.supervisorSignature
           );
-
           return { apprenticeId, name, data, hasUnapprovedMpr };
         }
       );
 
       const data = await Promise.all(apprenticeDataPromise);
-      setApprenticeData(data);
+      return data;
     } catch (error) {
       console.error(error);
       throw new Error("Could not fetch mprs");
     }
   };
 
-  const pastThreeMonths = () => {
-    console.log("three months");
-    fetchMprs();
+  const handleFilterChange = async (months: number, approval?: boolean) => {
+    if (months === -1) {
+      const data = await fetchMprs(undefined, approval);
+      return setApprenticeData(data);
+    }
+    const beforeDate = new Date();
+    beforeDate.setMonth(beforeDate.getMonth() - months);
+    const data = await fetchMprs(beforeDate, approval);
+    return setApprenticeData(data);
   };
 
-  const pastSixMonths = () => {
-    console.log("six months");
-    const sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-    fetchMprs(sixMonthsAgo);
+  const fetchApprenticeByName = async (name: string): Promise<void> => {
+    try {
+      const usersCollection = collection(db, "users");
+      const queryRef = query(usersCollection, where("name", "==", name));
+      const userSnapshot = await getDocs(queryRef);
+      const user = userSnapshot.docs[0];
+      if (!user) {
+        return;
+      }
+      const data = await getApprenticeData(user.id);
+      return setApprenticeData([
+        {
+          apprenticeId: user.id,
+          data,
+          name,
+          hasUnapprovedMpr: data.mprs.some((mpr) => !mpr.supervisorSignature),
+        },
+      ]);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Could not get user by name");
+    }
+  };
+
+  const getInitData = async () => {
+    const beforeDate = new Date();
+    beforeDate.setMonth(beforeDate.getMonth() - 6);
+    const data = await fetchMprs(beforeDate);
+    setApprenticeData(data);
+  };
+
+  const clear = () => {
+    getInitData();
   };
 
   useEffect(() => {
-    fetchMprs();
-  }, []);
+    getInitData();
+  }, [filters]);
 
-  return { apprenticeData, pastThreeMonths, pastSixMonths };
+  return { apprenticeData, handleFilterChange, fetchApprenticeByName, clear };
 };

@@ -1,28 +1,19 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useMprPagination } from "../hooks/useMprPagination";
 import s from "../styles/components/MonthlyProgressReports.module.scss";
 import filter from "../assets/filter.png";
 import { useRef, useState } from "react";
-import { useUsers } from "../hooks/useUsers";
 import { ApprenticeSearch } from "./ApprenticeSearch";
 import { MprTable } from "./MprTable";
-import { PaginationButtons } from "./PaginationButtons";
+// import { PaginationButtons } from "./PaginationButtons";
 import { useReactToPrint } from "react-to-print";
+import { useStaffData } from "../hooks/useStaffData";
+import { Modal } from "./Modal";
+import { StaffFilter } from "./StaffFilter";
 
 export const MonthlyProgressReports = () => {
-  const {
-    mprs,
-    currentPage,
-    totalPages,
-    next,
-    prev,
-    filterByName,
-    findSupervisorUnapproved,
-    findAdminUnapproved,
-    clearSearch,
-  } = useMprPagination();
-
-  const { users } = useUsers();
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const { apprenticeData, handleFilterChange, fetchApprenticeByName, clear } =
+    useStaffData();
 
   const componentRef = useRef(null);
 
@@ -30,73 +21,63 @@ export const MonthlyProgressReports = () => {
     content: () => componentRef.current,
   });
 
-  const apprenticeNames = users
-    .filter((user) => user.role === "apprentice")
-    .map((app) => app.name);
-
   const [inputValue, setInputValue] = useState("");
 
   const handleSelect = (value: string) => {
-    console.log("fuck!!!!", value);
-
     setInputValue(value);
-    filterByName(value);
+    fetchApprenticeByName(value);
   };
 
   const onInputChange = (value: string) => {
     setInputValue(value);
   };
 
-  const showUnapproved = () => {
-    console.log("unapproved");
-    findSupervisorUnapproved();
-  };
-
-  const showAdminUnapproved = () => {
-    console.log("admin");
-    findAdminUnapproved();
-  };
-
   const handleClearSearch = () => {
-    clearSearch();
+    clear();
     setInputValue("");
   };
 
   return (
     <div className={s.reports}>
       <div className={s.adminActions}>
-        <button className={s.filterBtn}>
+        <button
+          className={s.filterBtn}
+          onClick={() => setIsFilterModalOpen(true)}
+        >
           <div className={s.filterImg}>
             <img src={filter} alt="filter" />
           </div>
           Filters
         </button>
         <ApprenticeSearch
-          options={apprenticeNames}
           onSelect={handleSelect}
           onInputChange={onInputChange}
           inputValue={inputValue}
+          clearSearch={handleClearSearch}
         />
-        <button onClick={showUnapproved} className={s.link}>
-          Supervisor Unapproved
-        </button>
-        <button onClick={showAdminUnapproved} className={s.link}>
-          Admin Unapproved
-        </button>
-        <button className={s.link} onClick={handleClearSearch}>
-          Clear Filters
-        </button>
         <button className={s.link} onClick={handlePrint}>
           Print Report
         </button>
       </div>
-      <MprTable mprs={mprs} tableRef={componentRef} />
-      <PaginationButtons
+      <MprTable data={apprenticeData} tableRef={componentRef} />
+      {/* <PaginationButtons
         totalPages={totalPages}
         prev={prev}
         next={next}
         currentPage={currentPage}
-      />
+      /> */}
+      <Modal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        title="Filter"
+        filter
+      >
+        <StaffFilter
+          closeModal={() => setIsFilterModalOpen(false)}
+          handleFilter={handleFilterChange}
+          clear={handleClearSearch}
+        />
+      </Modal>
     </div>
   );
 };

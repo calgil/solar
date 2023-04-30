@@ -5,7 +5,7 @@ import alert from "../assets/alert.png";
 import classNames from "classnames/bind";
 import { useState } from "react";
 import { Modal } from "./Modal";
-import { useAuth } from "../firebase/auth/auth.provider";
+import { useAuth } from "../providers/auth.provider";
 import { MprType } from "../types/mpr.type";
 import { AddHours } from "./AddHours";
 
@@ -15,13 +15,13 @@ type SignatureProps = {
   text: string;
   isSigned: boolean;
   mpr: MprType;
-  authorizedApproval: "supervisor" | "admin";
+  supervisorId: string;
 };
 export const Signature = ({
   text,
   isSigned,
   mpr,
-  authorizedApproval,
+  supervisorId,
 }: SignatureProps) => {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,11 +37,14 @@ export const Signature = ({
   const handleApproval = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
 
-    if (user?.role !== authorizedApproval || user?.role !== "admin") {
+    if (user?.role === "admin") {
+      return setIsModalOpen(true);
+    }
+
+    if (user?.id !== supervisorId) {
       return;
     }
     setIsModalOpen(true);
-    console.log("i want to be approved!");
   };
   return (
     <div className={s.signature} onClick={handleApproval}>
@@ -58,7 +61,7 @@ export const Signature = ({
           <AddHours
             user={user}
             closeModal={closeModal}
-            supervisor={authorizedApproval}
+            supervisor="supervisor"
             mpr={mpr}
           />
         )}

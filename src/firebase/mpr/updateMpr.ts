@@ -1,4 +1,4 @@
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { UploadMpr } from "./createMpr";
 import { db } from "../config";
 import { toast } from "react-toastify";

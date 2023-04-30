@@ -1,41 +1,36 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { ApprenticeMprData } from "../hooks/useStaffData";
 import s from "../styles/components/MprTable.module.scss";
-import { MprType } from "../types/mpr.type";
-import { displayDate } from "../utils/displayDate";
 
 type MprTableProps = {
-  mprs: MprType[];
+  data: ApprenticeMprData[];
   tableRef: React.RefObject<HTMLTableElement>;
 };
 
-export const MprTable = ({ mprs, tableRef }: MprTableProps) => {
+export const MprTable = ({ data, tableRef }: MprTableProps) => {
   return (
     <table className={s.table} ref={tableRef}>
       <thead className={s.headers}>
         <tr className={`${s.row} ${s.top}`}>
           <th>Name</th>
-          <th>Date</th>
           <th>Total Time</th>
-          <th>PS Hours</th>
-          <th>ORES Hours</th>
+          <th>PV Hours</th>
+          <th>Other RE Hours</th>
           <th>BOS Hours</th>
           <th>Other Hours</th>
           <th>Supervisor Approved</th>
-          <th>Approved</th>
         </tr>
       </thead>
       <tbody className={s.tableBody}>
-        {mprs.map((mpr) => (
-          <tr className={s.row} key={mpr.id}>
-            <td>{mpr.apprenticeName}</td>
-            <td>{displayDate(mpr.date)}</td>
-            <td>{mpr.totalHours}</td>
-            <td>{mpr.psHours}</td>
-            <td>{mpr.oresHours}</td>
-            <td>{mpr.bosHours}</td>
-            <td>{mpr.otherHours}</td>
-            <td>{mpr.supervisorSignature ? "Yes" : "No"}</td>
-            <td>{mpr.adminApproval ? "Yes" : "No"}</td>
+        {data.map((apprentice) => (
+          <tr className={s.row} key={apprentice.apprenticeId}>
+            <td>{apprentice.name}</td>
+            <td>{apprentice.data.totalHours}</td>
+            <td>{apprentice.data.pvHours}</td>
+            <td>{apprentice.data.oresHours}</td>
+            <td>{apprentice.data.bosHours}</td>
+            <td>{apprentice.data.otherHours}</td>
+            <td>{apprentice.hasUnapprovedMpr ? "No" : "Yes"}</td>
           </tr>
         ))}
       </tbody>

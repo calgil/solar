@@ -1,4 +1,4 @@
-import { useAuth } from "../firebase/auth/auth.provider";
+import { useAuth } from "../providers/auth.provider";
 import s from "../styles/components/Header.module.scss";
 import logo from "../assets/logo.png";
 import { DisplayUser } from "./DisplayUser";

@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import s from "../../styles/components/ApprenticeDashboard.module.scss";
-import { useAuth } from "../../firebase/auth/auth.provider";
+import { useAuth } from "../../providers/auth.provider";
 import { useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
@@ -8,7 +8,7 @@ import { capitalizeName } from "../../utils/capitalizeName";
 import { MprType } from "../../types/mpr.type";
 import { HoursOverview } from "../HoursOverview";
 import { HoursDetails } from "../HoursDetails";
-import { fetchMprs } from "../../firebase/mpr/getApprenticeMprs";
+import { fetchMprs } from "../../firebase/mpr/fetchMprs";
 import { AddBtn } from "../AddBtn";
 import { User } from "../../types/user.type";
 import { AddUser } from "../AddUser";
@@ -53,7 +53,7 @@ export const ApprenticeDashboard = ({
   }, [apprentice]);
 
   const totalHours = userMprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
-  const psHours = userMprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
+  const pvHours = userMprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
   const oresHours = userMprs.reduce((acc, mpr) => acc + mpr.oresHours, 0);
   const bosHours = userMprs.reduce((acc, mpr) => acc + mpr.bosHours, 0);
   const otherHours = userMprs.reduce((acc, mpr) => acc + mpr.otherHours, 0);
@@ -64,7 +64,7 @@ export const ApprenticeDashboard = ({
         <h2>{capitalizeName(apprentice.name)}&apos;s Dashboard</h2>
         <div className={s.totals}>
           <HoursOverview
-            hours={{ totalHours, psHours, oresHours, bosHours, otherHours }}
+            hours={{ totalHours, pvHours, oresHours, bosHours, otherHours }}
           />
           {/* <div>Certs and Education</div> */}
           {/* <div>Test</div> */}
@@ -82,7 +82,7 @@ export const ApprenticeDashboard = ({
         <HoursDetails
           apprenticeData={{
             totalHours,
-            psHours,
+            pvHours,
             oresHours,
             bosHours,
             otherHours,

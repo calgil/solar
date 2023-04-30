@@ -18,11 +18,11 @@ export const fetchMprs = (
     orderBy("date", "desc")
   );
   const unsubscribe = onSnapshot(mprsQuery, (mprsSnapshot) => {
-    const mprsData = mprsSnapshot.docs.map((doc) => ({
+    const data = mprsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     })) as MprType[];
-    callback(mprsData);
+    callback(data);
   });
   return unsubscribe;
 };
