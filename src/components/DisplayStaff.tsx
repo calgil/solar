@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
-import s from "../styles/components/Staff.module.scss";
+import s from "../styles/components/DisplayStaff.module.scss";
 import { StaffMember } from "./StaffMember";
 import filter from "../assets/filter.png";
 import { Modal } from "./Modal";
@@ -9,7 +9,9 @@ import { useStaffData } from "../hooks/useStaffData";
 import { ApprenticeSearch } from "./ApprenticeSearch";
 
 export const DisplayStaff = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const { apprenticeData, handleFilterChange, fetchApprenticeByName, clear } =
@@ -49,6 +51,9 @@ export const DisplayStaff = () => {
           inputValue={searchQuery}
           clearSearch={handleClearSearch}
         />
+        <button className={s.addHours} onClick={() => setIsModalOpen(true)}>
+          Add Hours
+        </button>
       </div>
       <div className={s.staffContainer}>
         {apprenticeData.map((data) => (
