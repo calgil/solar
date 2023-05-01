@@ -11,6 +11,7 @@ import { generateFileName } from "../utils/generateFileName";
 import classNames from "classnames/bind";
 import { MprType } from "../types/mpr.type";
 import { updateMpr } from "../firebase/mpr/updateMpr";
+import { deleteMprPhoto } from "../firebase/mpr/deleteMprPhoto";
 
 const cx = classNames.bind(s);
 
@@ -48,12 +49,14 @@ export const AddHours = ({
   const [apprenticeSignature, setApprenticeSignature] = useState(
     mpr?.apprenticeSignature || false
   );
+
+  const [fileName, setFileName] = useState("");
   const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | null>(
     mpr?.photoUrl || null
   );
 
-  const [selectedApprentice, setSelectedApprentice] = useState<User | string>(
-    ""
+  const [selectedApprentice, setSelectedApprentice] = useState<User | null>(
+    null
   );
   const [supervisorSignature, setSupervisorSignature] = useState(false);
 
@@ -133,27 +136,36 @@ export const AddHours = ({
     setPhotoError(false);
     const date = new Date(year, month - 1);
 
-    let newFileName = generateFileName(user.name, date, selectedFile.type);
+    let file;
 
-    if (
-      supervisor &&
-      typeof selectedApprentice !== "string" &&
-      mpr?.apprenticeName
-    ) {
-      newFileName = generateFileName(
-        mpr?.apprenticeName,
-        date,
-        selectedFile.type
+    if (supervisor) {
+      if (selectedApprentice) {
+        console.log("fuck this noise!!");
+        file = new File(
+          [selectedFile],
+          generateFileName(selectedApprentice.name, date, selectedFile.type),
+          { type: selectedFile.type }
+        );
+        setFileName(file.name);
+      }
+    }
+
+    if (!supervisor) {
+      console.log("no supervisor");
+      file = new File(
+        [selectedFile],
+        generateFileName(user.name, date, selectedFile.type),
+        { type: selectedFile.type }
       );
     }
 
-    const newFile = new File([selectedFile], newFileName, {
-      type: selectedFile.type,
-    });
+    if (!file) {
+      return;
+    }
+
     try {
-      const photoUrl = await uploadMprPhoto(newFile);
+      const photoUrl = await uploadMprPhoto(file);
       setUploadPhotoUrl(photoUrl);
-      console.log("new file! 3");
     } catch (err) {
       console.error(err);
       setUploadPhotoUrl(null);
@@ -163,7 +175,7 @@ export const AddHours = ({
 
   const deletePhoto = () => {
     setUploadPhotoUrl(null);
-    // delete photo from bucket
+    deleteMprPhoto(fileName);
   };
 
   const uploadMPR = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -230,7 +242,7 @@ export const AddHours = ({
       return closeModal();
     }
 
-    if (supervisor && typeof selectedApprentice !== "string") {
+    if (supervisor && selectedApprentice) {
       createMpr({
         apprenticeId: selectedApprentice.id,
         apprenticeName: selectedApprentice.name,
@@ -373,7 +385,12 @@ export const AddHours = ({
                 />
               </div>
               <span className={s.uploadText}>
-                Drag and drop or <span className={s.green}>upload file</span>
+                {!uploadPhotoUrl && (
+                  <span>
+                    Drag and drop or
+                    <span className={s.green}> upload file</span>
+                  </span>
+                )}
               </span>
               <input
                 className={s.fileInput}
@@ -385,9 +402,17 @@ export const AddHours = ({
               />
             </label>
           </div>
+          {uploadPhotoUrl && (
+            <div className={s.deleteContainer}>
+              <button className={s.deleteBtn} onClick={deletePhoto}>
+                Delete Photo
+              </button>
+            </div>
+          )}
           {!month && (
             <p className={s.error}>
-              Please choose month/year before uploading photo
+              Please choose {selectedApprentice ? "" : "apprentice/"}
+              month/year before uploading photo
             </p>
           )}
           {isSubmitted && !uploadPhotoUrl && (

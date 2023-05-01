@@ -98,6 +98,17 @@
     }
   }
 
+  .deleteContainer {
+    padding-top: 10px;
+    text-align: center;
+
+    .deleteBtn {
+      @extend .customLink;
+      background-color: transparent;
+      border: none;
+    }
+  }
+
   .rightCol {
     display: block;
     width: 250px;
