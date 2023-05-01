@@ -4,6 +4,7 @@ import { db } from "../config";
 export type Updates = {
   role: string;
   supervisorId: string;
+  status: "active" | "archived" | "graduated";
 };
 
 type UpdateUserProps = {

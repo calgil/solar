@@ -430,8 +430,9 @@ export const AddHours = ({
             onChange={() => setSupervisorSignature(!supervisorSignature)}
           />
           <span className={s.supervisorApproval}>
-            This is true to the best of my knowledge as a member Training Agent
-            of the LRT Apprenticeship Program administered by the RE-JATC
+            I signed this MPR because it is correct best of my knowledge as a
+            member Training Agent of the LRT Apprenticeship Program administered
+            by the RE-JATC
           </span>
         </label>
       )}

@@ -12,6 +12,7 @@ import { fetchMprs } from "../../firebase/mpr/fetchMprs";
 import { AddBtn } from "../AddBtn";
 import { User } from "../../types/user.type";
 import { AddUser } from "../AddUser";
+import { Status } from "../Status";
 
 type ApprenticeDashboardProps = {
   apprentice: User;
@@ -61,7 +62,12 @@ export const ApprenticeDashboard = ({
   return (
     <div>
       <div className={s.overview}>
-        <h2>{capitalizeName(apprentice.name)}&apos;s Dashboard</h2>
+        <div className={s.userInfo}>
+          <h2>{capitalizeName(apprentice.name)}&apos;s Dashboard</h2>
+          {edit && user?.role !== "apprentice" && (
+            <Status status={apprentice.status} />
+          )}
+        </div>
         <div className={s.totals}>
           <HoursOverview
             hours={{ totalHours, pvHours, oresHours, bosHours, otherHours }}

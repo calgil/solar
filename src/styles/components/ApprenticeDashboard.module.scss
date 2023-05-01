@@ -5,6 +5,12 @@
   background-color: a.$backgroundGrey;
   padding: 25px 50px;
 
+  .userInfo {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
   .totals {
     max-width: 800px;
     margin: 0 auto;

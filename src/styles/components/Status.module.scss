@@ -1,0 +1,24 @@
+@use "../abstracts" as a;
+
+.statusContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .userStatus {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+  .userStatus.active {
+    background-color: a.$success;
+  }
+
+  .userStatus.graduated {
+    background-color: black;
+  }
+
+  .userStatus.archived {
+    background-color: a.$alert;
+  }
+}
