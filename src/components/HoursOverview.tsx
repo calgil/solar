@@ -7,7 +7,7 @@ import { ProgressDisplay } from "./ProgressDisplay";
 
 type Hours = {
   totalHours: number;
-  psHours: number;
+  pvHours: number;
   bosHours: number;
   oresHours: number;
   otherHours: number;
@@ -17,7 +17,7 @@ type HoursOverviewProps = {
   hours: Hours;
 };
 export const HoursOverview = ({
-  hours: { totalHours, psHours, oresHours, bosHours, otherHours },
+  hours: { totalHours, pvHours, oresHours, bosHours, otherHours },
 }: HoursOverviewProps) => {
   const [showDetails, setShowDetails] = useState(false);
   const handleExpandClick = () => {
@@ -38,8 +38,8 @@ export const HoursOverview = ({
         <div className={s.hoursDetails}>
           <ProgressDisplay
             title="PS"
-            earned={psHours}
-            required={REQUIRED_HOURS.PSHours}
+            earned={pvHours}
+            required={REQUIRED_HOURS.PVHours}
             main={false}
           />
           <ProgressDisplay
@@ -51,7 +51,7 @@ export const HoursOverview = ({
           <ProgressDisplay
             title="ORES"
             earned={oresHours}
-            required={REQUIRED_HOURS.ORESHours}
+            required={REQUIRED_HOURS.OtherREHours}
             main={false}
           />
           <ProgressDisplay

@@ -356,8 +356,8 @@ export const AddHours = ({
                 className={cx(s.input, s.date)}
                 type="number"
                 name="year"
-                min="2020"
-                max="2060"
+                min="1970"
+                max="3000"
                 step="1"
                 value={year}
                 onChange={(e) => setYear(parseInt(e.target.value))}
@@ -430,8 +430,9 @@ export const AddHours = ({
             onChange={() => setSupervisorSignature(!supervisorSignature)}
           />
           <span className={s.supervisorApproval}>
-            This is true to the best of my knowledge as a member Training Agent
-            of the LRT Apprenticeship Program administered by the RE-JATC
+            I signed this MPR because it is correct best of my knowledge as a
+            member Training Agent of the LRT Apprenticeship Program administered
+            by the RE-JATC
           </span>
         </label>
       )}

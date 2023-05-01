@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthForm } from "../components/AuthForm";
-import { useAuth } from "../firebase/auth/auth.provider";
+import { useAuth } from "../providers/auth.provider";
 import { InputType } from "../types/input.type";
 import { toast } from "react-toastify";
 
@@ -22,7 +22,7 @@ export default function Login() {
       value: emailInput,
       placeholder: "Email",
       onChange: (e) => setEmailInput(e.target.value),
-      autoComplete: "off",
+      autoComplete: "on",
     },
     {
       id: "password",
@@ -32,7 +32,7 @@ export default function Login() {
       value: passwordInput,
       placeholder: "Password",
       onChange: (e) => setPasswordInput(e.target.value),
-      autoComplete: "off",
+      autoComplete: "on",
     },
   ];
 

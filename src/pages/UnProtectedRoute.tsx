@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-import { useAuth } from "../firebase/auth/auth.provider";
+import { useAuth } from "../providers/auth.provider";
 
 /* eslint-disable react/react-in-jsx-scope */
 

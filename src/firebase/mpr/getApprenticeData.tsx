@@ -4,7 +4,7 @@ import { db } from "../config";
 
 export type ApprenticeData = {
   totalHours: number;
-  psHours: number;
+  pvHours: number;
   oresHours: number;
   bosHours: number;
   otherHours: number;
@@ -25,14 +25,14 @@ export const getApprenticeData = async (apprenticeId: string) => {
   })) as MprType[];
 
   const totalHours = mprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
-  const psHours = mprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
+  const pvHours = mprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
   const oresHours = mprs.reduce((acc, mpr) => acc + mpr.oresHours, 0);
   const bosHours = mprs.reduce((acc, mpr) => acc + mpr.bosHours, 0);
   const otherHours = mprs.reduce((acc, mpr) => acc + mpr.otherHours, 0);
 
   return {
     totalHours,
-    psHours,
+    pvHours,
     oresHours,
     bosHours,
     otherHours,

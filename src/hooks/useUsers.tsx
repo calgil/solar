@@ -4,14 +4,15 @@ import { fetchUsers } from "../firebase/users/fetchUsers";
 
 export const useUsers = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [users, setUsers] = useState<User[]>([]);
+  const [apprentices, setApprentices] = useState<User[]>([]);
+  const [supervisors, setSupervisors] = useState<User[]>([]);
   const [error, setError] = useState(null);
-  const supervisors = users.filter((user) => user.role === "supervisor");
 
   const getUsers = () => {
-    fetchUsers()
-      .then((usersData) => {
-        setUsers(usersData);
+    Promise.all([fetchUsers(), fetchUsers("supervisor")])
+      .then(([apprenticesData, supervisorsData]) => {
+        setApprentices(apprenticesData);
+        setSupervisors(supervisorsData);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -26,5 +27,5 @@ export const useUsers = () => {
     getUsers();
   }, []);
 
-  return { isLoading, users, supervisors, error };
+  return { isLoading, apprentices, supervisors, error };
 };

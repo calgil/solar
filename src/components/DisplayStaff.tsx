@@ -1,53 +1,96 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
-import { useUsers } from "../hooks/useUsers";
-import s from "../styles/components/Staff.module.scss";
+import s from "../styles/components/DisplayStaff.module.scss";
 import { StaffMember } from "./StaffMember";
 import filter from "../assets/filter.png";
-import search from "../assets/search.png";
+import { Modal } from "./Modal";
+import { StaffFilter } from "./StaffFilter";
+import { useStaffData } from "../hooks/useStaffData";
+import { ApprenticeSearch } from "./ApprenticeSearch";
+import { AddHours } from "./AddHours";
+import { useUsers } from "../hooks/useUsers";
+import { useAuth } from "../providers/auth.provider";
 
 export const DisplayStaff = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState("");
 
-  //   TODO: Error/loading
-  const { users } = useUsers();
+  const { user } = useAuth();
+  const { apprentices } = useUsers();
+  const { apprenticeData, handleFilterChange, fetchApprenticeByName, clear } =
+    useStaffData();
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.role.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleSearch = (name: string) => {
+    setSearchQuery(name);
+    fetchApprenticeByName(name);
+  };
 
-  const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+  const handleNameChange = (value: string) => {
+    console.log("change", value);
+
+    setSearchQuery(value);
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    clear();
   };
 
   return (
     <div className={s.staff}>
       <div className={s.adminActions}>
-        <button className={s.filterBtn}>
+        <button
+          onClick={() => setIsFilterModalOpen(true)}
+          className={s.filterBtn}
+        >
           <div className={s.filterImg}>
             <img src={filter} alt="filter" />
           </div>
           Filters
         </button>
-        <div className={s.searchContainer}>
-          <input
-            className={s.filterInput}
-            type="text"
-            placeholder="Filter Staff"
-            onChange={handleSearchQueryChange}
-          />
-          <div className={s.searchImg}>
-            <img src={search} alt="search" />
-          </div>
-        </div>
+        <ApprenticeSearch
+          onSelect={handleSearch}
+          onInputChange={handleNameChange}
+          inputValue={searchQuery}
+          clearSearch={handleClearSearch}
+        />
+        <button className={s.addHours} onClick={() => setIsModalOpen(true)}>
+          Add Hours
+        </button>
       </div>
       <div className={s.staffContainer}>
-        {filteredUsers.map((user) => (
-          <StaffMember key={user.id} user={user} />
+        {apprenticeData.map((data) => (
+          <StaffMember key={data.apprenticeId} data={data} />
         ))}
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Add Hours"
+      >
+        {user && (
+          <AddHours
+            user={user}
+            closeModal={() => setIsModalOpen(false)}
+            supervisor="admin"
+            apprentices={apprentices}
+          />
+        )}
+      </Modal>
+      <Modal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        title="Filter"
+        filter
+      >
+        <StaffFilter
+          closeModal={() => setIsFilterModalOpen(false)}
+          handleFilter={handleFilterChange}
+          clear={clear}
+        />
+      </Modal>
     </div>
   );
 };

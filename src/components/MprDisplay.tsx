@@ -22,9 +22,15 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
         <p className={s.totalHours}>{mpr.totalHours} Hours</p>
         <div className={s.categoryContainer}>
           <HourCategory
-            category="PS"
+            category="PV"
             hoursEarned={mpr.psHours}
             totalHours={1000}
+            showPercentage={false}
+          />
+          <HourCategory
+            category="Other RE"
+            hoursEarned={mpr.oresHours}
+            totalHours={500}
             showPercentage={false}
           />
           <HourCategory
@@ -33,12 +39,7 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
             totalHours={1500}
             showPercentage={false}
           />
-          <HourCategory
-            category="ORES"
-            hoursEarned={mpr.oresHours}
-            totalHours={500}
-            showPercentage={false}
-          />
+
           <HourCategory
             category="Other"
             hoursEarned={mpr.otherHours}
@@ -50,13 +51,7 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
           <Signature
             text="Supervisor"
             isSigned={mpr.supervisorSignature}
-            authorizedApproval="supervisor"
-            mpr={mpr}
-          />
-          <Signature
-            text="Admin"
-            isSigned={mpr.adminApproval}
-            authorizedApproval="admin"
+            supervisorId={mpr.supervisorId}
             mpr={mpr}
           />
         </div>

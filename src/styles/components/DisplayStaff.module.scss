@@ -40,8 +40,10 @@
       }
     }
   }
-  .link {
+  .addHours {
     @extend .customLink;
+    background-color: transparent;
+    border: none;
   }
 }
 

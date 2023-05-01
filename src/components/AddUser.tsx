@@ -6,7 +6,6 @@ import { User } from "../types/user.type";
 import classNames from "classnames/bind";
 import { toast } from "react-toastify";
 import { useUsers } from "../hooks/useUsers";
-import { useAuth } from "../firebase/auth/auth.provider";
 import { updateUser } from "../firebase/users/updateUser";
 
 const cx = classNames.bind(s);
@@ -18,7 +17,6 @@ type AddUserProps = {
 
 export const AddUser = ({ closeModal, userToEdit }: AddUserProps) => {
   const { supervisors } = useUsers();
-  const { user } = useAuth();
 
   const [newUserRole, setNewUserRole] = useState<string>(
     userToEdit?.role || ""
@@ -26,9 +24,21 @@ export const AddUser = ({ closeModal, userToEdit }: AddUserProps) => {
   const [newUserSupervisor, setNewUserSupervisor] = useState(
     userToEdit?.supervisorId || ""
   );
+  const [newUserStatus, setNewUserStatus] = useState(userToEdit?.status);
   const [newUserName, setNewUserName] = useState<string>("");
   const [newUserEmail, setNewUserEmail] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleStatusUpdate = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = e.target.value;
+    if (
+      newStatus === "active" ||
+      newStatus === "archived" ||
+      newStatus === "graduated"
+    ) {
+      return setNewUserStatus(newStatus);
+    }
+  };
 
   const addUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,9 +55,16 @@ export const AddUser = ({ closeModal, userToEdit }: AddUserProps) => {
     }
 
     if (userToEdit) {
+      if (!newUserStatus) {
+        return;
+      }
       updateUser({
         id: userToEdit.id,
-        updates: { role: newUserRole, supervisorId: newUserSupervisor },
+        updates: {
+          role: newUserRole,
+          supervisorId: newUserSupervisor,
+          status: newUserStatus,
+        },
       });
       return closeModal();
     }
@@ -66,10 +83,6 @@ export const AddUser = ({ closeModal, userToEdit }: AddUserProps) => {
         console.error(error);
         toast.error("Could not create user");
       });
-  };
-
-  const handleDeleteProfile = () => {
-    console.log("delete");
   };
 
   const roleClass = cx({
@@ -130,6 +143,21 @@ export const AddUser = ({ closeModal, userToEdit }: AddUserProps) => {
           </select>
         </label>
       )}
+      {userToEdit && (
+        <label>
+          Status
+          <select
+            className={s.input}
+            name="status"
+            id="status"
+            onChange={handleStatusUpdate}
+          >
+            <option value="active">Active</option>
+            <option value="graduated">Graduated</option>
+            <option value="archived">Archived</option>
+          </select>
+        </label>
+      )}
       {!userToEdit && (
         <>
           <label className={nameClass} htmlFor="name">
@@ -162,13 +190,7 @@ export const AddUser = ({ closeModal, userToEdit }: AddUserProps) => {
           </label>
         </>
       )}
-
       <div className={s.submitContainer}>
-        {userToEdit && user?.role === "admin" && (
-          <button className={s.deleteBtn} onClick={handleDeleteProfile}>
-            Delete Profile
-          </button>
-        )}
         <input
           className={s.submitBtn}
           type="submit"

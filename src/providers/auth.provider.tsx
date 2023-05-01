@@ -8,16 +8,17 @@ import {
 } from "@firebase/auth";
 import { deleteDoc, doc, setDoc } from "@firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
-import { getUserById } from "../../fetch/auth/getUserById";
-import { User } from "../../types/user.type";
-import { auth, db } from "../config";
-import { isEmailPending } from "../pendingUsers/isEmailPending";
+import { getUserById } from "../fetch/auth/getUserById";
+import { User } from "../types/user.type";
+import { auth, db } from "../firebase/config";
+import { isEmailPending } from "../firebase/pendingUsers/isEmailPending";
 import { toast } from "react-toastify";
 
 export type NewUser = {
   name: string;
   role: string;
   supervisorId?: string;
+  status: "active";
 };
 
 type AuthContextType = {
@@ -52,6 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const data: NewUser = {
         name: pendingUser.name,
         role: pendingUser.role,
+        status: "active",
       };
 
       if (pendingUser.supervisorId) {

@@ -3,4 +3,5 @@ export type User = {
   name: string;
   role: "admin" | "supervisor" | "apprentice";
   supervisorId?: string;
+  status: "active" | "archived" | "graduated";
 };
