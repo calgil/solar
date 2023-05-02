@@ -9,7 +9,7 @@ type Hours = {
   totalHours: number;
   pvHours: number;
   bosHours: number;
-  oresHours: number;
+  otherREHours: number;
   otherHours: number;
 };
 
@@ -17,7 +17,7 @@ type HoursOverviewProps = {
   hours: Hours;
 };
 export const HoursOverview = ({
-  hours: { totalHours, pvHours, oresHours, bosHours, otherHours },
+  hours: { totalHours, pvHours, otherREHours, bosHours, otherHours },
 }: HoursOverviewProps) => {
   const [showDetails, setShowDetails] = useState(false);
   const handleExpandClick = () => {
@@ -43,17 +43,18 @@ export const HoursOverview = ({
             main={false}
           />
           <ProgressDisplay
+            title="OTHER RE"
+            earned={otherREHours}
+            required={REQUIRED_HOURS.OtherREHours}
+            main={false}
+          />
+          <ProgressDisplay
             title="BOS"
             earned={bosHours}
             required={REQUIRED_HOURS.BOSHours}
             main={false}
           />
-          <ProgressDisplay
-            title="ORES"
-            earned={oresHours}
-            required={REQUIRED_HOURS.OtherREHours}
-            main={false}
-          />
+
           <ProgressDisplay
             title="Other"
             earned={otherHours}

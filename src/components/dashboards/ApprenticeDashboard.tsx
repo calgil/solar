@@ -55,7 +55,7 @@ export const ApprenticeDashboard = ({
 
   const totalHours = userMprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
   const pvHours = userMprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
-  const oresHours = userMprs.reduce((acc, mpr) => acc + mpr.oresHours, 0);
+  const otherREHours = userMprs.reduce((acc, mpr) => acc + mpr.otherREHours, 0);
   const bosHours = userMprs.reduce((acc, mpr) => acc + mpr.bosHours, 0);
   const otherHours = userMprs.reduce((acc, mpr) => acc + mpr.otherHours, 0);
 
@@ -70,7 +70,7 @@ export const ApprenticeDashboard = ({
         </div>
         <div className={s.totals}>
           <HoursOverview
-            hours={{ totalHours, pvHours, oresHours, bosHours, otherHours }}
+            hours={{ totalHours, pvHours, otherREHours, bosHours, otherHours }}
           />
           {/* <div>Certs and Education</div> */}
           {/* <div>Test</div> */}
@@ -89,7 +89,7 @@ export const ApprenticeDashboard = ({
           apprenticeData={{
             totalHours,
             pvHours,
-            otherReHours: oresHours,
+            otherREHours,
             bosHours,
             otherHours,
             mprs: userMprs,
