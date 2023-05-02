@@ -1,5 +1,6 @@
 @use "../abstracts" as a;
 @use "../layouts";
+@use "../breakpoints" as bp;
 
 .mprDetails {
   padding: 10px;
@@ -7,13 +8,16 @@
   border-radius: 8px;
   margin-top: 10px;
   cursor: default;
-  // font-family: a.$secondaryFont;
 
   .hoursContainer {
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 15px 0;
+
+    @include bp.media("lg") {
+      flex-wrap: wrap;
+    }
   }
 
   .date {
@@ -36,6 +40,10 @@
     .photoLink {
       text-decoration: none;
       @extend .customLink;
+    }
+
+    @include bp.media("md") {
+      gap: 10px;
     }
   }
 
