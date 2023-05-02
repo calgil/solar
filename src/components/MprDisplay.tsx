@@ -29,7 +29,7 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
           />
           <HourCategory
             category="Other RE"
-            hoursEarned={mpr.oresHours}
+            hoursEarned={mpr.otherREHours}
             totalHours={500}
             showPercentage={false}
           />
@@ -46,6 +46,14 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
             totalHours={1000}
             showPercentage={false}
           />
+          <a
+            className={s.photoLink}
+            href={mpr.photoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Photo
+          </a>
         </div>
         <div className={s.signatureContainer}>
           <Signature

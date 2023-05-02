@@ -1,4 +1,5 @@
 @use "../abstracts" as a;
+@use "../breakpoints" as bp;
 
 .header {
   display: flex;
@@ -20,6 +21,10 @@
       .companyName {
         text-transform: uppercase;
         max-width: 23ch;
+
+        @include bp.media("sm") {
+          display: none;
+        }
       }
     }
 

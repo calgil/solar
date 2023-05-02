@@ -5,15 +5,17 @@ import s from "../styles/components/StaffFilter.module.scss";
 type StaffFilterProps = {
   closeModal: () => void;
   handleFilter: (dateRange: number, approval?: boolean) => void;
+  date: number;
   clear: () => void;
 };
 
 export const StaffFilter = ({
   closeModal,
   handleFilter,
+  date,
   clear,
 }: StaffFilterProps) => {
-  const [dateRange, setDateRange] = useState(6);
+  const [dateRange, setDateRange] = useState(date);
   const [approval, setApproval] = useState(false);
 
   const handleApprovalChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -40,6 +42,7 @@ export const StaffFilter = ({
           value={dateRange}
         >
           <option value="">- Choose a Date Range</option>
+          <option value={1}>Last Month</option>
           <option value={6}>Past Six Months</option>
           <option value={12}>Past Year</option>
           <option value={24}>Past 2 Years</option>

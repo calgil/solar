@@ -34,12 +34,33 @@
     flex: 1 1;
 
     .dateContainer {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      transition: all 200ms ease-in-out;
+
+      .date {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
       .input {
         @extend .input;
+      }
+
+      .dateError {
+        display: none;
+      }
+    }
+
+    .dateContainer.invalid {
+      color: a.$alert;
+
+      .input {
+        color: a.$alert;
+      }
+
+      .dateError {
+        display: block;
+        margin-top: 5px;
       }
     }
 
@@ -95,6 +116,17 @@
       max-width: 100px;
       max-height: 100px;
       overflow: hidden;
+    }
+  }
+
+  .deleteContainer {
+    padding-top: 10px;
+    text-align: center;
+
+    .deleteBtn {
+      @extend .customLink;
+      background-color: transparent;
+      border: none;
     }
   }
 

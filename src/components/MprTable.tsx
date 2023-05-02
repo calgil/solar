@@ -1,4 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { REQUIRED_HOURS } from "../data/hourRequirements";
 import { ApprenticeMprData } from "../hooks/useStaffData";
 import s from "../styles/components/MprTable.module.scss";
 
@@ -25,11 +26,21 @@ export const MprTable = ({ data, tableRef }: MprTableProps) => {
         {data.map((apprentice) => (
           <tr className={s.row} key={apprentice.apprenticeId}>
             <td>{apprentice.name}</td>
-            <td>{apprentice.data.totalHours}</td>
-            <td>{apprentice.data.pvHours}</td>
-            <td>{apprentice.data.oresHours}</td>
-            <td>{apprentice.data.bosHours}</td>
-            <td>{apprentice.data.otherHours}</td>
+            <td>
+              {apprentice.data.totalHours}/{REQUIRED_HOURS.totalHours}
+            </td>
+            <td>
+              {apprentice.data.pvHours}/{REQUIRED_HOURS.PVHours}
+            </td>
+            <td>
+              {apprentice.data.otherREHours}/{REQUIRED_HOURS.OtherREHours}
+            </td>
+            <td>
+              {apprentice.data.bosHours}/{REQUIRED_HOURS.BOSHours}
+            </td>
+            <td>
+              {apprentice.data.otherHours}/{REQUIRED_HOURS.otherHours}
+            </td>
             <td>{apprentice.hasUnapprovedMpr ? "No" : "Yes"}</td>
           </tr>
         ))}

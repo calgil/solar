@@ -29,7 +29,6 @@ export const AuthForm = ({
       <form className={s.form} onSubmit={onSubmit}>
         <h2 className={s.portal}>LRT Apprenticeship Program Portal</h2>
         <div className={s.titleBg}>
-          {/* <h2 className={s.portal}>LRT Apprenticeship Program Portal</h2> */}
           <h2
             className={s.title}
             style={{ backgroundImage: `url(${titleBg})` }}

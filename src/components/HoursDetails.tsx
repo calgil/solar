@@ -51,7 +51,7 @@ export const HoursDetails = ({ apprenticeData }: HoursDetailsProps) => {
             />
             <HourCategory
               category="Other RE"
-              hoursEarned={apprenticeData.oresHours}
+              hoursEarned={apprenticeData.otherREHours}
               totalHours={REQUIRED_HOURS.OtherREHours}
               showPercentage
             />
