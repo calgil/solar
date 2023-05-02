@@ -26,6 +26,10 @@
       font-weight: 900;
       line-height: 27.32px;
       width: 173px;
+
+      @include bp.media("md") {
+        width: auto;
+      }
     }
 
     .totalHours {
@@ -34,6 +38,10 @@
       font-size: 14px;
       width: 124px;
       line-height: 19px;
+
+      @include bp.media("md") {
+        width: auto;
+      }
     }
 
     .categoryContainer {
@@ -41,9 +49,19 @@
       align-items: center;
       gap: 30px;
 
-      @include bp.media("md") {
-        gap: 5px;
+      @include bp.media("lg") {
+        flex-wrap: wrap;
       }
+
+      @include bp.media("sm") {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+
+    @include bp.media("md") {
+      gap: 20px;
     }
   }
 

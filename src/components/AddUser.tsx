@@ -151,6 +151,7 @@ export const AddUser = ({ closeModal, userToEdit }: AddUserProps) => {
             name="status"
             id="status"
             onChange={handleStatusUpdate}
+            value={newUserStatus}
           >
             <option value="active">Active</option>
             <option value="graduated">Graduated</option>

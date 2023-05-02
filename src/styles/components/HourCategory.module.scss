@@ -73,4 +73,8 @@
 
 .category.showPercentage {
   width: 123px;
+
+  @include bp.media("sm") {
+    width: auto;
+  }
 }
