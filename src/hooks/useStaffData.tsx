@@ -63,10 +63,27 @@ export const useStaffData = (): QueryResult => {
     }
   };
 
+  const fetchLastMonthData = async (approval?: boolean) => {
+    const today = new Date();
+    const currentMonth = today.getMonth();
+
+    let beforeMonth = currentMonth - (today.getDate() < 10 ? 2 : 1);
+    if (beforeMonth < 0) {
+      beforeMonth = 11;
+    }
+
+    const beforeDate = new Date(today.getFullYear(), beforeMonth, 1);
+    const data = await fetchMprs(beforeDate, approval);
+    setApprenticeData(data);
+  };
+
   const handleFilterChange = async (months: number, approval?: boolean) => {
     if (months === -1) {
       const data = await fetchMprs(undefined, approval);
       return setApprenticeData(data);
+    }
+    if (months === 1) {
+      return fetchLastMonthData(approval);
     }
     const beforeDate = new Date();
     beforeDate.setMonth(beforeDate.getMonth() - months);

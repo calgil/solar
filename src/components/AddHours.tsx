@@ -140,7 +140,6 @@ export const AddHours = ({
 
     if (supervisor) {
       if (selectedApprentice) {
-        console.log("fuck this noise!!");
         file = new File(
           [selectedFile],
           generateFileName(selectedApprentice.name, date, selectedFile.type),
@@ -151,7 +150,6 @@ export const AddHours = ({
     }
 
     if (!supervisor) {
-      console.log("no supervisor");
       file = new File(
         [selectedFile],
         generateFileName(user.name, date, selectedFile.type),

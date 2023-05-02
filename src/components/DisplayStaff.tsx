@@ -16,6 +16,7 @@ export const DisplayStaff = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [dateRange, setDateRange] = useState(6);
 
   const { user } = useAuth();
   const { apprentices } = useUsers();
@@ -31,6 +32,11 @@ export const DisplayStaff = () => {
     console.log("change", value);
 
     setSearchQuery(value);
+  };
+
+  const handleDateChange = (months: number) => {
+    setDateRange(months);
+    handleFilterChange(months);
   };
 
   const handleClearSearch = () => {
@@ -87,7 +93,8 @@ export const DisplayStaff = () => {
       >
         <StaffFilter
           closeModal={() => setIsFilterModalOpen(false)}
-          handleFilter={handleFilterChange}
+          handleFilter={handleDateChange}
+          date={dateRange}
           clear={clear}
         />
       </Modal>
