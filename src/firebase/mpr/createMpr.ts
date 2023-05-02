@@ -16,7 +16,6 @@ export type UploadMpr = {
   apprenticeSignature: boolean;
   supervisorSignature: boolean;
   supervisorId: string;
-  adminApproval: boolean;
 };
 
 export const createMpr = async ({
@@ -32,7 +31,6 @@ export const createMpr = async ({
   apprenticeSignature,
   supervisorSignature,
   supervisorId,
-  adminApproval,
 }: UploadMpr) => {
   const data = {
     apprenticeId,
@@ -47,7 +45,6 @@ export const createMpr = async ({
     apprenticeSignature,
     supervisorSignature,
     supervisorId,
-    adminApproval,
   };
 
   try {

@@ -30,9 +30,11 @@ export const AddHours = ({
   apprentices,
   mpr,
 }: AddHoursProps) => {
+  const currentMonth = new Date().getMonth() + 1;
   const [month, setMonth] = useState(
-    mpr ? mpr.date.toDate().getMonth() + 1 : 0
+    mpr ? mpr.date.toDate().getMonth() + 1 : currentMonth
   );
+
   const [year, setYear] = useState(
     mpr?.date.toDate().getFullYear() || +new Date().getFullYear()
   );
@@ -202,6 +204,10 @@ export const AddHours = ({
 
     const date = new Date(year, month - 1);
 
+    if (date > new Date()) {
+      return;
+    }
+
     if (mpr && supervisor === "admin") {
       updateMpr(mpr.id, {
         apprenticeId: mpr.apprenticeId,
@@ -216,7 +222,6 @@ export const AddHours = ({
         apprenticeSignature: mpr.apprenticeSignature,
         supervisorSignature: mpr.supervisorSignature,
         supervisorId: mpr.supervisorId,
-        adminApproval: true,
       });
       return closeModal();
     }
@@ -235,7 +240,6 @@ export const AddHours = ({
         apprenticeSignature: mpr.apprenticeSignature,
         supervisorSignature,
         supervisorId: mpr.supervisorId,
-        adminApproval: false,
       });
       return closeModal();
     }
@@ -254,7 +258,6 @@ export const AddHours = ({
         apprenticeSignature: true,
         supervisorSignature,
         supervisorId: user.id,
-        adminApproval: false,
       });
       return closeModal();
     }
@@ -276,7 +279,6 @@ export const AddHours = ({
       apprenticeSignature,
       supervisorSignature: false,
       supervisorId: user.supervisorId,
-      adminApproval: false,
     });
 
     closeModal();
@@ -285,6 +287,14 @@ export const AddHours = ({
   const apprenticeClass = cx({
     label: true,
     invalid: supervisor && !selectedApprentice && isSubmitted,
+  });
+
+  const dateClass = cx({
+    dateContainer: true,
+    invalid:
+      isSubmitted &&
+      new Date(year, month + 1) >
+        new Date(new Date().getFullYear(), currentMonth),
   });
 
   const monthClass = cx({
@@ -341,39 +351,43 @@ export const AddHours = ({
               </select>
             </label>
           )}
-          <div className={s.dateContainer}>
-            <label className={monthClass}>
-              Month
-              <select
-                className={cx(s.input, s.date)}
-                name="month"
-                id="month"
-                onChange={handleMonthChange}
-                autoFocus={!supervisor}
-                value={month}
-              >
-                <option value="">-Choose a month</option>
-                {months.map((month) => (
-                  <option key={month.id} value={+month.id}>
-                    {month.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className={yearClass}>
-              Year
-              <input
-                className={cx(s.input, s.date)}
-                type="number"
-                name="year"
-                min="1970"
-                max="3000"
-                step="1"
-                value={year}
-                onChange={(e) => setYear(parseInt(e.target.value))}
-              />
-            </label>
+          <div className={dateClass}>
+            <div className={s.date}>
+              <label className={monthClass}>
+                Month
+                <select
+                  className={cx(s.input, s.date)}
+                  name="month"
+                  id="month"
+                  onChange={handleMonthChange}
+                  autoFocus={!supervisor}
+                  value={month}
+                >
+                  <option value="">-Choose a month</option>
+                  {months.map((month) => (
+                    <option key={month.id} value={+month.id}>
+                      {month.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className={yearClass}>
+                Year
+                <input
+                  className={cx(s.input, s.date)}
+                  type="number"
+                  name="year"
+                  min="1970"
+                  max="3000"
+                  step="1"
+                  value={year}
+                  onChange={(e) => setYear(parseInt(e.target.value))}
+                />
+              </label>
+            </div>
+            <span className={s.dateError}>Cannot submit future MPR </span>
           </div>
+
           <div className={photoClass}>
             <label className={s.inputContainer}>
               <div className={s.filePreview}>
