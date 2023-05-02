@@ -10,6 +10,8 @@ type MprDetailsProps = {
 };
 
 export const MprDisplay = ({ mpr }: MprDetailsProps) => {
+  console.log({ mpr });
+
   return (
     <div
       className={s.mprDetails}
@@ -46,6 +48,14 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
             totalHours={1000}
             showPercentage={false}
           />
+          <a
+            className={s.photoLink}
+            href={mpr.photoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Photo
+          </a>
         </div>
         <div className={s.signatureContainer}>
           <Signature
