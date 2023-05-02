@@ -40,10 +40,10 @@ export const AddHours = ({
   );
 
   const [psHours, setPsHours] = useState(mpr?.psHours || 0);
-  const [oresHours, setOresHours] = useState(mpr?.oresHours || 0);
+  const [otherREHours, setOtherREHours] = useState(mpr?.otherREHours || 0);
   const [bosHours, setBosHours] = useState(mpr?.bosHours || 0);
   const [otherHours, setOtherHours] = useState(mpr?.otherHours || 0);
-  const totalHours = [psHours, oresHours, bosHours, otherHours].reduce(
+  const totalHours = [psHours, otherREHours, bosHours, otherHours].reduce(
     (acc, val) => acc + val,
     0
   );
@@ -81,9 +81,9 @@ export const AddHours = ({
       labelText: "Other Renewable Energy Systems",
       type: "number",
       name: "ORES",
-      value: oresHours,
+      value: otherREHours,
       placeholder: "0",
-      onChange: (e) => setOresHours(Number(e.target.value)),
+      onChange: (e) => setOtherREHours(Number(e.target.value)),
       autoComplete: "off",
     },
     {
@@ -215,7 +215,7 @@ export const AddHours = ({
         date,
         photoUrl: uploadPhotoUrl,
         psHours,
-        oresHours,
+        otherREHours,
         bosHours,
         otherHours,
         totalHours,
@@ -233,7 +233,7 @@ export const AddHours = ({
         date,
         photoUrl: uploadPhotoUrl,
         psHours,
-        oresHours,
+        otherREHours,
         bosHours,
         otherHours,
         totalHours,
@@ -251,7 +251,7 @@ export const AddHours = ({
         date,
         photoUrl: uploadPhotoUrl,
         psHours,
-        oresHours,
+        otherREHours,
         bosHours,
         otherHours,
         totalHours,
@@ -272,7 +272,7 @@ export const AddHours = ({
       date,
       photoUrl: uploadPhotoUrl,
       psHours,
-      oresHours,
+      otherREHours: otherREHours,
       bosHours,
       otherHours,
       totalHours,

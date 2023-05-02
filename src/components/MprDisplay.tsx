@@ -10,8 +10,6 @@ type MprDetailsProps = {
 };
 
 export const MprDisplay = ({ mpr }: MprDetailsProps) => {
-  console.log({ mpr });
-
   return (
     <div
       className={s.mprDetails}
@@ -31,7 +29,7 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
           />
           <HourCategory
             category="Other RE"
-            hoursEarned={mpr.oresHours}
+            hoursEarned={mpr.otherREHours}
             totalHours={500}
             showPercentage={false}
           />

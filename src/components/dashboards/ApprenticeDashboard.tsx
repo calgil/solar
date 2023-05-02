@@ -89,7 +89,7 @@ export const ApprenticeDashboard = ({
           apprenticeData={{
             totalHours,
             pvHours,
-            oresHours,
+            otherReHours: oresHours,
             bosHours,
             otherHours,
             mprs: userMprs,
