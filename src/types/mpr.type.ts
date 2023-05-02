@@ -8,7 +8,7 @@ export type MprType = {
   date: firebase.firestore.Timestamp;
   photoUrl: string;
   psHours: number;
-  oresHours: number;
+  otherREHours: number;
   bosHours: number;
   otherHours: number;
   totalHours: number;

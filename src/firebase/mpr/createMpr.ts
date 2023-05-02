@@ -9,14 +9,13 @@ export type UploadMpr = {
   date: Date;
   photoUrl: string;
   psHours: number;
-  oresHours: number;
+  otherREHours: number;
   bosHours: number;
   otherHours: number;
   totalHours: number;
   apprenticeSignature: boolean;
   supervisorSignature: boolean;
   supervisorId: string;
-  adminApproval: boolean;
 };
 
 export const createMpr = async ({
@@ -25,14 +24,13 @@ export const createMpr = async ({
   date,
   photoUrl,
   psHours,
-  oresHours,
+  otherREHours,
   bosHours,
   otherHours,
   totalHours,
   apprenticeSignature,
   supervisorSignature,
   supervisorId,
-  adminApproval,
 }: UploadMpr) => {
   const data = {
     apprenticeId,
@@ -40,14 +38,13 @@ export const createMpr = async ({
     date,
     photoUrl,
     psHours,
-    oresHours,
+    otherREHours,
     bosHours,
     otherHours,
     totalHours,
     apprenticeSignature,
     supervisorSignature,
     supervisorId,
-    adminApproval,
   };
 
   try {
