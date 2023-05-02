@@ -1,5 +1,6 @@
 @use "../layouts";
 @use "../abstracts" as a;
+@use "../breakpoints" as bp;
 
 .addHours {
   margin-top: 20px;
@@ -154,6 +155,19 @@
 
     .checkbox {
       @extend .checkbox;
+    }
+  }
+
+  @include bp.media("md") {
+    width: auto;
+    flex-direction: column;
+
+    .rightCol {
+      .hours {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+      }
     }
   }
 }
