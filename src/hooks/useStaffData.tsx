@@ -34,6 +34,9 @@ export const useStaffData = (): QueryResult => {
       if (approval) {
         queryRef = query(queryRef, where("supervisorSignature", "==", true));
       }
+      if (!approval) {
+        queryRef = query(queryRef, where("supervisorSignature", "==", false));
+      }
       queryRef = query(queryRef, orderBy("date"));
       queryRef = query(queryRef, orderBy("apprenticeName"));
 
@@ -118,7 +121,7 @@ export const useStaffData = (): QueryResult => {
   const getInitData = async () => {
     const beforeDate = new Date();
     beforeDate.setMonth(beforeDate.getMonth() - 6);
-    const data = await fetchMprs(beforeDate);
+    const data = await fetchMprs(beforeDate, false);
     setApprenticeData(data);
   };
 

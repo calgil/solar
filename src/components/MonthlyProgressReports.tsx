@@ -13,14 +13,22 @@ import { StaffFilter } from "./StaffFilter";
 export const MonthlyProgressReports = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState(6);
+  const [approval, setApproval] = useState(false);
   const { apprenticeData, handleFilterChange, fetchApprenticeByName, clear } =
     useStaffData();
 
   const componentRef = useRef(null);
 
-  const handleDateChange = (month: number) => {
+  const handleDateChange = (month: number, approval?: boolean) => {
     setDateRange(month);
-    handleFilterChange(month);
+    if (approval) {
+      setApproval(approval);
+    } else {
+      setApproval(false);
+    }
+    console.log({ approval });
+
+    handleFilterChange(month, approval);
   };
 
   const handlePrint = useReactToPrint({
@@ -82,6 +90,7 @@ export const MonthlyProgressReports = () => {
           closeModal={() => setIsFilterModalOpen(false)}
           handleFilter={handleDateChange}
           date={dateRange}
+          approval={approval}
           clear={handleClearSearch}
         />
       </Modal>
