@@ -24,41 +24,85 @@ export const useStaffData = (): QueryResult => {
   const [apprenticeData, setApprenticeData] = useState<ApprenticeMprData[]>([]);
   const [filters] = useState(0);
 
+  const fetchApprenticeData = async (apprenticeIds: Set<string>) => {
+    const apprenticeDataPromise = Array.from(apprenticeIds).map(async (id) => {
+      const data = await getApprenticeData(id);
+      const apprenticeId = id;
+      const name = data.mprs[0].apprenticeName;
+      const hasUnapprovedMpr = data.mprs.some(
+        (mpr) => !mpr.supervisorSignature
+      );
+      return { apprenticeId, name, data, hasUnapprovedMpr };
+    });
+
+    const data = await Promise.all(apprenticeDataPromise);
+    return data;
+  };
+
   const fetchMprs = async (beforeDate?: Date, approval?: boolean) => {
     try {
       const collectionRef = collection(db, "mprs");
-      let queryRef = query(collectionRef);
+
+      let approvedQueryRef = query(collectionRef);
+      let unapprovedQueryRef = query(collectionRef);
+
       if (beforeDate) {
-        queryRef = query(queryRef, where("date", ">=", beforeDate));
+        approvedQueryRef = query(
+          approvedQueryRef,
+          where("date", ">=", beforeDate)
+        );
+        unapprovedQueryRef = query(
+          unapprovedQueryRef,
+          where("date", ">=", beforeDate)
+        );
       }
+
       if (approval) {
-        queryRef = query(queryRef, where("supervisorSignature", "==", true));
+        approvedQueryRef = query(
+          approvedQueryRef,
+          where("supervisorSignature", "==", true)
+        );
+        unapprovedQueryRef = query(
+          unapprovedQueryRef,
+          where("supervisorSignature", "==", false)
+        );
       }
+
       if (!approval) {
-        queryRef = query(queryRef, where("supervisorSignature", "==", false));
+        approvedQueryRef = query(
+          approvedQueryRef,
+          where("supervisorSignature", "==", false)
+        );
+        unapprovedQueryRef = query(
+          unapprovedQueryRef,
+          where("supervisorSignature", "==", true)
+        );
       }
-      queryRef = query(queryRef, orderBy("date"));
-      queryRef = query(queryRef, orderBy("apprenticeName"));
 
-      const documentSnapshots = await getDocs(queryRef);
+      approvedQueryRef = query(approvedQueryRef, orderBy("date"));
+      approvedQueryRef = query(approvedQueryRef, orderBy("apprenticeName"));
 
-      const apprenticeIds = new Set(
-        documentSnapshots.docs.map((doc) => doc.data().apprenticeId)
+      unapprovedQueryRef = query(unapprovedQueryRef, orderBy("date"));
+      unapprovedQueryRef = query(unapprovedQueryRef, orderBy("apprenticeName"));
+
+      const approvedDocumentSnapshots = await getDocs(approvedQueryRef);
+      const unapprovedDocumentSnapshots = await getDocs(unapprovedQueryRef);
+
+      const approvedApprenticeIds = new Set(
+        approvedDocumentSnapshots.docs.map((doc) => doc.data().apprenticeId)
       );
 
-      const apprenticeDataPromise = Array.from(apprenticeIds).map(
-        async (id) => {
-          const data = await getApprenticeData(id);
-          const apprenticeId = data.mprs[0].apprenticeId;
-          const name = data.mprs[0].apprenticeName;
-          const hasUnapprovedMpr = data.mprs.some(
-            (mpr) => !mpr.supervisorSignature
-          );
-          return { apprenticeId, name, data, hasUnapprovedMpr };
+      const unapprovedApprenticeIds = new Set(
+        unapprovedDocumentSnapshots.docs.map((doc) => doc.data().apprenticeId)
+      );
+
+      if (approval) {
+        for (const apprenticeId of unapprovedApprenticeIds) {
+          approvedApprenticeIds.delete(apprenticeId);
         }
-      );
+      }
 
-      const data = await Promise.all(apprenticeDataPromise);
+      const data = fetchApprenticeData(approvedApprenticeIds);
       return data;
     } catch (error) {
       console.error(error);
