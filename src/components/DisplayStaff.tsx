@@ -4,12 +4,12 @@ import s from "../styles/components/DisplayStaff.module.scss";
 import { StaffMember } from "./StaffMember";
 import filter from "../assets/filter.png";
 import { Modal } from "./Modal";
-import { StaffFilter } from "./StaffFilter";
-import { useStaffData } from "../hooks/useStaffData";
 import { ApprenticeSearch } from "./ApprenticeSearch";
 import { AddHours } from "./AddHours";
 import { useUsers } from "../hooks/useUsers";
 import { useAuth } from "../providers/auth.provider";
+import { useStaffData } from "../hooks/useStaffData";
+import { StaffFilter } from "./StaffFilter";
 
 export const DisplayStaff = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
