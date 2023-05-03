@@ -4,12 +4,12 @@ import s from "../styles/components/DisplayStaff.module.scss";
 import { StaffMember } from "./StaffMember";
 import filter from "../assets/filter.png";
 import { Modal } from "./Modal";
-import { StaffFilter } from "./StaffFilter";
-import { useStaffData } from "../hooks/useStaffData";
 import { ApprenticeSearch } from "./ApprenticeSearch";
 import { AddHours } from "./AddHours";
 import { useUsers } from "../hooks/useUsers";
 import { useAuth } from "../providers/auth.provider";
+import { useStaffData } from "../hooks/useStaffData";
+import { StaffFilter } from "./StaffFilter";
 
 export const DisplayStaff = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,6 +17,7 @@ export const DisplayStaff = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [dateRange, setDateRange] = useState(6);
+  const [approval, setApproval] = useState(false);
 
   const { user } = useAuth();
   const { apprentices } = useUsers();
@@ -29,14 +30,17 @@ export const DisplayStaff = () => {
   };
 
   const handleNameChange = (value: string) => {
-    console.log("change", value);
-
     setSearchQuery(value);
   };
 
-  const handleDateChange = (months: number) => {
-    setDateRange(months);
-    handleFilterChange(months);
+  const handleDateChange = (month: number, approval?: boolean) => {
+    setDateRange(month);
+    if (approval) {
+      setApproval(approval);
+    } else {
+      setApproval(false);
+    }
+    handleFilterChange(month, approval);
   };
 
   const handleClearSearch = () => {
@@ -95,6 +99,7 @@ export const DisplayStaff = () => {
           closeModal={() => setIsFilterModalOpen(false)}
           handleFilter={handleDateChange}
           date={dateRange}
+          approval={approval}
           clear={clear}
         />
       </Modal>

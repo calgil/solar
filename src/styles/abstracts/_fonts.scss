@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;800;900&family=Playfair+Display&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Radio+Canada:wght@600;700&display=swap");
 
 @font-face {
   font-family: "Avenir";
@@ -17,5 +18,6 @@
 
 $primaryFont: "Playfair Display", serif;
 $secondaryFont: "Avenir", sans-serif;
-$secondaryFontLight: "Avenir Light";
+$secondaryFontLight: "Avenir Light", sans-serif;
 $alternativeFont: "Tahoma", sans-serif;
+$logoFont: "Radio Canada", sans-serif;
