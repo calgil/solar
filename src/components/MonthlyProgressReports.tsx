@@ -6,8 +6,8 @@ import { ApprenticeSearch } from "./ApprenticeSearch";
 import { MprTable } from "./MprTable";
 // import { PaginationButtons } from "./PaginationButtons";
 import { useReactToPrint } from "react-to-print";
-import { useStaffData } from "../hooks/useStaffData";
 import { Modal } from "./Modal";
+import { useStaffData } from "../hooks/useStaffData";
 import { StaffFilter } from "./StaffFilter";
 
 export const MonthlyProgressReports = () => {
