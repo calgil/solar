@@ -6,6 +6,7 @@ type StaffFilterProps = {
   closeModal: () => void;
   handleFilter: (dateRange: number, approval?: boolean) => void;
   date: number;
+  approval: boolean;
   clear: () => void;
 };
 
@@ -13,21 +14,22 @@ export const StaffFilter = ({
   closeModal,
   handleFilter,
   date,
+  approval,
   clear,
 }: StaffFilterProps) => {
   const [dateRange, setDateRange] = useState(date);
-  const [approval, setApproval] = useState(false);
+  const [showApproved, setShowApproved] = useState(approval);
 
   const handleApprovalChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (+e.target.value < 0) {
-      return setApproval(false);
+      return setShowApproved(false);
     }
-    return setApproval(true);
+    return setShowApproved(true);
   };
 
   const applyFilters = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleFilter(dateRange, approval);
+    handleFilter(dateRange, showApproved);
     closeModal();
   };
   return (
@@ -57,10 +59,11 @@ export const StaffFilter = ({
           name="approval"
           id="approval"
           onChange={handleApprovalChange}
+          value={showApproved ? 1 : -1}
         >
           <option value="">- Select Approval Status</option>
-          <option value={1}>Yes</option>
-          <option value={-1}>No</option>
+          <option value={1}>All Approved</option>
+          <option value={-1}>Unapproved</option>
         </select>
       </label>
       <div className={s.submitContainer}>
