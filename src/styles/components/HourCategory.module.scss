@@ -50,8 +50,25 @@
     border: 3px solid a.$progressOverage;
   }
 
+  .text {
+    display: inline;
+  }
+
   .line {
     color: a.$accentLight;
+  }
+
+  @include bp.media("md") {
+    display: flex;
+    flex-direction: column;
+
+    .text {
+      display: block;
+    }
+
+    .line {
+      display: none;
+    }
   }
 }
 
@@ -74,7 +91,7 @@
 .category.showPercentage {
   width: 123px;
 
-  @include bp.media("sm") {
+  @include bp.media("xl") {
     width: auto;
   }
 }

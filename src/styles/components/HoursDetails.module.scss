@@ -49,18 +49,17 @@
       align-items: center;
       gap: 30px;
 
-      @include bp.media("lg") {
-        flex-wrap: wrap;
-      }
+      // @include bp.media("lg") {
+      //   padding-left: 10px;
+      // }
 
-      @include bp.media("sm") {
-        flex-direction: column;
-        align-items: center;
+      @include bp.media("md") {
         gap: 10px;
       }
     }
 
-    @include bp.media("md") {
+    @include bp.media("lg") {
+      flex-wrap: wrap;
       gap: 20px;
     }
   }
