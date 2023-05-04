@@ -13,6 +13,7 @@ import { AddBtn } from "../AddBtn";
 import { User } from "../../types/user.type";
 import { AddUser } from "../AddUser";
 import { Status } from "../Status";
+import { useUsers } from "../../hooks/useUsers";
 
 type ApprenticeDashboardProps = {
   apprentice: User;
@@ -25,6 +26,14 @@ export const ApprenticeDashboard = ({
 }: ApprenticeDashboardProps) => {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [userMprs, setUserMprs] = useState<MprType[]>([]);
+
+  const { supervisors } = useUsers();
+
+  const currentSupervisor = supervisors.find(
+    (supervisor) => supervisor.id === apprentice.supervisorId
+  );
 
   const closeModal = () => setIsModalOpen(false);
 
@@ -32,8 +41,6 @@ export const ApprenticeDashboard = ({
     e.stopPropagation();
     setIsModalOpen(true);
   };
-
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const closeEditModal = () => setIsEditModalOpen(false);
 
@@ -43,8 +50,6 @@ export const ApprenticeDashboard = ({
     e.stopPropagation();
     setIsEditModalOpen(true);
   };
-
-  const [userMprs, setUserMprs] = useState<MprType[]>([]);
 
   useEffect(() => {
     if (apprentice) {
@@ -65,7 +70,10 @@ export const ApprenticeDashboard = ({
         <div className={s.userInfo}>
           <h2>{capitalizeName(apprentice.name)}&apos;s Dashboard</h2>
           {edit && user?.role !== "apprentice" && (
-            <Status status={apprentice.status} />
+            <div className={s.apprenticeInfo}>
+              <Status status={apprentice.status} />
+              <span>Supervisor: {currentSupervisor?.name}</span>
+            </div>
           )}
         </div>
         <div className={s.totals}>
@@ -78,11 +86,14 @@ export const ApprenticeDashboard = ({
       </div>
       <div className={s.action}>
         {edit && user?.role === "admin" && (
-          <button className={s.editBtn} onClick={openEditModal}>
-            Edit Profile
-          </button>
+          <AddBtn text="Edit Profile" onClick={openEditModal} />
+          // <button className={s.editBtn} onClick={openEditModal}>
+          //   Edit Profile
+          // </button>
         )}
-        <AddBtn text="Add Hours" onClick={openModal} />
+        {user?.role === "apprentice" && (
+          <AddBtn text="Add Hours" onClick={openModal} />
+        )}
       </div>
       <div className={s.details}>
         <HoursDetails

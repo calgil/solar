@@ -9,6 +9,12 @@
     display: flex;
     align-items: center;
     gap: 30px;
+
+    .apprenticeInfo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
   }
 
   .totals {
@@ -22,8 +28,9 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-top: 20px;
   gap: 20px;
+  padding: 20px;
+  padding-bottom: 0;
 
   .editBtn {
     border: none;
