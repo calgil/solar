@@ -37,8 +37,8 @@ export const ArchivedUsers = () => {
             onChange={handleDisplayChange}
             value={displayed}
           >
-            <option value="graduated">Graduated</option>
             <option value="archived">Archived</option>
+            <option value="graduated">Graduated</option>
           </select>
         </label>
       </div>
