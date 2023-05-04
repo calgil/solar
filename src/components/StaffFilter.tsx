@@ -2,6 +2,8 @@
 import { useState } from "react";
 import s from "../styles/components/StaffFilter.module.scss";
 
+// type Role = "apprentices" | "supervisors";
+
 type StaffFilterProps = {
   closeModal: () => void;
   handleFilter: (dateRange: number, approval?: boolean) => void;
@@ -19,6 +21,7 @@ export const StaffFilter = ({
 }: StaffFilterProps) => {
   const [dateRange, setDateRange] = useState(date);
   const [showApproved, setShowApproved] = useState(approval);
+  // const [role, setRole] = useState<Role>("apprentices");
 
   const handleApprovalChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (+e.target.value < 0) {
@@ -26,6 +29,14 @@ export const StaffFilter = ({
     }
     return setShowApproved(true);
   };
+
+  // const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   console.log("role change");
+  //   const newRole = e.target.value as Role;
+  //   if (newRole) {
+  //     setRole(newRole);
+  //   }
+  // };
 
   const applyFilters = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,6 +77,20 @@ export const StaffFilter = ({
           <option value={-1}>Unapproved</option>
         </select>
       </label>
+      {/* <label className={s.label}>
+        Staff Role
+        <select
+          className={s.input}
+          name="role"
+          id="role"
+          onChange={handleRoleChange}
+          value={role}
+        >
+          <option value="">- Select Role</option>
+          <option value="apprentices">Apprentices</option>
+          <option value="supervisors">Supervisors</option>
+        </select>
+      </label> */}
       <div className={s.submitContainer}>
         <input className={s.submitBtn} value="Apply Filters" type="submit" />
       </div>
