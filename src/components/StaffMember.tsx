@@ -43,7 +43,7 @@ export const StaffMember = ({ user }: StaffMemberProps) => {
           </Link>
           <p className={s.role}>{capitalizeName(user.role)}</p>
         </div>
-        <DownArrow expand={showDetails} />
+        {user.role === "apprentice" && <DownArrow expand={showDetails} />}
       </div>
       {showDetails && user.role === "apprentice" && (
         <div className={s.detailsContainer}>

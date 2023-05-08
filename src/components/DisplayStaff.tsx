@@ -11,6 +11,7 @@ import { useAuth } from "../providers/auth.provider";
 import { useStaffData } from "../hooks/useStaffData";
 import { StaffFilter } from "./StaffFilter";
 import { useUserData } from "../hooks/useUserData";
+import { UserRole, UserStatus } from "../types/user.type";
 
 export const DisplayStaff = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,32 +19,44 @@ export const DisplayStaff = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [dateRange, setDateRange] = useState(6);
+  const [status, setStatus] = useState<UserStatus>("active");
+  const [role, setRole] = useState<UserRole>("apprentice");
   const [approval, setApproval] = useState(false);
 
   const { user } = useAuth();
   const { apprentices } = useUsers();
-  const { handleFilterChange, fetchApprenticeByName, clear } = useStaffData();
 
-  const { users } = useUserData();
-  console.log({ users });
+  const { staffData, handleFilterChange, fetchStaffByName, clear } =
+    useUserData();
+  console.log({ staffData });
 
   const handleSearch = (name: string) => {
     setSearchQuery(name);
-    fetchApprenticeByName(name);
+    fetchStaffByName(name);
   };
 
   const handleNameChange = (value: string) => {
     setSearchQuery(value);
   };
 
-  const handleDateChange = (month: number, approval?: boolean) => {
-    setDateRange(month);
+  const applyFilters = (
+    month: number,
+    approval: boolean,
+    status: UserStatus,
+    role: UserRole
+  ) => {
+    if (month) {
+      setDateRange(month);
+    }
+
     if (approval) {
       setApproval(approval);
     } else {
       setApproval(false);
     }
-    handleFilterChange(month, approval);
+    setStatus(status);
+    setRole(role);
+    handleFilterChange(month, approval, status, role);
   };
 
   const handleClearSearch = () => {
@@ -74,8 +87,8 @@ export const DisplayStaff = () => {
         </button>
       </div>
       <div className={s.staffContainer}>
-        {users.map((user) => (
-          <StaffMember key={user.id} user={user} />
+        {staffData.map((staff) => (
+          <StaffMember key={staff.id} user={staff} />
         ))}
       </div>
       <Modal
@@ -100,8 +113,10 @@ export const DisplayStaff = () => {
       >
         <StaffFilter
           closeModal={() => setIsFilterModalOpen(false)}
-          handleFilter={handleDateChange}
+          applyFilters={applyFilters}
           date={dateRange}
+          status={status}
+          role={role}
           approval={approval}
           clear={clear}
         />

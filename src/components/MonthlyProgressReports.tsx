@@ -17,7 +17,7 @@ export const MonthlyProgressReports = () => {
   const [approval, setApproval] = useState(false);
   const { handleFilterChange, fetchApprenticeByName, clear } = useStaffData();
 
-  const { users: staffData } = useUserData();
+  const { staffData: staffData } = useUserData();
 
   const componentRef = useRef(null);
 
@@ -90,7 +90,7 @@ export const MonthlyProgressReports = () => {
       >
         <StaffFilter
           closeModal={() => setIsFilterModalOpen(false)}
-          handleFilter={handleDateChange}
+          applyFilters={handleDateChange}
           date={dateRange}
           approval={approval}
           clear={handleClearSearch}
