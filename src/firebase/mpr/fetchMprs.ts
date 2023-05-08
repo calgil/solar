@@ -9,7 +9,7 @@ import { MprType } from "../../types/mpr.type";
 import { db } from "../config";
 import { ApprenticeData, MprData } from "./getApprenticeData";
 
-export const fetchMprs = (
+export const fetchApprenticeData = (
   apprenticeId: string,
   setApprenticeData: (data: ApprenticeData | null) => void
 ) => {

@@ -17,7 +17,7 @@ export const MonthlyProgressReports = () => {
   const [approval, setApproval] = useState(false);
   const { handleFilterChange, fetchApprenticeByName, clear } = useStaffData();
 
-  const { staffData } = useUserData();
+  const { users: staffData } = useUserData();
 
   const componentRef = useRef(null);
 

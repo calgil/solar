@@ -1,18 +1,14 @@
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/config";
-import { UserRole, UserStatus } from "../types/user.type";
-import {
-  ApprenticeData,
-  getApprenticeData,
-} from "../firebase/mpr/getApprenticeData";
+import { User, UserRole, UserStatus } from "../types/user.type";
 
 export type QueryResult = {
-  staffData: ApprenticeData[];
+  users: User[];
 };
 
 export const useUserData = (): QueryResult => {
-  const [staffData, setStaffData] = useState<ApprenticeData[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   const fetchUsers = async (
     status: UserStatus = "active",
@@ -27,9 +23,14 @@ export const useUserData = (): QueryResult => {
 
     const usersSnapshot = await getDocs(usersQuery);
 
-    const userIds = usersSnapshot.docs.map((doc) => doc.id);
+    const users = usersSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as User[];
 
-    return userIds;
+    console.log({ users });
+
+    return users;
   };
 
   const getApprenticeIdFromMpr = async (
@@ -46,9 +47,11 @@ export const useUserData = (): QueryResult => {
         orderBy("apprenticeName")
       );
       const documentSnapshot = await getDocs(mprQueryRef);
+
       const apprenticeIdSet = new Set(
         documentSnapshot.docs.map((doc) => doc.data().apprenticeId)
       );
+
       return Array.from(apprenticeIdSet);
     } catch (error) {
       console.error(error);
@@ -57,24 +60,23 @@ export const useUserData = (): QueryResult => {
   };
 
   const getInitData = async () => {
-    const userIds = await fetchUsers();
+    const users = await fetchUsers();
 
     const beforeDate = new Date();
     beforeDate.setMonth(beforeDate.getMonth() - 6);
-    const apprenticeIds = await getApprenticeIdFromMpr(beforeDate, true);
+    const apprenticeIds = await getApprenticeIdFromMpr(beforeDate, false);
+    console.log({ apprenticeIds });
 
-    const desiredStaff = userIds.filter((id) => apprenticeIds.includes(id));
-
-    const staffData = await Promise.all(
-      desiredStaff.map(async (id) => await getApprenticeData(id))
+    const desiredStaff = users.filter((user) =>
+      apprenticeIds.includes(user.id)
     );
 
-    setStaffData(staffData);
+    setUsers(desiredStaff);
   };
 
   useEffect(() => {
     getInitData();
   }, []);
 
-  return { staffData };
+  return { users };
 };

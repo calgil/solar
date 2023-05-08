@@ -24,7 +24,8 @@ export const DisplayStaff = () => {
   const { apprentices } = useUsers();
   const { handleFilterChange, fetchApprenticeByName, clear } = useStaffData();
 
-  const { staffData } = useUserData();
+  const { users } = useUserData();
+  console.log({ users });
 
   const handleSearch = (name: string) => {
     setSearchQuery(name);
@@ -73,8 +74,8 @@ export const DisplayStaff = () => {
         </button>
       </div>
       <div className={s.staffContainer}>
-        {staffData.map((data) => (
-          <StaffMember key={data.id} data={data} />
+        {users.map((user) => (
+          <StaffMember key={user.id} user={user} />
         ))}
       </div>
       <Modal

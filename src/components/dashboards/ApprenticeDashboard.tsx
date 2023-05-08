@@ -7,7 +7,7 @@ import { AddHours } from "../AddHours";
 import { capitalizeName } from "../../utils/capitalizeName";
 import { HoursOverview } from "../HoursOverview";
 import { HoursDetails } from "../HoursDetails";
-import { fetchMprs } from "../../firebase/mpr/fetchMprs";
+import { fetchApprenticeData } from "../../firebase/mpr/fetchMprs";
 import { AddBtn } from "../AddBtn";
 import { User } from "../../types/user.type";
 import { AddUser } from "../AddUser";
@@ -55,7 +55,7 @@ export const ApprenticeDashboard = ({
 
   useEffect(() => {
     if (apprentice) {
-      const unsubscribe = fetchMprs(apprentice.id, setApprenticeData);
+      const unsubscribe = fetchApprenticeData(apprentice.id, setApprenticeData);
       return () => unsubscribe();
     }
   }, [apprentice]);
