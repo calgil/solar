@@ -10,6 +10,7 @@ import { useUsers } from "../hooks/useUsers";
 import { useAuth } from "../providers/auth.provider";
 import { useStaffData } from "../hooks/useStaffData";
 import { StaffFilter } from "./StaffFilter";
+import { useUserData } from "../hooks/useUserData";
 
 export const DisplayStaff = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,8 +22,9 @@ export const DisplayStaff = () => {
 
   const { user } = useAuth();
   const { apprentices } = useUsers();
-  const { apprenticeData, handleFilterChange, fetchApprenticeByName, clear } =
-    useStaffData();
+  const { handleFilterChange, fetchApprenticeByName, clear } = useStaffData();
+
+  const { staffData } = useUserData();
 
   const handleSearch = (name: string) => {
     setSearchQuery(name);
@@ -71,8 +73,8 @@ export const DisplayStaff = () => {
         </button>
       </div>
       <div className={s.staffContainer}>
-        {apprenticeData.map((data) => (
-          <StaffMember key={data.apprenticeId} data={data} />
+        {staffData.map((data) => (
+          <StaffMember key={data.id} data={data} />
         ))}
       </div>
       <Modal

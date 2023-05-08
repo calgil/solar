@@ -8,15 +8,17 @@ import { StaffMember } from "../StaffMember";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
 import { AddBtn } from "../AddBtn";
-import { getApprenticeData } from "../../firebase/mpr/getApprenticeData";
-import { ApprenticeMprData } from "../../hooks/useStaffData";
+import {
+  ApprenticeData,
+  getApprenticeData,
+} from "../../firebase/mpr/getApprenticeData";
 
 export const SupervisorDashboard = () => {
   const { user } = useAuth();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [apprentices, setApprentices] = useState<User[]>([]);
-  const [apprenticeData, setApprenticeData] = useState<ApprenticeMprData[]>([]);
+  const [apprenticeData, setApprenticeData] = useState<ApprenticeData[]>([]);
 
   const closeModal = () => setIsModalOpen(false);
 
@@ -29,17 +31,19 @@ export const SupervisorDashboard = () => {
     const apprenticeIds = new Set(apprentices.map((app) => app.id));
     console.log({ apprenticeIds });
 
-    const apprenticeDataPromise = Array.from(apprenticeIds).map(async (id) => {
-      const data = await getApprenticeData(id);
-      const apprenticeId = data.mprs[0].apprenticeId;
-      const name = data.mprs[0].apprenticeName;
-      const hasUnapprovedMpr = data.mprs.some(
-        (mpr) => !mpr.supervisorSignature
-      );
-      return { apprenticeId, name, data, hasUnapprovedMpr };
-    });
+    // const apprenticeDataPromise = Array.from(apprenticeIds).map(async (id) => {
+    //   const data = await getApprenticeData(id);
+    //   const apprenticeId = data.mprs[0].apprenticeId;
+    //   const name = data.mprs[0].apprenticeName;
+    //   const hasUnapprovedMpr = data.mprs.some(
+    //     (mpr) => !mpr.supervisorSignature
+    //   );
+    //   return { apprenticeId, name, data, hasUnapprovedMpr };
+    // });
 
-    const data = await Promise.all(apprenticeDataPromise);
+    const data = await Promise.all(
+      Array.from(apprenticeIds).map(async (id) => await getApprenticeData(id))
+    );
 
     setApprenticeData(data);
   };
@@ -57,10 +61,9 @@ export const SupervisorDashboard = () => {
       <div className={s.action}>
         <AddBtn text="Add Hours" onClick={() => setIsModalOpen(true)} />
       </div>
-      {/* Figure out how to use useStaffData to get data and pass to this component */}
       <div className={s.apprenticeContainer}>
         {apprenticeData.map((app) => (
-          <StaffMember key={app.apprenticeId} data={app} />
+          <StaffMember key={app.id} data={app} />
         ))}
       </div>
       <Modal

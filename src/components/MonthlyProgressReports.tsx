@@ -7,15 +7,17 @@ import { MprTable } from "./MprTable";
 // import { PaginationButtons } from "./PaginationButtons";
 import { useReactToPrint } from "react-to-print";
 import { Modal } from "./Modal";
-import { useStaffData } from "../hooks/useStaffData";
 import { StaffFilter } from "./StaffFilter";
+import { useUserData } from "../hooks/useUserData";
+import { useStaffData } from "../hooks/useStaffData";
 
 export const MonthlyProgressReports = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState(6);
   const [approval, setApproval] = useState(false);
-  const { apprenticeData, handleFilterChange, fetchApprenticeByName, clear } =
-    useStaffData();
+  const { handleFilterChange, fetchApprenticeByName, clear } = useStaffData();
+
+  const { staffData } = useUserData();
 
   const componentRef = useRef(null);
 
@@ -73,7 +75,7 @@ export const MonthlyProgressReports = () => {
           Print Report
         </button>
       </div>
-      <MprTable data={apprenticeData} tableRef={componentRef} />
+      <MprTable apprenticeData={staffData} tableRef={componentRef} />
       {/* <PaginationButtons
         totalPages={totalPages}
         prev={prev}

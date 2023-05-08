@@ -5,10 +5,10 @@ import { capitalizeName } from "../utils/capitalizeName";
 import { HoursDetails } from "./HoursDetails";
 import { DownArrow } from "./DownArrow";
 import { Link } from "react-router-dom";
-import { ApprenticeMprData } from "../hooks/useStaffData";
+import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
 
 type StaffMemberProps = {
-  data: ApprenticeMprData;
+  data: ApprenticeData;
 };
 
 export const StaffMember = ({ data }: StaffMemberProps) => {
@@ -25,7 +25,7 @@ export const StaffMember = ({ data }: StaffMemberProps) => {
     <div className={s.staffMember} onClick={handleExpandClick}>
       <div className={s.staffContainer}>
         <div className={s.staffInfo}>
-          <Link className={s.name} to={`staff/${data.apprenticeId}`}>
+          <Link className={s.name} to={`staff/${data.id}`}>
             {capitalizeName(data.name)}
           </Link>
           {/* <p className={s.role}>{capitalizeName(user.role)}</p> */}
