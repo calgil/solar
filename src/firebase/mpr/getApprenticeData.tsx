@@ -43,7 +43,7 @@ export const getApprenticeData = async (
         })) as MprType[];
 
         const totalHours = mprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
-        const pvHours = mprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
+        const pvHours = mprs.reduce((acc, mpr) => acc + mpr.pvHours, 0);
         const otherREHours = mprs.reduce(
           (acc, mpr) => acc + mpr.otherREHours,
           0

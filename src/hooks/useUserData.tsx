@@ -61,7 +61,7 @@ export const useUserData = (): QueryResult => {
 
     const beforeDate = new Date();
     beforeDate.setMonth(beforeDate.getMonth() - 6);
-    const apprenticeIds = await getApprenticeIdFromMpr(beforeDate, false);
+    const apprenticeIds = await getApprenticeIdFromMpr(beforeDate, true);
 
     const desiredStaff = userIds.filter((id) => apprenticeIds.includes(id));
 
@@ -69,26 +69,7 @@ export const useUserData = (): QueryResult => {
       desiredStaff.map(async (id) => await getApprenticeData(id))
     );
 
-    console.log({ staffData });
-
     setStaffData(staffData);
-
-    // now find all mprs within a date and approved, pull apprenticeId from that
-    // compare these ids with the ones from fetchUsers
-    // get apprenticeData for all ids that are in both arrays
-
-    // const apprenticeDataPromise = ids.map(async (id) => {
-    //   const data = await getApprenticeData(id);
-    //   const apprenticeId = id;
-    //   const name = data.mprs[0].apprenticeName;
-    //   const hasUnapprovedMpr = data.mprs.some(
-    //     (mpr) => !mpr.supervisorSignature
-    //   );
-    //   return { apprenticeId, name, data, hasUnapprovedMpr };
-    // });
-
-    // const data = await Promise.all(apprenticeDataPromise);
-    // setApprenticeData(data);
   };
 
   useEffect(() => {

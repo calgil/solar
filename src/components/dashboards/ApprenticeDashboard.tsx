@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
 import { capitalizeName } from "../../utils/capitalizeName";
-import { MprType } from "../../types/mpr.type";
 import { HoursOverview } from "../HoursOverview";
 import { HoursDetails } from "../HoursDetails";
 import { fetchMprs } from "../../firebase/mpr/fetchMprs";
@@ -14,6 +13,7 @@ import { User } from "../../types/user.type";
 import { AddUser } from "../AddUser";
 import { Status } from "../Status";
 import { useUsers } from "../../hooks/useUsers";
+import { ApprenticeData } from "../../firebase/mpr/getApprenticeData";
 
 type ApprenticeDashboardProps = {
   apprentice: User;
@@ -27,7 +27,9 @@ export const ApprenticeDashboard = ({
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [userMprs, setUserMprs] = useState<MprType[]>([]);
+  const [apprenticeData, setApprenticeData] = useState<ApprenticeData | null>(
+    null
+  );
 
   const { supervisors } = useUsers();
 
@@ -53,16 +55,10 @@ export const ApprenticeDashboard = ({
 
   useEffect(() => {
     if (apprentice) {
-      const unsubscribe = fetchMprs(apprentice.id, setUserMprs);
+      const unsubscribe = fetchMprs(apprentice.id, setApprenticeData);
       return () => unsubscribe();
     }
   }, [apprentice]);
-
-  const totalHours = userMprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
-  const pvHours = userMprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
-  const otherREHours = userMprs.reduce((acc, mpr) => acc + mpr.otherREHours, 0);
-  const bosHours = userMprs.reduce((acc, mpr) => acc + mpr.bosHours, 0);
-  const otherHours = userMprs.reduce((acc, mpr) => acc + mpr.otherHours, 0);
 
   return (
     <div>
@@ -77,9 +73,9 @@ export const ApprenticeDashboard = ({
           )}
         </div>
         <div className={s.totals}>
-          <HoursOverview
-            hours={{ totalHours, pvHours, otherREHours, bosHours, otherHours }}
-          />
+          {apprenticeData?.data && (
+            <HoursOverview hours={apprenticeData.data} />
+          )}
           {/* <div>Certs and Education</div> */}
           {/* <div>Test</div> */}
         </div>
@@ -87,25 +83,15 @@ export const ApprenticeDashboard = ({
       <div className={s.action}>
         {edit && user?.role === "admin" && (
           <AddBtn text="Edit Profile" onClick={openEditModal} />
-          // <button className={s.editBtn} onClick={openEditModal}>
-          //   Edit Profile
-          // </button>
         )}
         {user?.role === "apprentice" && (
           <AddBtn text="Add Hours" onClick={openModal} />
         )}
       </div>
       <div className={s.details}>
-        <HoursDetails
-          apprenticeData={{
-            totalHours,
-            pvHours,
-            otherREHours,
-            bosHours,
-            otherHours,
-            mprs: userMprs,
-          }}
-        />
+        {apprenticeData?.data && (
+          <HoursDetails apprenticeData={apprenticeData.data} />
+        )}
         <Modal
           isOpen={isEditModalOpen}
           onClose={closeEditModal}

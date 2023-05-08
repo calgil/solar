@@ -7,6 +7,8 @@ import { DownArrow } from "./DownArrow";
 import { Link } from "react-router-dom";
 import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
 
+// lets consider passing in a user here. And this component can grab it's own data like in apprenticeDashboard
+
 type StaffMemberProps = {
   data: ApprenticeData;
 };
