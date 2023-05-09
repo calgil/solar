@@ -62,7 +62,6 @@ export const StaffFilter = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("submint", dateRange, approved, selectedStatus, selectedRole);
 
     applyFilters(dateRange, approved, selectedStatus, selectedRole);
     closeModal();

@@ -46,6 +46,8 @@ export const useUserData = (): QueryResult => {
     startDate?: Date,
     endDate?: Date
   ) => {
+    console.log({ startDate });
+
     try {
       const collectionRef = collection(db, "mprs");
       let approvedQueryRef = query(collectionRef);
@@ -112,8 +114,13 @@ export const useUserData = (): QueryResult => {
       const unapprovedApprenticeIds = new Set(
         unapprovedDocumentSnapshots.docs.map((doc) => doc.data().apprenticeId)
       );
-      for (const apprenticeId of unapprovedApprenticeIds) {
-        approvedApprenticeIds.delete(apprenticeId);
+
+      console.log({ approvedApprenticeIds, unapprovedApprenticeIds });
+
+      if (approval) {
+        for (const apprenticeId of unapprovedApprenticeIds) {
+          approvedApprenticeIds.delete(apprenticeId);
+        }
       }
 
       return Array.from(approvedApprenticeIds);
