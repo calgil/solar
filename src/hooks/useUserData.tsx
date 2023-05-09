@@ -43,49 +43,80 @@ export const useUserData = (): QueryResult => {
 
   const getApprenticeIdFromMpr = async (
     approval: boolean,
-    beforeDate?: Date
+    startDate?: Date,
+    endDate?: Date
   ) => {
     try {
       const collectionRef = collection(db, "mprs");
-      let mprQueryRef = query(
-        collectionRef,
-        where("supervisorSignature", "==", approval)
-      );
-      if (beforeDate) {
-        mprQueryRef = query(mprQueryRef, where("date", ">=", beforeDate));
+      let approvedQueryRef = query(collectionRef);
+      let unapprovedQueryRef = query(collectionRef);
+
+      if (startDate) {
+        approvedQueryRef = query(
+          approvedQueryRef,
+          where("date", ">=", startDate)
+        );
+        unapprovedQueryRef = query(
+          unapprovedQueryRef,
+          where("date", ">=", startDate)
+        );
       }
 
-      mprQueryRef = query(
-        mprQueryRef,
+      if (approval) {
+        approvedQueryRef = query(
+          approvedQueryRef,
+          where("supervisorSignature", "==", true)
+        );
+        unapprovedQueryRef = query(
+          unapprovedQueryRef,
+          where("supervisorSignature", "==", false)
+        );
+      }
+
+      if (!approval) {
+        approvedQueryRef = query(
+          approvedQueryRef,
+          where("supervisorSignature", "==", false)
+        );
+        unapprovedQueryRef = query(
+          unapprovedQueryRef,
+          where("supervisorSignature", "==", true)
+        );
+      }
+
+      if (endDate) {
+        approvedQueryRef = query(
+          approvedQueryRef,
+          where("date", "<=", endDate)
+        );
+        unapprovedQueryRef = query(
+          unapprovedQueryRef,
+          where("date", "<=", endDate)
+        );
+      }
+      approvedQueryRef = query(
+        approvedQueryRef,
         orderBy("date"),
         orderBy("apprenticeName")
       );
+      unapprovedQueryRef = query(
+        unapprovedQueryRef,
+        orderBy("date"),
+        orderBy("apprenticeName")
+      );
+      const approvedDocumentSnapshots = await getDocs(approvedQueryRef);
+      const unapprovedDocumentSnapshots = await getDocs(unapprovedQueryRef);
+      const approvedApprenticeIds = new Set(
+        approvedDocumentSnapshots.docs.map((doc) => doc.data().apprenticeId)
+      );
+      const unapprovedApprenticeIds = new Set(
+        unapprovedDocumentSnapshots.docs.map((doc) => doc.data().apprenticeId)
+      );
+      for (const apprenticeId of unapprovedApprenticeIds) {
+        approvedApprenticeIds.delete(apprenticeId);
+      }
 
-      const documentSnapshot = await getDocs(mprQueryRef);
-
-      const apprenticeIds = documentSnapshot.docs
-        .reduce((acc, doc) => {
-          const apprenticeId = doc.data().apprenticeId;
-          const supervisorSignature = doc.data().supervisorSignature;
-          if (acc.has(apprenticeId)) {
-            if (supervisorSignature !== approval) {
-              acc.delete(apprenticeId);
-            }
-          }
-          if (!acc.has(apprenticeId)) {
-            if (supervisorSignature === approval) {
-              acc.set(apprenticeId, true);
-            }
-          }
-          return acc;
-        }, new Map())
-        .keys();
-
-      // const apprenticeIdSet = new Set(
-      //   documentSnapshot.docs.map((doc) => doc.data().apprenticeId)
-      // );
-
-      return Array.from(apprenticeIds);
+      return Array.from(approvedApprenticeIds);
     } catch (error) {
       console.error(error);
       throw new Error("could not get apprentice ids from mprs");
@@ -93,7 +124,37 @@ export const useUserData = (): QueryResult => {
   };
 
   const fetchLastMonthData = async (approval: boolean) => {
-    console.log("last month", { approval });
+    console.log("last month");
+
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+
+    let startMonth, year;
+
+    if (today.getDate() < 10) {
+      startMonth = currentMonth - 2;
+      year = currentYear;
+      if (startMonth < 0) {
+        startMonth += 12;
+        year -= 1;
+      }
+    } else {
+      startMonth = currentMonth - 1;
+      year = currentYear;
+    }
+
+    const startDate = new Date(year, startMonth, 1);
+    const endDate = new Date(year, startMonth, 28);
+
+    const apprenticeIds = await getApprenticeIdFromMpr(
+      approval,
+      startDate,
+      endDate
+    );
+
+    console.log("last month", { apprenticeIds, startDate, endDate });
+    return apprenticeIds;
   };
 
   const handleFilterChange = async (
@@ -110,10 +171,18 @@ export const useUserData = (): QueryResult => {
     }
     if (dateRange === -1) {
       const apprenticeIds = await getApprenticeIdFromMpr(approval);
-      return console.log({ apprenticeIds });
+      const desiredStaff = users.filter((user) =>
+        apprenticeIds.includes(user.id)
+      );
+      setStaffData(desiredStaff);
+      return console.log({ apprenticeIds, users });
     }
     if (dateRange === 1) {
-      fetchLastMonthData(approval);
+      const apprenticeIds = await fetchLastMonthData(approval);
+      const desiredStaff = users.filter((user) =>
+        apprenticeIds.includes(user.id)
+      );
+      return setStaffData(desiredStaff);
     }
     console.log("handle Filter change", dateRange, approval);
 

@@ -54,42 +54,42 @@ export const useStaffData = (): QueryResult => {
     //     );
     //   }
     //   if (approval) {
-    //     approvedQueryRef = query(
-    //       approvedQueryRef,
-    //       where("supervisorSignature", "==", true)
-    //     );
-    //     unapprovedQueryRef = query(
-    //       unapprovedQueryRef,
-    //       where("supervisorSignature", "==", false)
-    //     );
+    // approvedQueryRef = query(
+    //   approvedQueryRef,
+    //   where("supervisorSignature", "==", true)
+    // );
+    // unapprovedQueryRef = query(
+    //   unapprovedQueryRef,
+    //   where("supervisorSignature", "==", false)
+    // );
     //   }
-    //   if (!approval) {
-    //     approvedQueryRef = query(
-    //       approvedQueryRef,
-    //       where("supervisorSignature", "==", false)
-    //     );
-    //     unapprovedQueryRef = query(
-    //       unapprovedQueryRef,
-    //       where("supervisorSignature", "==", true)
-    //     );
-    //   }
-    //   approvedQueryRef = query(approvedQueryRef, orderBy("date"));
-    //   approvedQueryRef = query(approvedQueryRef, orderBy("apprenticeName"));
-    //   unapprovedQueryRef = query(unapprovedQueryRef, orderBy("date"));
-    //   unapprovedQueryRef = query(unapprovedQueryRef, orderBy("apprenticeName"));
-    //   const approvedDocumentSnapshots = await getDocs(approvedQueryRef);
-    //   const unapprovedDocumentSnapshots = await getDocs(unapprovedQueryRef);
-    //   const approvedApprenticeIds = new Set(
-    //     approvedDocumentSnapshots.docs.map((doc) => doc.data().apprenticeId)
+    // if (!approval) {
+    //   approvedQueryRef = query(
+    //     approvedQueryRef,
+    //     where("supervisorSignature", "==", false)
     //   );
-    //   const unapprovedApprenticeIds = new Set(
-    //     unapprovedDocumentSnapshots.docs.map((doc) => doc.data().apprenticeId)
+    //   unapprovedQueryRef = query(
+    //     unapprovedQueryRef,
+    //     where("supervisorSignature", "==", true)
     //   );
-    //   if (approval) {
-    //     for (const apprenticeId of unapprovedApprenticeIds) {
-    //       approvedApprenticeIds.delete(apprenticeId);
-    //     }
+    // }
+    // approvedQueryRef = query(approvedQueryRef, orderBy("date"));
+    // approvedQueryRef = query(approvedQueryRef, orderBy("apprenticeName"));
+    // unapprovedQueryRef = query(unapprovedQueryRef, orderBy("date"));
+    // unapprovedQueryRef = query(unapprovedQueryRef, orderBy("apprenticeName"));
+    // const approvedDocumentSnapshots = await getDocs(approvedQueryRef);
+    // const unapprovedDocumentSnapshots = await getDocs(unapprovedQueryRef);
+    // const approvedApprenticeIds = new Set(
+    //   approvedDocumentSnapshots.docs.map((doc) => doc.data().apprenticeId)
+    // );
+    // const unapprovedApprenticeIds = new Set(
+    //   unapprovedDocumentSnapshots.docs.map((doc) => doc.data().apprenticeId)
+    // );
+    // if (approval) {
+    //   for (const apprenticeId of unapprovedApprenticeIds) {
+    //     approvedApprenticeIds.delete(apprenticeId);
     //   }
+    // }
     //   const data = fetchApprenticeData(approvedApprenticeIds);
     //   return data;
     // } catch (error) {
