@@ -22,8 +22,6 @@ export const useUserData = (): QueryResult => {
     status: UserStatus = "active",
     role: UserRole = "apprentice"
   ) => {
-    console.log({ status, role });
-
     const usersQuery = query(
       collection(db, "users"),
       where("status", "==", status),
@@ -46,8 +44,6 @@ export const useUserData = (): QueryResult => {
     startDate?: Date,
     endDate?: Date
   ) => {
-    console.log({ startDate });
-
     try {
       const collectionRef = collection(db, "mprs");
       let approvedQueryRef = query(collectionRef);
@@ -131,8 +127,6 @@ export const useUserData = (): QueryResult => {
   };
 
   const fetchLastMonthData = async (approval: boolean) => {
-    console.log("last month");
-
     const today = new Date();
     const currentMonth = today.getMonth();
     const currentYear = today.getFullYear();
@@ -160,7 +154,6 @@ export const useUserData = (): QueryResult => {
       endDate
     );
 
-    console.log("last month", { apprenticeIds, startDate, endDate });
     return apprenticeIds;
   };
 
@@ -172,8 +165,6 @@ export const useUserData = (): QueryResult => {
   ) => {
     const users = await fetchUsers(status, role);
     if (role !== "apprentice") {
-      console.log("not apprentice", users);
-
       return setStaffData(users);
     }
     if (dateRange === -1) {
@@ -182,7 +173,6 @@ export const useUserData = (): QueryResult => {
         apprenticeIds.includes(user.id)
       );
       setStaffData(desiredStaff);
-      return console.log({ apprenticeIds, users });
     }
     if (dateRange === 1) {
       const apprenticeIds = await fetchLastMonthData(approval);
@@ -191,7 +181,6 @@ export const useUserData = (): QueryResult => {
       );
       return setStaffData(desiredStaff);
     }
-    console.log("handle Filter change", dateRange, approval);
 
     const beforeDate = new Date();
     beforeDate.setMonth(beforeDate.getMonth() - dateRange);
@@ -206,8 +195,6 @@ export const useUserData = (): QueryResult => {
 
   const fetchStaffByName = async (name: string) => {
     try {
-      console.log({ name });
-
       const usersCollection = collection(db, "users");
       const queryRef = query(usersCollection, where("name", "==", name));
       const userSnapshot = await getDocs(queryRef);

@@ -27,7 +27,6 @@ export const DisplayStaff = () => {
 
   const { staffData, handleFilterChange, fetchStaffByName, clear } =
     useUserData();
-  console.log({ staffData });
 
   const handleSearch = (name: string) => {
     setSearchQuery(name);

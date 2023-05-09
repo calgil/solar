@@ -9,28 +9,48 @@ import { useReactToPrint } from "react-to-print";
 import { Modal } from "./Modal";
 import { StaffFilter } from "./StaffFilter";
 import { useUserData } from "../hooks/useUserData";
-import { useStaffData } from "../hooks/useStaffData";
+import { UserRole, UserStatus } from "../types/user.type";
 
 export const MonthlyProgressReports = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState(6);
   const [approval, setApproval] = useState(false);
-  const { handleFilterChange, fetchApprenticeByName, clear } = useStaffData();
+  const [role, setRole] = useState<UserRole>("apprentice");
+  const [status, setStatus] = useState<UserStatus>("active");
+  const { staffData, fetchStaffByName, handleFilterChange, clear } =
+    useUserData();
 
-  const { staffData: staffData } = useUserData();
+  console.log({ staffData });
 
   const componentRef = useRef(null);
 
-  const handleDateChange = (month: number, approval?: boolean) => {
-    setDateRange(month);
+  const handleDateChange = (
+    month: number,
+    approval: boolean,
+    status: UserStatus,
+    role: UserRole
+  ) => {
+    if (month) {
+      setDateRange(month);
+    }
+
     if (approval) {
       setApproval(approval);
     } else {
       setApproval(false);
     }
+
+    if (!status) {
+      return;
+    }
+    if (!role) {
+      return;
+    }
+    setRole(role);
+    setStatus(status);
     console.log({ approval });
 
-    handleFilterChange(month, approval);
+    handleFilterChange(month, approval, status, role);
   };
 
   const handlePrint = useReactToPrint({
@@ -41,7 +61,7 @@ export const MonthlyProgressReports = () => {
 
   const handleSelect = (value: string) => {
     setInputValue(value);
-    fetchApprenticeByName(value);
+    fetchStaffByName(value);
   };
 
   const onInputChange = (value: string) => {
@@ -75,7 +95,7 @@ export const MonthlyProgressReports = () => {
           Print Report
         </button>
       </div>
-      <MprTable apprenticeData={staffData} tableRef={componentRef} />
+      <MprTable users={staffData} tableRef={componentRef} />
       {/* <PaginationButtons
         totalPages={totalPages}
         prev={prev}
@@ -92,6 +112,8 @@ export const MonthlyProgressReports = () => {
           closeModal={() => setIsFilterModalOpen(false)}
           applyFilters={handleDateChange}
           date={dateRange}
+          status={status}
+          role={role}
           approval={approval}
           clear={handleClearSearch}
         />

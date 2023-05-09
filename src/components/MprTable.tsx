@@ -1,14 +1,14 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { REQUIRED_HOURS } from "../data/hourRequirements";
-import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
+import { User } from "../types/user.type";
 import s from "../styles/components/MprTable.module.scss";
+import { MprTableRow } from "./MprTableRow";
 
 type MprTableProps = {
-  apprenticeData: ApprenticeData[];
+  users: User[];
   tableRef: React.RefObject<HTMLTableElement>;
 };
 
-export const MprTable = ({ apprenticeData: data, tableRef }: MprTableProps) => {
+export const MprTable = ({ users, tableRef }: MprTableProps) => {
   return (
     <table className={s.table} ref={tableRef}>
       <thead className={s.headers}>
@@ -23,26 +23,8 @@ export const MprTable = ({ apprenticeData: data, tableRef }: MprTableProps) => {
         </tr>
       </thead>
       <tbody className={s.tableBody}>
-        {data.map((apprentice) => (
-          <tr className={s.row} key={apprentice.id}>
-            <td>{apprentice.name}</td>
-            <td>
-              {apprentice.data.totalHours}/{REQUIRED_HOURS.totalHours}
-            </td>
-            <td>
-              {apprentice.data.pvHours}/{REQUIRED_HOURS.PVHours}
-            </td>
-            <td>
-              {apprentice.data.otherREHours}/{REQUIRED_HOURS.OtherREHours}
-            </td>
-            <td>
-              {apprentice.data.bosHours}/{REQUIRED_HOURS.BOSHours}
-            </td>
-            <td>
-              {apprentice.data.otherHours}/{REQUIRED_HOURS.otherHours}
-            </td>
-            <td>{apprentice.data.hasUnapprovedMpr ? "No" : "Yes"}</td>
-          </tr>
+        {users.map((user) => (
+          <MprTableRow key={user.id} user={user} />
         ))}
       </tbody>
     </table>
