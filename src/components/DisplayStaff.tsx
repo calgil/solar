@@ -8,7 +8,6 @@ import { ApprenticeSearch } from "./ApprenticeSearch";
 import { AddHours } from "./AddHours";
 import { useUsers } from "../hooks/useUsers";
 import { useAuth } from "../providers/auth.provider";
-import { useStaffData } from "../hooks/useStaffData";
 import { StaffFilter } from "./StaffFilter";
 import { useUserData } from "../hooks/useUserData";
 import { UserRole, UserStatus } from "../types/user.type";

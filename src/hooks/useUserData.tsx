@@ -63,11 +63,29 @@ export const useUserData = (): QueryResult => {
 
       const documentSnapshot = await getDocs(mprQueryRef);
 
-      const apprenticeIdSet = new Set(
-        documentSnapshot.docs.map((doc) => doc.data().apprenticeId)
-      );
+      const apprenticeIds = documentSnapshot.docs
+        .reduce((acc, doc) => {
+          const apprenticeId = doc.data().apprenticeId;
+          const supervisorSignature = doc.data().supervisorSignature;
+          if (acc.has(apprenticeId)) {
+            if (supervisorSignature !== approval) {
+              acc.delete(apprenticeId);
+            }
+          }
+          if (!acc.has(apprenticeId)) {
+            if (supervisorSignature === approval) {
+              acc.set(apprenticeId, true);
+            }
+          }
+          return acc;
+        }, new Map())
+        .keys();
 
-      return Array.from(apprenticeIdSet);
+      // const apprenticeIdSet = new Set(
+      //   documentSnapshot.docs.map((doc) => doc.data().apprenticeId)
+      // );
+
+      return Array.from(apprenticeIds);
     } catch (error) {
       console.error(error);
       throw new Error("could not get apprentice ids from mprs");
@@ -93,8 +111,6 @@ export const useUserData = (): QueryResult => {
     if (dateRange === -1) {
       const apprenticeIds = await getApprenticeIdFromMpr(approval);
       return console.log({ apprenticeIds });
-
-      // get all mprs
     }
     if (dateRange === 1) {
       fetchLastMonthData(approval);

@@ -15,6 +15,8 @@ import { Status } from "../Status";
 import { useUsers } from "../../hooks/useUsers";
 import { ApprenticeData } from "../../firebase/mpr/getApprenticeData";
 
+// need to pass apprentice Id to this component. Then set user in state like with fetchApprenticeData()
+
 type ApprenticeDashboardProps = {
   apprentice: User;
   edit?: boolean;

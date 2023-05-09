@@ -6,7 +6,6 @@ import { MonthlyProgressReports } from "../MonthlyProgressReports";
 import { AddBtn } from "../AddBtn";
 import { Modal } from "../Modal";
 import { AddUser } from "../AddUser";
-import { ArchivedUsers } from "../ArchivedUsers";
 
 type ActivePage = "staff" | "mprs" | "archive";
 
@@ -28,9 +27,6 @@ export const AdminDashboard = () => {
           <a className={s.link} onClick={() => handlePageChange("mprs")}>
             Monthly Progress Reports
           </a>
-          <a className={s.link} onClick={() => handlePageChange("archive")}>
-            Archived Users
-          </a>
           <AddBtn text="Add User" onClick={() => setIsModalOpen(true)} />
         </div>
         <Modal
@@ -43,7 +39,6 @@ export const AdminDashboard = () => {
       </div>
       {activePage === "staff" && <DisplayStaff />}
       {activePage === "mprs" && <MonthlyProgressReports />}
-      {activePage === "archive" && <ArchivedUsers />}
     </div>
   );
 };

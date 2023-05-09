@@ -9,8 +9,6 @@ import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
 import { User } from "../types/user.type";
 import { fetchApprenticeData } from "../firebase/mpr/fetchMprs";
 
-// lets consider passing in a user here. And this component can grab it's own data like in apprenticeDashboard
-
 type StaffMemberProps = {
   user: User;
 };
@@ -30,7 +28,8 @@ export const StaffMember = ({ user }: StaffMemberProps) => {
 
   useEffect(() => {
     if (user) {
-      fetchApprenticeData(user.id, setApprenticeData);
+      const unsubscribe = fetchApprenticeData(user.id, setApprenticeData);
+      return () => unsubscribe();
     }
   }, []);
 
