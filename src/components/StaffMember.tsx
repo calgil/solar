@@ -7,7 +7,7 @@ import { DownArrow } from "./DownArrow";
 import { Link } from "react-router-dom";
 import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
 import { User } from "../types/user.type";
-import { fetchApprenticeData } from "../firebase/mpr/fetchMprs";
+import { fetchApprenticeData } from "../firebase/mpr/fetchApprenticeData";
 
 type StaffMemberProps = {
   user: User;

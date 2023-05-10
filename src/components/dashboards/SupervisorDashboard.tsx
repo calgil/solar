@@ -8,17 +8,12 @@ import { StaffMember } from "../StaffMember";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
 import { AddBtn } from "../AddBtn";
-import {
-  ApprenticeData,
-  getApprenticeData,
-} from "../../firebase/mpr/getApprenticeData";
 
 export const SupervisorDashboard = () => {
   const { user } = useAuth();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [apprentices, setApprentices] = useState<User[]>([]);
-  const [apprenticeData, setApprenticeData] = useState<ApprenticeData[]>([]);
 
   const closeModal = () => setIsModalOpen(false);
 
@@ -28,24 +23,6 @@ export const SupervisorDashboard = () => {
     }
     const apprentices = await fetchUsers("apprentice", user.id);
     setApprentices(apprentices);
-    const apprenticeIds = new Set(apprentices.map((app) => app.id));
-    console.log({ apprenticeIds });
-
-    // const apprenticeDataPromise = Array.from(apprenticeIds).map(async (id) => {
-    //   const data = await getApprenticeData(id);
-    //   const apprenticeId = data.mprs[0].apprenticeId;
-    //   const name = data.mprs[0].apprenticeName;
-    //   const hasUnapprovedMpr = data.mprs.some(
-    //     (mpr) => !mpr.supervisorSignature
-    //   );
-    //   return { apprenticeId, name, data, hasUnapprovedMpr };
-    // });
-
-    const data = await Promise.all(
-      Array.from(apprenticeIds).map(async (id) => await getApprenticeData(id))
-    );
-
-    setApprenticeData(data);
   };
 
   useEffect(() => {
@@ -62,8 +39,8 @@ export const SupervisorDashboard = () => {
         <AddBtn text="Add Hours" onClick={() => setIsModalOpen(true)} />
       </div>
       <div className={s.apprenticeContainer}>
-        {apprenticeData.map((app) => (
-          <StaffMember key={app.id} data={app} />
+        {apprentices.map((app) => (
+          <StaffMember key={app.id} user={app} />
         ))}
       </div>
       <Modal

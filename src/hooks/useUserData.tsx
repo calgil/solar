@@ -111,8 +111,6 @@ export const useUserData = (): QueryResult => {
         unapprovedDocumentSnapshots.docs.map((doc) => doc.data().apprenticeId)
       );
 
-      console.log({ approvedApprenticeIds, unapprovedApprenticeIds });
-
       if (approval) {
         for (const apprenticeId of unapprovedApprenticeIds) {
           approvedApprenticeIds.delete(apprenticeId);

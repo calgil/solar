@@ -3,7 +3,7 @@ import s from "../styles/components/MprTableRow.module.scss";
 import { useEffect, useState } from "react";
 import { User } from "../types/user.type";
 import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
-import { fetchApprenticeData } from "../firebase/mpr/fetchMprs";
+import { fetchApprenticeData } from "../firebase/mpr/fetchApprenticeData";
 import { REQUIRED_HOURS } from "../data/hourRequirements";
 
 type MprTableRowProps = {

@@ -5,7 +5,7 @@ import {
   ApprenticeData,
   getApprenticeData,
 } from "../firebase/mpr/getApprenticeData";
-import { fetchUserById } from "../firebase/users/fetchUserById";
+import { fetchUserData } from "../firebase/users/fetchUserById";
 
 type QueryResult = {
   apprenticeData: ApprenticeInfo[];
@@ -25,7 +25,7 @@ export const useArchivedUsers = (): QueryResult => {
 
   const fetchApprenticeData = async (apprenticeIds: Set<string>) => {
     const apprenticeDataPromise = Array.from(apprenticeIds).map(async (id) => {
-      const user = await fetchUserById(id);
+      const user = await fetchUserData(id);
       const data = await getApprenticeData(id);
       const apprenticeId = id;
       const name = data.mprs[0].apprenticeName;
