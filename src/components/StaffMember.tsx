@@ -37,7 +37,7 @@ export const StaffMember = ({ user }: StaffMemberProps) => {
     <div className={s.staffMember} onClick={handleExpandClick}>
       <div className={s.staffContainer}>
         <div className={s.staffInfo}>
-          <Link className={s.name} to={`staff/${user.id}`}>
+          <Link className={s.name} to={`/staff/${user.id}`}>
             {capitalizeName(user.name)}
           </Link>
           <p className={s.role}>{capitalizeName(user.role)}</p>

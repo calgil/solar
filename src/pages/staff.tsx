@@ -23,7 +23,9 @@ export default function Staff() {
       {user?.role === "apprentice" && (
         <ApprenticeDashboard apprenticeId={user.id} edit />
       )}
-      {user?.role === "supervisor" && <SupervisorDashboard />}
+      {user?.role === "supervisor" && (
+        <SupervisorDashboard supervisorId={user.id} edit />
+      )}
     </>
   );
 }

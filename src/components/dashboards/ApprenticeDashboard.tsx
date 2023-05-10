@@ -16,8 +16,6 @@ import { useUsers } from "../../hooks/useUsers";
 import { ApprenticeData } from "../../firebase/mpr/getApprenticeData";
 import { fetchUserData } from "../../firebase/users/fetchUserById";
 
-// need to pass apprentice Id to this component. Then set user in state like with fetchApprenticeData()
-
 type ApprenticeDashboardProps = {
   apprenticeId: string;
   edit?: boolean;
@@ -38,8 +36,6 @@ export const ApprenticeDashboard = ({
 
   const { supervisors } = useUsers();
 
-  console.log({ supervisors, currentSupervisor });
-
   const closeModal = () => setIsModalOpen(false);
 
   const openModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -58,8 +54,6 @@ export const ApprenticeDashboard = ({
 
   useEffect(() => {
     if (apprentice) {
-      console.log("there is an apprentice", apprentice);
-
       const supervisor = supervisors.find(
         (supervisor) => supervisor.id === apprentice.supervisorId
       );
@@ -88,7 +82,6 @@ export const ApprenticeDashboard = ({
 
   return (
     <>
-      {!apprentice && <span>No apprentice</span>}
       {apprentice && (
         <div>
           <div className={s.overview}>
