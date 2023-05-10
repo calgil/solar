@@ -8,7 +8,7 @@ export type UploadMpr = {
   apprenticeName: string;
   date: Date;
   photoUrl: string;
-  psHours: number;
+  pvHours: number;
   otherREHours: number;
   bosHours: number;
   otherHours: number;
@@ -23,7 +23,7 @@ export const createMpr = async ({
   apprenticeName,
   date,
   photoUrl,
-  psHours,
+  pvHours,
   otherREHours,
   bosHours,
   otherHours,
@@ -37,7 +37,7 @@ export const createMpr = async ({
     apprenticeName,
     date,
     photoUrl,
-    psHours,
+    pvHours,
     otherREHours,
     bosHours,
     otherHours,

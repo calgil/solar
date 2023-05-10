@@ -1,0 +1,10 @@
+@use "../abstracts" as a;
+
+.row {
+  border: 1px solid a.$tableBorder;
+  height: 40px;
+
+  &:hover {
+    background-color: a.$yellow;
+  }
+}

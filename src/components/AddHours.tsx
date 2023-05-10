@@ -39,11 +39,11 @@ export const AddHours = ({
     mpr?.date.toDate().getFullYear() || +new Date().getFullYear()
   );
 
-  const [psHours, setPsHours] = useState(mpr?.psHours || 0);
+  const [pvHours, setPvHours] = useState(mpr?.pvHours || 0);
   const [otherREHours, setOtherREHours] = useState(mpr?.otherREHours || 0);
   const [bosHours, setBosHours] = useState(mpr?.bosHours || 0);
   const [otherHours, setOtherHours] = useState(mpr?.otherHours || 0);
-  const totalHours = [psHours, otherREHours, bosHours, otherHours].reduce(
+  const totalHours = [pvHours, otherREHours, bosHours, otherHours].reduce(
     (acc, val) => acc + val,
     0
   );
@@ -71,9 +71,9 @@ export const AddHours = ({
       labelText: "Photovalic Systems",
       type: "number",
       name: "PS",
-      value: psHours,
+      value: pvHours,
       placeholder: "0",
-      onChange: (e) => setPsHours(Number(e.target.value)),
+      onChange: (e) => setPvHours(Number(e.target.value)),
       autoComplete: "off",
     },
     {
@@ -214,7 +214,7 @@ export const AddHours = ({
         apprenticeName: mpr.apprenticeName,
         date,
         photoUrl: uploadPhotoUrl,
-        psHours,
+        pvHours: pvHours,
         otherREHours,
         bosHours,
         otherHours,
@@ -232,7 +232,7 @@ export const AddHours = ({
         apprenticeName: mpr.apprenticeName,
         date,
         photoUrl: uploadPhotoUrl,
-        psHours,
+        pvHours: pvHours,
         otherREHours,
         bosHours,
         otherHours,
@@ -250,7 +250,7 @@ export const AddHours = ({
         apprenticeName: selectedApprentice.name,
         date,
         photoUrl: uploadPhotoUrl,
-        psHours,
+        pvHours: pvHours,
         otherREHours,
         bosHours,
         otherHours,
@@ -271,7 +271,7 @@ export const AddHours = ({
       apprenticeName: user.name,
       date,
       photoUrl: uploadPhotoUrl,
-      psHours,
+      pvHours: pvHours,
       otherREHours: otherREHours,
       bosHours,
       otherHours,

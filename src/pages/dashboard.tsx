@@ -10,8 +10,12 @@ export default function Dashboard() {
 
   return (
     <>
-      {user?.role === "apprentice" && <ApprenticeDashboard apprentice={user} />}
-      {user?.role === "supervisor" && <SupervisorDashboard />}
+      {user?.role === "apprentice" && (
+        <ApprenticeDashboard apprenticeId={user.id} />
+      )}
+      {user?.role === "supervisor" && (
+        <SupervisorDashboard supervisorId={user.id} />
+      )}
       {user?.role === "admin" && <AdminDashboard />}
     </>
   );

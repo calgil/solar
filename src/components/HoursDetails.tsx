@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
-import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
+import { MprData } from "../firebase/mpr/getApprenticeData";
 import s from "../styles/components/HoursDetails.module.scss";
 import { DownArrow } from "./DownArrow";
 import { HourCategory } from "./HourCategory";
@@ -8,7 +8,7 @@ import { MprDisplay } from "./MprDisplay";
 import { REQUIRED_HOURS } from "../data/hourRequirements";
 
 type HoursDetailsProps = {
-  apprenticeData: ApprenticeData;
+  apprenticeData: MprData;
 };
 
 export const HoursDetails = ({ apprenticeData }: HoursDetailsProps) => {

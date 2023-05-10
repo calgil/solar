@@ -40,13 +40,16 @@ export const HourCategory = ({
       )}
       {showPercentage && (
         <div className={s.showPercentage}>
-          {category} <span className={s.line}>|</span> {hoursEarned} /
-          {totalHours}
+          <p className={s.text}>{category}</p> <span className={s.line}>|</span>
+          <p className={s.text}>
+            {hoursEarned} /{totalHours}
+          </p>
         </div>
       )}
       {!showPercentage && (
         <div className={s.noPercentage}>
-          {category} <span className={s.line}>|</span> {hoursEarned}
+          <p className={s.text}>{category}</p> <span className={s.line}>|</span>{" "}
+          <p className={s.text}>{hoursEarned}</p>
         </div>
       )}
     </div>

@@ -5,26 +5,36 @@ import { useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
 import { capitalizeName } from "../../utils/capitalizeName";
-import { MprType } from "../../types/mpr.type";
 import { HoursOverview } from "../HoursOverview";
 import { HoursDetails } from "../HoursDetails";
-import { fetchMprs } from "../../firebase/mpr/fetchMprs";
+import { fetchApprenticeData } from "../../firebase/mpr/fetchApprenticeData";
 import { AddBtn } from "../AddBtn";
 import { User } from "../../types/user.type";
 import { AddUser } from "../AddUser";
 import { Status } from "../Status";
+import { useUsers } from "../../hooks/useUsers";
+import { ApprenticeData } from "../../firebase/mpr/getApprenticeData";
+import { fetchUserData } from "../../firebase/users/fetchUserById";
 
 type ApprenticeDashboardProps = {
-  apprentice: User;
+  apprenticeId: string;
   edit?: boolean;
 };
 
 export const ApprenticeDashboard = ({
-  apprentice,
+  apprenticeId,
   edit,
 }: ApprenticeDashboardProps) => {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [apprentice, setApprentice] = useState<User | null>(null);
+  const [apprenticeData, setApprenticeData] = useState<ApprenticeData | null>(
+    null
+  );
+  const [currentSupervisor, setCurrentSupervisor] = useState<User | null>(null);
+
+  const { supervisors } = useUsers();
 
   const closeModal = () => setIsModalOpen(false);
 
@@ -32,8 +42,6 @@ export const ApprenticeDashboard = ({
     e.stopPropagation();
     setIsModalOpen(true);
   };
-
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const closeEditModal = () => setIsEditModalOpen(false);
 
@@ -44,68 +52,81 @@ export const ApprenticeDashboard = ({
     setIsEditModalOpen(true);
   };
 
-  const [userMprs, setUserMprs] = useState<MprType[]>([]);
-
   useEffect(() => {
     if (apprentice) {
-      const unsubscribe = fetchMprs(apprentice.id, setUserMprs);
+      const supervisor = supervisors.find(
+        (supervisor) => supervisor.id === apprentice.supervisorId
+      );
+      if (supervisor) {
+        setCurrentSupervisor(supervisor);
+      }
+      if (!supervisor) {
+        setCurrentSupervisor(null);
+      }
+    }
+  }, [apprentice, supervisors]);
+
+  useEffect(() => {
+    if (apprenticeId) {
+      const unsubscribe = fetchUserData(apprenticeId, setApprentice);
       return () => unsubscribe();
     }
-  }, [apprentice]);
+  }, [apprenticeId]);
 
-  const totalHours = userMprs.reduce((acc, mpr) => acc + mpr.totalHours, 0);
-  const pvHours = userMprs.reduce((acc, mpr) => acc + mpr.psHours, 0);
-  const otherREHours = userMprs.reduce((acc, mpr) => acc + mpr.otherREHours, 0);
-  const bosHours = userMprs.reduce((acc, mpr) => acc + mpr.bosHours, 0);
-  const otherHours = userMprs.reduce((acc, mpr) => acc + mpr.otherHours, 0);
+  useEffect(() => {
+    if (apprenticeId) {
+      const unsubscribe = fetchApprenticeData(apprenticeId, setApprenticeData);
+      return () => unsubscribe();
+    }
+  }, [apprenticeId]);
 
   return (
-    <div>
-      <div className={s.overview}>
-        <div className={s.userInfo}>
-          <h2>{capitalizeName(apprentice.name)}&apos;s Dashboard</h2>
-          {edit && user?.role !== "apprentice" && (
-            <Status status={apprentice.status} />
-          )}
+    <>
+      {apprentice && (
+        <div>
+          <div className={s.overview}>
+            <div className={s.userInfo}>
+              <h2>{capitalizeName(apprentice.name)}&apos;s Dashboard</h2>
+              {edit && user?.role !== "apprentice" && (
+                <div className={s.apprenticeInfo}>
+                  <Status status={apprentice.status} />
+                  <span>Supervisor: {currentSupervisor?.name}</span>
+                </div>
+              )}
+            </div>
+            <div className={s.totals}>
+              {apprenticeData?.data && (
+                <HoursOverview hours={apprenticeData.data} />
+              )}
+              {/* <div>Certs and Education</div> */}
+              {/* <div>Test</div> */}
+            </div>
+          </div>
+          <div className={s.action}>
+            {edit && user?.role === "admin" && (
+              <AddBtn text="Edit Profile" onClick={openEditModal} />
+            )}
+            {user?.role === "apprentice" && (
+              <AddBtn text="Add Hours" onClick={openModal} />
+            )}
+          </div>
+          <div className={s.details}>
+            {apprenticeData?.data && (
+              <HoursDetails apprenticeData={apprenticeData.data} />
+            )}
+            <Modal
+              isOpen={isEditModalOpen}
+              onClose={closeEditModal}
+              title={`Edit ${apprentice.name}'s Profile`}
+            >
+              <AddUser closeModal={closeEditModal} userToEdit={apprentice} />
+            </Modal>
+            <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
+              {user && <AddHours user={user} closeModal={closeModal} />}
+            </Modal>
+          </div>
         </div>
-        <div className={s.totals}>
-          <HoursOverview
-            hours={{ totalHours, pvHours, otherREHours, bosHours, otherHours }}
-          />
-          {/* <div>Certs and Education</div> */}
-          {/* <div>Test</div> */}
-        </div>
-      </div>
-      <div className={s.action}>
-        {edit && user?.role === "admin" && (
-          <button className={s.editBtn} onClick={openEditModal}>
-            Edit Profile
-          </button>
-        )}
-        <AddBtn text="Add Hours" onClick={openModal} />
-      </div>
-      <div className={s.details}>
-        <HoursDetails
-          apprenticeData={{
-            totalHours,
-            pvHours,
-            otherREHours,
-            bosHours,
-            otherHours,
-            mprs: userMprs,
-          }}
-        />
-        <Modal
-          isOpen={isEditModalOpen}
-          onClose={closeEditModal}
-          title={`Edit ${apprentice.name}'s Profile`}
-        >
-          <AddUser closeModal={closeEditModal} userToEdit={apprentice} />
-        </Modal>
-        <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
-          {user && <AddHours user={user} closeModal={closeModal} />}
-        </Modal>
-      </div>
-    </div>
+      )}
+    </>
   );
 };

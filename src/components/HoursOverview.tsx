@@ -4,17 +4,10 @@ import { REQUIRED_HOURS } from "../data/hourRequirements";
 import s from "../styles/components/HoursOverview.module.scss";
 import { DownArrow } from "./DownArrow";
 import { ProgressDisplay } from "./ProgressDisplay";
-
-type Hours = {
-  totalHours: number;
-  pvHours: number;
-  bosHours: number;
-  otherREHours: number;
-  otherHours: number;
-};
+import { MprData } from "../firebase/mpr/getApprenticeData";
 
 type HoursOverviewProps = {
-  hours: Hours;
+  hours: MprData;
 };
 export const HoursOverview = ({
   hours: { totalHours, pvHours, otherREHours, bosHours, otherHours },

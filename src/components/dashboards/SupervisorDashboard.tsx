@@ -8,75 +8,106 @@ import { StaffMember } from "../StaffMember";
 import { Modal } from "../Modal";
 import { AddHours } from "../AddHours";
 import { AddBtn } from "../AddBtn";
-import { getApprenticeData } from "../../firebase/mpr/getApprenticeData";
-import { ApprenticeMprData } from "../../hooks/useStaffData";
+import { fetchUserData } from "../../firebase/users/fetchUserById";
+import { AddUser } from "../AddUser";
 
-export const SupervisorDashboard = () => {
+type SupervisorDashboardProps = {
+  supervisorId: string;
+  edit?: boolean;
+};
+
+export const SupervisorDashboard = ({
+  supervisorId,
+  edit,
+}: SupervisorDashboardProps) => {
   const { user } = useAuth();
 
+  const [supervisor, setSupervisor] = useState<User | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [apprentices, setApprentices] = useState<User[]>([]);
-  const [apprenticeData, setApprenticeData] = useState<ApprenticeMprData[]>([]);
+
+  const openEditModal = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    setIsEditModalOpen(true);
+  };
 
   const closeModal = () => setIsModalOpen(false);
 
   const getApprentices = async () => {
-    if (!user) {
+    if (!supervisor) {
       return;
     }
-    const apprentices = await fetchUsers("apprentice", user.id);
+    const apprentices = await fetchUsers("apprentice", supervisor.id);
+    console.log({ apprentices });
+
     setApprentices(apprentices);
-    const apprenticeIds = new Set(apprentices.map((app) => app.id));
-    console.log({ apprenticeIds });
-
-    const apprenticeDataPromise = Array.from(apprenticeIds).map(async (id) => {
-      const data = await getApprenticeData(id);
-      const apprenticeId = data.mprs[0].apprenticeId;
-      const name = data.mprs[0].apprenticeName;
-      const hasUnapprovedMpr = data.mprs.some(
-        (mpr) => !mpr.supervisorSignature
-      );
-      return { apprenticeId, name, data, hasUnapprovedMpr };
-    });
-
-    const data = await Promise.all(apprenticeDataPromise);
-
-    setApprenticeData(data);
   };
 
   useEffect(() => {
-    if (!user) {
-      return;
+    if (supervisor) {
+      getApprentices();
     }
-    getApprentices();
-  }, [user]);
+  }, [supervisor]);
+
+  useEffect(() => {
+    if (supervisorId) {
+      const unsubscribe = fetchUserData(supervisorId, setSupervisor);
+
+      return () => unsubscribe();
+    }
+  }, []);
 
   return (
-    <div className={s.apprenticeSummary}>
-      <h2 className={s.title}>Apprentice Summary</h2>
-      <div className={s.action}>
-        <AddBtn text="Add Hours" onClick={() => setIsModalOpen(true)} />
-      </div>
-      {/* Figure out how to use useStaffData to get data and pass to this component */}
-      <div className={s.apprenticeContainer}>
-        {apprenticeData.map((app) => (
-          <StaffMember key={app.apprenticeId} data={app} />
-        ))}
-      </div>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        title="Add Apprentice Hours"
-      >
-        {user && (
-          <AddHours
-            user={user}
-            closeModal={closeModal}
-            supervisor="supervisor"
-            apprentices={apprentices}
-          />
-        )}
-      </Modal>
-    </div>
+    <>
+      {supervisor && (
+        <div className={s.apprenticeSummary}>
+          <h2 className={s.title}>Apprentice Summary</h2>
+          <div className={s.action}>
+            {edit && user?.role === "admin" && (
+              <AddBtn text="Edit Profile" onClick={openEditModal} />
+            )}
+            {user?.role === "supervisor" && (
+              <AddBtn text="Add Hours" onClick={() => setIsModalOpen(true)} />
+            )}
+          </div>
+          <div className={s.apprenticeContainer}>
+            {apprentices.map((app) => (
+              <StaffMember key={app.id} user={app} />
+            ))}
+          </div>
+          <Modal
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            title={`Edit ${supervisor.name}'s Profile`}
+          >
+            {apprentices.length > 0 ? (
+              <div>Cannot Edit Supervisor while they have apprentices</div>
+            ) : (
+              <AddUser
+                closeModal={() => setIsEditModalOpen(false)}
+                userToEdit={supervisor}
+              />
+            )}
+          </Modal>
+          <Modal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            title="Add Apprentice Hours"
+          >
+            {user && (
+              <AddHours
+                user={user}
+                closeModal={closeModal}
+                supervisor="supervisor"
+                apprentices={apprentices}
+              />
+            )}
+          </Modal>
+        </div>
+      )}
+    </>
   );
 };
