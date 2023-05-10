@@ -1,18 +1,23 @@
 /* eslint-disable react/react-in-jsx-scope */
 import s from "../styles/components/StaffMember.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { capitalizeName } from "../utils/capitalizeName";
 import { HoursDetails } from "./HoursDetails";
 import { DownArrow } from "./DownArrow";
 import { Link } from "react-router-dom";
-import { ApprenticeMprData } from "../hooks/useStaffData";
+import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
+import { User } from "../types/user.type";
+import { fetchApprenticeData } from "../firebase/mpr/fetchApprenticeData";
 
 type StaffMemberProps = {
-  data: ApprenticeMprData;
+  user: User;
 };
 
-export const StaffMember = ({ data }: StaffMemberProps) => {
+export const StaffMember = ({ user }: StaffMemberProps) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [apprenticeData, setApprenticeData] = useState<ApprenticeData | null>(
+    null
+  );
 
   const handleExpandClick = async () => {
     if (showDetails) {
@@ -21,20 +26,29 @@ export const StaffMember = ({ data }: StaffMemberProps) => {
     setShowDetails(true);
   };
 
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = fetchApprenticeData(user.id, setApprenticeData);
+      return () => unsubscribe();
+    }
+  }, []);
+
   return (
     <div className={s.staffMember} onClick={handleExpandClick}>
       <div className={s.staffContainer}>
         <div className={s.staffInfo}>
-          <Link className={s.name} to={`staff/${data.apprenticeId}`}>
-            {capitalizeName(data.name)}
+          <Link className={s.name} to={`/staff/${user.id}`}>
+            {capitalizeName(user.name)}
           </Link>
-          {/* <p className={s.role}>{capitalizeName(user.role)}</p> */}
+          <p className={s.role}>{capitalizeName(user.role)}</p>
         </div>
-        <DownArrow expand={showDetails} />
+        {user.role === "apprentice" && <DownArrow expand={showDetails} />}
       </div>
-      {showDetails && (
+      {showDetails && user.role === "apprentice" && (
         <div className={s.detailsContainer}>
-          {data && <HoursDetails apprenticeData={data.data} />}
+          {apprenticeData && (
+            <HoursDetails apprenticeData={apprenticeData.data} />
+          )}
         </div>
       )}
     </div>

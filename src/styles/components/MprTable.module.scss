@@ -15,12 +15,6 @@
     font-weight: 800;
     font-size: 14px;
     line-height: 19px;
-
-    .row.top {
-      &:hover {
-        background-color: transparent;
-      }
-    }
   }
 
   .tableBody {
@@ -32,10 +26,6 @@
   .row {
     border: 1px solid a.$tableBorder;
     height: 40px;
-
-    &:hover {
-      background-color: a.$yellow;
-    }
   }
 }
 

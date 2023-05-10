@@ -4,6 +4,7 @@ import { LoaderFunction, useLoaderData } from "react-router-dom";
 import { fetchUserById } from "../firebase/users/fetchUserById";
 import { User } from "../types/user.type";
 import { ApprenticeDashboard } from "../components/dashboards/ApprenticeDashboard";
+import { SupervisorDashboard } from "../components/dashboards/SupervisorDashboard";
 
 export const loader: LoaderFunction = async ({ params }) => {
   if (params.uid) {
@@ -15,11 +16,15 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export default function Staff() {
   const { user } = useLoaderData() as Awaited<{ user: User }>;
+  console.log({ user });
 
   return (
     <>
       {user?.role === "apprentice" && (
-        <ApprenticeDashboard apprentice={user} edit />
+        <ApprenticeDashboard apprenticeId={user.id} edit />
+      )}
+      {user?.role === "supervisor" && (
+        <SupervisorDashboard supervisorId={user.id} edit />
       )}
     </>
   );

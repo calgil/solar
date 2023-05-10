@@ -1,0 +1,18 @@
+@use "../abstracts" as a;
+@use "../layouts";
+
+.actions {
+  font-family: a.$secondaryFont;
+
+  .label {
+    margin-top: 10px;
+    display: block;
+    max-width: 200px;
+    margin-bottom: 20px;
+
+    .input {
+      @extend .input;
+      margin-top: 5px;
+    }
+  }
+}
