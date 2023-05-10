@@ -5,6 +5,7 @@ import { User } from "../types/user.type";
 import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
 import { fetchApprenticeData } from "../firebase/mpr/fetchApprenticeData";
 import { REQUIRED_HOURS } from "../data/hourRequirements";
+import { capitalizeName } from "../utils/capitalizeName";
 
 type MprTableRowProps = {
   user: User;
@@ -22,7 +23,14 @@ export const MprTableRow = ({ user }: MprTableRowProps) => {
   }, []);
   return (
     <>
-      {apprenticeData && (
+      {user.role !== "apprentice" && (
+        <tr className={s.row} key={user.id}>
+          <td>{user.name}</td>
+          <td>{capitalizeName(user.role)}</td>
+          <td>{capitalizeName(user.status)}</td>
+        </tr>
+      )}
+      {user.role === "apprentice" && apprenticeData && (
         <tr className={s.row} key={user.id}>
           <td>{user.name}</td>
           <td>
