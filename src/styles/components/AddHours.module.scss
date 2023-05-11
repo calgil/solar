@@ -108,6 +108,20 @@
           width: 100%;
         }
       }
+
+      @include bp.media("md") {
+        .inputContainer {
+          min-height: 100px;
+
+          .filePreview {
+            max-width: 100px;
+          }
+
+          .uploadText {
+            bottom: 9px;
+          }
+        }
+      }
     }
     .fileContainer.invalid {
       border: 1px solid a.$alert;
@@ -164,6 +178,7 @@
 
     .rightCol {
       .hours {
+        margin-top: 0;
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 5px;
@@ -174,6 +189,9 @@
 
 .checkbox {
   @extend .checkbox;
+  @include bp.media("md") {
+    margin-top: 0;
+  }
 }
 .checkbox.invalid {
   color: a.$alert;
