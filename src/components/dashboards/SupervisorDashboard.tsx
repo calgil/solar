@@ -64,7 +64,9 @@ export const SupervisorDashboard = ({
     <>
       {supervisor && (
         <div className={s.apprenticeSummary}>
-          <h2 className={s.title}>Apprentice Summary</h2>
+          <h2 className={s.title}>
+            {supervisor.name}&apos;s Apprentice Summary
+          </h2>
           <div className={s.action}>
             {edit && user?.role === "admin" && (
               <AddBtn text="Edit Profile" onClick={openEditModal} />
