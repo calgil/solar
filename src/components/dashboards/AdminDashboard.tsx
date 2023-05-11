@@ -6,8 +6,9 @@ import { MonthlyProgressReports } from "../MonthlyProgressReports";
 import { AddBtn } from "../AddBtn";
 import { Modal } from "../Modal";
 import { AddUser } from "../AddUser";
+import { Education } from "../Education";
 
-type ActivePage = "staff" | "mprs" | "archive";
+type ActivePage = "staff" | "mprs" | "education";
 
 export const AdminDashboard = () => {
   const [activePage, setActivePage] = useState<ActivePage>("staff");
@@ -24,6 +25,9 @@ export const AdminDashboard = () => {
           Administrator Dashboard
         </h2>
         <div className={s.links}>
+          <a className={s.link} onClick={() => handlePageChange("education")}>
+            Education
+          </a>
           <a className={s.link} onClick={() => handlePageChange("mprs")}>
             Monthly Progress Reports
           </a>
@@ -39,6 +43,7 @@ export const AdminDashboard = () => {
       </div>
       {activePage === "staff" && <DisplayStaff />}
       {activePage === "mprs" && <MonthlyProgressReports />}
+      {activePage === "education" && <Education />}
     </div>
   );
 };

@@ -1,0 +1,10 @@
+@use "../abstracts" as a;
+@use "../layouts";
+
+.courseTitle {
+  margin-bottom: 20px;
+}
+
+.filterBtn {
+  @extend .filterBtn;
+}
