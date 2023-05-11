@@ -447,6 +447,14 @@ export const AddHours = ({
               <button className={s.deleteBtn} onClick={deletePhoto}>
                 Delete Photo
               </button>
+              <a
+                className={s.photoLink}
+                href={uploadPhotoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Photo
+              </a>
             </div>
           )}
           {!month ||
