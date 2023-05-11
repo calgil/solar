@@ -32,7 +32,7 @@ export const AddHours = ({
 }: AddHoursProps) => {
   const currentMonth = new Date().getMonth() + 1;
   const [month, setMonth] = useState(
-    mpr ? mpr.date.toDate().getMonth() + 1 : currentMonth
+    mpr ? mpr.date.toDate().getMonth() + 1 : currentMonth - 1
   );
 
   const [year, setYear] = useState(
@@ -63,7 +63,8 @@ export const AddHours = ({
   const [supervisorSignature, setSupervisorSignature] = useState(false);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [photoError, setPhotoError] = useState(false);
+  const [photoDateError, setPhotoDateError] = useState(false);
+  const [photoApprenticeError, setPhotoApprenticeError] = useState(false);
 
   const hoursInputs: InputType[] = [
     {
@@ -110,6 +111,9 @@ export const AddHours = ({
 
   const handleApprenticeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value) {
+      if (photoApprenticeError) {
+        setPhotoApprenticeError(false);
+      }
       const apprentice = apprentices?.find((app) => app.id === e.target.value);
       if (apprentice) {
         setSelectedApprentice(apprentice);
@@ -119,7 +123,9 @@ export const AddHours = ({
 
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value) {
-      setPhotoError(false);
+      if (photoDateError) {
+        setPhotoDateError(false);
+      }
       setMonth(+e.target.value);
     }
   };
@@ -128,20 +134,36 @@ export const AddHours = ({
     const selectedFile = e.target.files?.[0];
 
     if (!selectedFile) {
+      console.log("no file");
+
       return;
     }
 
-    if (!month || !year) {
-      return setPhotoError(true);
+    if (supervisor && !selectedApprentice) {
+      return setPhotoApprenticeError(true);
     }
 
-    setPhotoError(false);
+    if (!month || !year) {
+      console.log("no date");
+      return setPhotoDateError(true);
+    }
+
+    if (
+      new Date(year, month + 1) >
+      new Date(new Date().getFullYear(), currentMonth)
+    ) {
+      console.log("future mpr");
+      return setPhotoDateError(true);
+    }
+
+    setPhotoDateError(false);
     const date = new Date(year, month - 1);
 
     let file;
 
     if (supervisor) {
       if (selectedApprentice) {
+        setPhotoApprenticeError(false);
         file = new File(
           [selectedFile],
           generateFileName(selectedApprentice.name, date, selectedFile.type),
@@ -165,6 +187,8 @@ export const AddHours = ({
 
     try {
       const photoUrl = await uploadMprPhoto(file);
+      console.log({ photoUrl });
+
       setUploadPhotoUrl(photoUrl);
     } catch (err) {
       console.error(err);
@@ -284,9 +308,13 @@ export const AddHours = ({
     closeModal();
   };
 
+  // TODO: clean up this class for error handling
+
   const apprenticeClass = cx({
     label: true,
-    invalid: supervisor && !selectedApprentice && isSubmitted,
+    invalid:
+      photoApprenticeError ||
+      (supervisor && !selectedApprentice && isSubmitted),
   });
 
   const dateClass = cx({
@@ -299,7 +327,7 @@ export const AddHours = ({
 
   const monthClass = cx({
     label: true,
-    invalid: (!month && isSubmitted) || photoError,
+    invalid: (!month && isSubmitted) || photoDateError,
   });
 
   const yearClass = cx({
@@ -410,7 +438,7 @@ export const AddHours = ({
                 name="mprPhoto"
                 accept="image/*"
                 onChange={handleFileChange}
-                disabled={!month}
+                // disabled={!month}
               />
             </label>
           </div>
@@ -419,14 +447,29 @@ export const AddHours = ({
               <button className={s.deleteBtn} onClick={deletePhoto}>
                 Delete Photo
               </button>
+              <a
+                className={s.photoLink}
+                href={uploadPhotoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Photo
+              </a>
             </div>
           )}
-          {!month && (
-            <p className={s.error}>
-              Please choose {selectedApprentice ? "" : "apprentice/"}
-              month/year before uploading photo
-            </p>
-          )}
+          {!month ||
+            ((photoDateError || photoApprenticeError) && (
+              <p className={s.error}>
+                Please choose valid {selectedApprentice ? "" : "apprentice "}
+                {new Date(year, month + 1) >
+                new Date(new Date().getFullYear(), currentMonth)
+                  ? selectedApprentice
+                    ? "date "
+                    : "or date "
+                  : ""}
+                before uploading photo
+              </p>
+            ))}
           {isSubmitted && !uploadPhotoUrl && (
             <p className={s.error}>Please upload photo</p>
           )}
