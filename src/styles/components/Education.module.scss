@@ -2,7 +2,9 @@
 @use "../layouts";
 
 .courseTitle {
+  margin-top: 20px;
   margin-bottom: 20px;
+  font-family: a.$secondaryFont;
 }
 
 .filterBtn {

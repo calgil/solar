@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
 import s from "../styles/components/AddCourse.module.scss";
-import { NewCourse, addCourse } from "../firebase/courses/addCourse";
+import { Course, NewCourse, addCourse } from "../firebase/courses/addCourse";
 import { toast } from "react-toastify";
 
 type AddCourseProps = {
