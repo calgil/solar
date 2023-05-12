@@ -17,7 +17,7 @@ export const Education = () => {
         onClose={() => setIsAddCourseOpen(false)}
         title="Add Course"
       >
-        <AddCourse />
+        <AddCourse closeModal={() => setIsAddCourseOpen(false)} />
       </Modal>
     </div>
   );
