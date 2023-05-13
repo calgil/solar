@@ -1,0 +1,38 @@
+@use "../abstracts" as a;
+@use "../breakpoints" as bp;
+@use "../layouts";
+
+.addInstruction {
+  font-family: a.$secondaryFont;
+
+  .label {
+    display: block;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+    margin-top: 8px;
+  }
+
+  .input {
+    @extend .input;
+    margin-top: 8px;
+  }
+
+  .dateContainer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .submitContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .submitBtn {
+      @extend .submitBtn;
+      width: fit-content;
+      margin-top: 10px;
+    }
+  }
+}

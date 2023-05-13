@@ -33,6 +33,10 @@
   padding: 20px;
   padding-bottom: 0;
 
+  .addInstruction {
+    @extend .filterBtn;
+  }
+
   .editBtn {
     border: none;
     background-color: transparent;

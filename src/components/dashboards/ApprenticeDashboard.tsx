@@ -15,6 +15,7 @@ import { Status } from "../Status";
 import { useUsers } from "../../hooks/useUsers";
 import { ApprenticeData } from "../../firebase/mpr/getApprenticeData";
 import { fetchUserData } from "../../firebase/users/fetchUserById";
+import { AddInstruction } from "../AddInstruction";
 
 type ApprenticeDashboardProps = {
   apprenticeId: string;
@@ -28,6 +29,7 @@ export const ApprenticeDashboard = ({
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAddTrainingOpen, setIsTrainingOpen] = useState(false);
   const [apprentice, setApprentice] = useState<User | null>(null);
   const [apprenticeData, setApprenticeData] = useState<ApprenticeData | null>(
     null
@@ -107,7 +109,15 @@ export const ApprenticeDashboard = ({
               <AddBtn text="Edit Profile" onClick={openEditModal} />
             )}
             {user?.role === "apprentice" && (
-              <AddBtn text="Add Hours" onClick={openModal} />
+              <>
+                <button
+                  onClick={() => setIsTrainingOpen(true)}
+                  className={s.addInstruction}
+                >
+                  Add Instruction
+                </button>
+                <AddBtn text="Add Hours" onClick={openModal} />
+              </>
             )}
           </div>
           <div className={s.details}>
@@ -120,6 +130,13 @@ export const ApprenticeDashboard = ({
               title={`Edit ${apprentice.name}'s Profile`}
             >
               <AddUser closeModal={closeEditModal} userToEdit={apprentice} />
+            </Modal>
+            <Modal
+              isOpen={isAddTrainingOpen}
+              onClose={() => setIsTrainingOpen(false)}
+              title="Add Instruction"
+            >
+              <AddInstruction />
             </Modal>
             <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
               {user && <AddHours user={user} closeModal={closeModal} />}
