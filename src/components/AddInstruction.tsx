@@ -4,7 +4,7 @@ import s from "../styles/components/AddInstruction.module.scss";
 import { Course } from "../firebase/courses/addCourse";
 import { getAllCourses } from "../firebase/courses/getAllCourses";
 import { months } from "../data/months";
-import { addTraining, uploadTraining } from "../firebase/training/addTraining";
+import { addTraining, UploadTraining } from "../firebase/training/addTraining";
 import { useAuth } from "../providers/auth.provider";
 import { toast } from "react-toastify";
 
@@ -51,7 +51,7 @@ export const AddInstruction = ({ closeModal }: AddInstructionProps) => {
       return;
     }
 
-    const newTraining: uploadTraining = {
+    const newTraining: UploadTraining = {
       apprenticeId: user.id,
       courseId: selectedCourse.id,
       courseName: selectedCourse.name,
