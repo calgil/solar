@@ -136,7 +136,7 @@ export const ApprenticeDashboard = ({
               onClose={() => setIsTrainingOpen(false)}
               title="Add Instruction"
             >
-              <AddInstruction />
+              <AddInstruction closeModal={() => setIsTrainingOpen(false)} />
             </Modal>
             <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
               {user && <AddHours user={user} closeModal={closeModal} />}

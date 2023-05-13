@@ -4,13 +4,23 @@ import s from "../styles/components/AddInstruction.module.scss";
 import { Course } from "../firebase/courses/addCourse";
 import { getAllCourses } from "../firebase/courses/getAllCourses";
 import { months } from "../data/months";
-export const AddInstruction = () => {
+import { addTraining, uploadTraining } from "../firebase/training/addTraining";
+import { useAuth } from "../providers/auth.provider";
+import { toast } from "react-toastify";
+
+type AddInstructionProps = {
+  closeModal: () => void;
+};
+
+export const AddInstruction = ({ closeModal }: AddInstructionProps) => {
   const currentMonth = new Date().getMonth();
   const [courses, setCourses] = useState<Course[] | null>(null);
 
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(+new Date().getFullYear());
+
+  const { user } = useAuth();
 
   const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value) {
@@ -27,9 +37,38 @@ export const AddInstruction = () => {
     }
   };
 
-  const handleAddInstruction = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddInstruction = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("add instr", { selectedCourse, month, year });
+    if (!user) {
+      return;
+    }
+
+    if (!selectedCourse) {
+      return;
+    }
+
+    if (!month || !year) {
+      return;
+    }
+
+    const newTraining: uploadTraining = {
+      apprenticeId: user.id,
+      courseId: selectedCourse.id,
+      courseName: selectedCourse.name,
+      hours: selectedCourse.hours,
+      dateCompleted: new Date(year, month - 1),
+      supervisorApproval: false,
+    };
+
+    try {
+      await addTraining(newTraining);
+      toast.success("Instruction added successfully");
+      closeModal();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to add Instruction");
+      throw new Error("Could not add Training");
+    }
   };
 
   useEffect(() => {
