@@ -1,4 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { REQUIRED_HOURS } from "../data/hourRequirements";
 import s from "../styles/components/MprDisplay.module.scss";
 import { MprType } from "../types/mpr.type";
 import { displayDate } from "../utils/displayDate";
@@ -24,26 +25,26 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
           <HourCategory
             category="PV"
             hoursEarned={mpr.pvHours}
-            totalHours={1000}
+            totalHours={REQUIRED_HOURS.PVHours}
             showPercentage={false}
           />
           <HourCategory
             category="Other RE"
             hoursEarned={mpr.otherREHours}
-            totalHours={500}
+            totalHours={REQUIRED_HOURS.OtherREHours}
             showPercentage={false}
           />
           <HourCategory
             category="BOS"
             hoursEarned={mpr.bosHours}
-            totalHours={1500}
+            totalHours={REQUIRED_HOURS.BOSHours}
             showPercentage={false}
           />
 
           <HourCategory
             category="Other"
             hoursEarned={mpr.otherHours}
-            totalHours={1000}
+            totalHours={REQUIRED_HOURS.otherHours}
             showPercentage={false}
           />
           <a

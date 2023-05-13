@@ -1,0 +1,38 @@
+@use "../abstracts" as a;
+@use "../breakpoints" as bp;
+@use "../layouts";
+
+.detailsContainer {
+  background-color: a.$backgroundWhite;
+  border: 1px solid a.$borderGrey;
+  border-radius: 8px;
+  margin-top: 20px;
+  padding: 10px 16px;
+  padding-top: 20px;
+  cursor: pointer;
+  font-family: a.$secondaryFont;
+
+  .collapsedView {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      .totalHours {
+        width: 124px;
+        font-weight: 900;
+        font-style: normal;
+        font-size: 14px;
+        line-height: 19px;
+
+        @include bp.media("md") {
+          width: auto;
+        }
+      }
+    }
+  }
+}

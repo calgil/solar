@@ -22,6 +22,7 @@ import {
 } from "../../firebase/courses/fetchApprenticeTrainingData";
 import { ProgressDisplay } from "../ProgressDisplay";
 import { TrainingOverview } from "../TrainingOverview";
+import { TrainingDetails } from "../TrainingDetails";
 
 type ApprenticeDashboardProps = {
   apprenticeId: string;
@@ -148,7 +149,9 @@ export const ApprenticeDashboard = ({
             {apprenticeData?.data && (
               <HoursDetails apprenticeData={apprenticeData.data} />
             )}
-            {apprenticeTrainingData && <div>Training Details</div>}
+            {apprenticeTrainingData && (
+              <TrainingDetails data={apprenticeTrainingData} />
+            )}
           </div>
           <Modal
             isOpen={isEditModalOpen}

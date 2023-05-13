@@ -1,3 +1,5 @@
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../config";
 
@@ -16,7 +18,7 @@ export type Training = {
   courseId: string;
   courseName: string;
   hours: number;
-  dateCompleted: Date;
+  dateCompleted: firebase.firestore.Timestamp;
   supervisorApproval: boolean;
 };
 
