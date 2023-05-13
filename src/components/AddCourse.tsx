@@ -3,17 +3,29 @@ import { useState } from "react";
 import s from "../styles/components/AddCourse.module.scss";
 import { Course, NewCourse, addCourse } from "../firebase/courses/addCourse";
 import { toast } from "react-toastify";
+import { editCourse } from "../firebase/courses/editCourse";
 
 type AddCourseProps = {
   closeModal: () => void;
+  courseToEdit?: Course;
 };
 
-export const AddCourse = ({ closeModal }: AddCourseProps) => {
-  const [courseYear, setCourseYear] = useState(0);
-  const [courseName, setCourseName] = useState("");
-  const [courseHours, setCourseHours] = useState(0);
-  const [courseLink, setCourseLink] = useState("");
-  const [courseInfo, setCourseInfo] = useState("");
+export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
+  const [courseYear, setCourseYear] = useState(
+    courseToEdit?.year ? courseToEdit.year : 0
+  );
+  const [courseName, setCourseName] = useState(
+    courseToEdit?.name ? courseToEdit.name : ""
+  );
+  const [courseHours, setCourseHours] = useState(
+    courseToEdit?.hours ? courseToEdit.hours : 0
+  );
+  const [courseLink, setCourseLink] = useState(
+    courseToEdit?.link ? courseToEdit.link : ""
+  );
+  const [courseInfo, setCourseInfo] = useState(
+    courseToEdit?.info ? courseToEdit.info : ""
+  );
 
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCourseYear(+e.target.value);
@@ -49,6 +61,26 @@ export const AddCourse = ({ closeModal }: AddCourseProps) => {
       return;
     }
 
+    if (courseToEdit) {
+      const updates: NewCourse = {
+        year: courseYear,
+        name: courseName,
+        link: courseLink,
+        info: courseInfo,
+        hours: courseHours,
+      };
+
+      try {
+        await editCourse(courseToEdit.id, updates);
+        toast.success("Course updated");
+        return closeModal();
+      } catch (error) {
+        console.error(error);
+        toast.error("Could not update course");
+        throw new Error("Could not update course");
+      }
+    }
+
     const newCourse: NewCourse = {
       year: courseYear,
       name: courseName,
@@ -74,6 +106,7 @@ export const AddCourse = ({ closeModal }: AddCourseProps) => {
           name="year"
           id="year"
           onChange={handleYearChange}
+          value={courseYear}
         >
           <option value={0}>- Select Year</option>
           <option value={1}>1st Year</option>
@@ -124,7 +157,11 @@ export const AddCourse = ({ closeModal }: AddCourseProps) => {
           value={courseHours}
         />
       </label>
-      <input className={s.submitBtn} type="submit" value="Add Course" />
+      <input
+        className={s.submitBtn}
+        type="submit"
+        value={courseToEdit ? "Edit Course" : "Add Course"}
+      />
     </form>
   );
 };

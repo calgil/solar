@@ -5,11 +5,11 @@ import { Modal } from "./Modal";
 import { AddCourse } from "./AddCourse";
 import { Course } from "../firebase/courses/addCourse";
 import { getAllCourses } from "../firebase/courses/getAllCourses";
+import { CourseCard } from "./CourseCard";
 
 export const Education = () => {
   const [isAddCourseOpen, setIsAddCourseOpen] = useState(false);
   const [allCourses, setAllCourses] = useState<Course[] | null>(null);
-  console.log({ allCourses });
 
   useEffect(() => {
     const unsubscribe = getAllCourses(setAllCourses);
@@ -30,10 +30,8 @@ export const Education = () => {
       </Modal>
       <div className={s.courses}>
         {allCourses &&
-          allCourses?.map((course) => (
-            <div key={course.id}>
-              <h4>{course.name}</h4>
-            </div>
+          allCourses.map((course) => (
+            <CourseCard key={course.id} course={course} edit />
           ))}
       </div>
     </div>
