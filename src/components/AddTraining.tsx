@@ -4,23 +4,60 @@ import s from "../styles/components/AddInstruction.module.scss";
 import { Course } from "../firebase/courses/addCourse";
 import { getAllCourses } from "../firebase/courses/getAllCourses";
 import { months } from "../data/months";
-import { addTraining, UploadTraining } from "../firebase/training/addTraining";
+import {
+  addTrainingToDB,
+  UploadTraining,
+} from "../firebase/training/addTraining";
 import { useAuth } from "../providers/auth.provider";
 import { toast } from "react-toastify";
+import { User } from "../types/user.type";
+import {
+  TrainingData,
+  fetchApprenticeTrainingData,
+} from "../firebase/courses/fetchApprenticeTrainingData";
+import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
 
-type AddInstructionProps = {
+type AddTrainingProps = {
   closeModal: () => void;
+  apprentices: User[];
 };
 
-export const AddInstruction = ({ closeModal }: AddInstructionProps) => {
+export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
   const currentMonth = new Date().getMonth();
   const [courses, setCourses] = useState<Course[] | null>(null);
 
+  const [selectedApprentice, setSelectedApprentice] = useState<User | null>(
+    null
+  );
+  const [selectedApprenticeCourses, setSelectedApprenticeCourses] =
+    useState<TrainingData | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(+new Date().getFullYear());
 
   const { user } = useAuth();
+
+  console.log({ selectedApprenticeCourses });
+
+  const handleApprenticeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value) {
+      const newApprentice = apprentices.find(
+        (app) => app.id === e.target.value
+      );
+      if (newApprentice) {
+        setSelectedApprentice(newApprentice);
+        const apprenticeCourses = selectedApprenticeCourses?.trainings.map(
+          (training) => training.id
+        );
+        const validCourses = courses?.filter(
+          (course) => !apprenticeCourses?.includes(course.id)
+        );
+        if (validCourses) {
+          setCourses(validCourses);
+        }
+      }
+    }
+  };
 
   const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value) {
@@ -43,6 +80,10 @@ export const AddInstruction = ({ closeModal }: AddInstructionProps) => {
       return;
     }
 
+    if (!selectedApprentice) {
+      return;
+    }
+
     if (!selectedCourse) {
       return;
     }
@@ -52,31 +93,60 @@ export const AddInstruction = ({ closeModal }: AddInstructionProps) => {
     }
 
     const newTraining: UploadTraining = {
-      apprenticeId: user.id,
+      apprenticeId: selectedApprentice.id,
       courseId: selectedCourse.id,
       courseName: selectedCourse.name,
       hours: selectedCourse.hours,
       dateCompleted: new Date(year, month - 1),
-      supervisorApproval: false,
     };
 
-    try {
-      await addTraining(newTraining);
-      toast.success("Instruction added successfully");
-      closeModal();
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to add Instruction");
-      throw new Error("Could not add Training");
-    }
+    console.log({ newTraining });
+
+    // try {
+    //   await addTrainingToDB(newTraining);
+    //   toast.success("Instruction added successfully");
+    //   closeModal();
+    // } catch (error) {
+    //   console.error(error);
+    //   toast.error("Failed to add Instruction");
+    //   throw new Error("Could not add Training");
+    // }
   };
+
+  useEffect(() => {
+    if (selectedApprentice) {
+      const unsubscribe = fetchApprenticeTrainingData(
+        selectedApprentice.id,
+        setSelectedApprenticeCourses
+      );
+      return () => unsubscribe();
+    }
+  }, [selectedApprentice]);
 
   useEffect(() => {
     const unsubscribe = getAllCourses(setCourses);
     return () => unsubscribe();
   }, []);
+
   return (
     <form className={s.addInstruction} onSubmit={handleAddInstruction}>
+      <label className={s.label} htmlFor="apprentice">
+        Apprentice
+        <select
+          name="apprentice"
+          id="apprentice"
+          className={s.input}
+          value={selectedApprentice?.id}
+          onChange={handleApprenticeChange}
+        >
+          <option value="">- Select Apprentice</option>
+          {apprentices.map((app) => (
+            <option key={app.id} value={app.id}>
+              {app.name}
+            </option>
+          ))}
+        </select>
+      </label>
       <label className={s.label} htmlFor="course">
         Training
         <select

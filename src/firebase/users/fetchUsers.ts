@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { User } from "../../types/user.type";
 import { db } from "../config";
 
@@ -13,7 +13,8 @@ export const fetchUsers = async (
   if (supervisorId) {
     usersQuery = query(
       usersCollection,
-      where("supervisorId", "==", supervisorId)
+      where("supervisorId", "==", supervisorId),
+      orderBy("name")
     );
   }
 

@@ -20,14 +20,17 @@ export const CourseCard = ({ course, edit }: CourseCardProps) => {
         <p className={s.hours}>{hours} Hours</p>
       </div>
       <div className={s.courseInfo}>
-        <a
-          className={s.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          href={link}
-        >
-          Course Link
-        </a>
+        {link && (
+          <a
+            className={s.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            href={link}
+          >
+            Learn More
+          </a>
+        )}
+        {!link && <div></div>}
         <p className={s.year}>Year {year}</p>
       </div>
       <div className={`${s.courseInfo} ${s.settings}`}>

@@ -5,9 +5,8 @@ import { DownArrow } from "./DownArrow";
 import { TrainingData } from "../firebase/courses/fetchApprenticeTrainingData";
 import { REQUIRED_HOURS } from "../data/hourRequirements";
 import { HourCategory } from "./HourCategory";
-import { displayDate } from "../utils/displayDate";
-import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
+import { TrainingDisplay } from "./TrainingDisplay";
 
 type TrainingDetailsProps = {
   data: TrainingData;
@@ -42,7 +41,7 @@ export const TrainingDetails = ({ data }: TrainingDetailsProps) => {
     <div className={s.detailsContainer}>
       <div className={s.collapsedView} onClick={handleExpandClick}>
         <div className={s.info}>
-          <h3 className={s.title}>Education & Certification</h3>
+          <h3 className={s.title}>Certifications & Education</h3>
           <p className={s.totalHours}>
             {data.totalHours}/{REQUIRED_HOURS.trainingTotal}
           </p>
@@ -59,11 +58,8 @@ export const TrainingDetails = ({ data }: TrainingDetailsProps) => {
       </div>
       {showDetails && (
         <div className={s.courseContainer}>
-          {data.trainings.slice(0, numCoursesToShow).map((course) => (
-            <div key={course.id}>
-              <h4>{course.courseName}</h4>
-              <p>{displayDate(course.dateCompleted)}</p>
-            </div>
+          {data.trainings.slice(0, numCoursesToShow).map((training) => (
+            <TrainingDisplay key={training.id} training={training} />
           ))}
           {data.trainings.length > numCoursesToShow && (
             <div className={s.courseQuantity} onClick={handleSeeMoreClick}>

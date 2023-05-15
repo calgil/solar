@@ -9,7 +9,6 @@ export type UploadTraining = {
   courseName: string;
   hours: number;
   dateCompleted: Date;
-  supervisorApproval: boolean;
 };
 
 export type Training = {
@@ -19,10 +18,9 @@ export type Training = {
   courseName: string;
   hours: number;
   dateCompleted: firebase.firestore.Timestamp;
-  supervisorApproval: boolean;
 };
 
-export const addTraining = async (newTraining: UploadTraining) => {
+export const addTrainingToDB = async (newTraining: UploadTraining) => {
   try {
     await addDoc(collection(db, "trainings"), newTraining);
   } catch (error) {

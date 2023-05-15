@@ -9,17 +9,17 @@ import { CourseCard } from "./CourseCard";
 
 export const Education = () => {
   const [isAddCourseOpen, setIsAddCourseOpen] = useState(false);
-  const [allCourses, setAllCourses] = useState<Course[] | null>(null);
+  const [allTrainings, setAllTrainings] = useState<Course[] | null>(null);
 
   useEffect(() => {
-    const unsubscribe = getAllCourses(setAllCourses);
+    const unsubscribe = getAllCourses(setAllTrainings);
     return () => unsubscribe();
   }, []);
   return (
     <div>
-      <h3 className={s.courseTitle}>All Courses</h3>
+      <h3 className={s.courseTitle}>All Related Trainings</h3>
       <button className={s.filterBtn} onClick={() => setIsAddCourseOpen(true)}>
-        Add Course
+        Add Related Training Course
       </button>
       <Modal
         isOpen={isAddCourseOpen}
@@ -29,8 +29,8 @@ export const Education = () => {
         <AddCourse closeModal={() => setIsAddCourseOpen(false)} />
       </Modal>
       <div className={s.courses}>
-        {allCourses &&
-          allCourses.map((course) => (
+        {allTrainings &&
+          allTrainings.map((course) => (
             <CourseCard key={course.id} course={course} edit />
           ))}
       </div>

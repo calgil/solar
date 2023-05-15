@@ -15,7 +15,6 @@ import { Status } from "../Status";
 import { useUsers } from "../../hooks/useUsers";
 import { ApprenticeData } from "../../firebase/mpr/getApprenticeData";
 import { fetchUserData } from "../../firebase/users/fetchUserById";
-import { AddInstruction } from "../AddInstruction";
 import {
   TrainingData,
   fetchApprenticeTrainingData,
@@ -36,7 +35,6 @@ export const ApprenticeDashboard = ({
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isAddTrainingOpen, setIsTrainingOpen] = useState(false);
   const [apprentice, setApprentice] = useState<User | null>(null);
   const [apprenticeData, setApprenticeData] = useState<ApprenticeData | null>(
     null
@@ -134,15 +132,7 @@ export const ApprenticeDashboard = ({
               <AddBtn text="Edit Profile" onClick={openEditModal} />
             )}
             {user?.role === "apprentice" && (
-              <>
-                <button
-                  onClick={() => setIsTrainingOpen(true)}
-                  className={s.addInstruction}
-                >
-                  Add Instruction
-                </button>
-                <AddBtn text="Add Hours" onClick={openModal} />
-              </>
+              <AddBtn text="Add Hours" onClick={openModal} />
             )}
           </div>
           <div className={s.details}>
@@ -159,13 +149,6 @@ export const ApprenticeDashboard = ({
             title={`Edit ${apprentice.name}'s Profile`}
           >
             <AddUser closeModal={closeEditModal} userToEdit={apprentice} />
-          </Modal>
-          <Modal
-            isOpen={isAddTrainingOpen}
-            onClose={() => setIsTrainingOpen(false)}
-            title="Add Instruction"
-          >
-            <AddInstruction closeModal={() => setIsTrainingOpen(false)} />
           </Modal>
           <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
             {user && <AddHours user={user} closeModal={closeModal} />}
