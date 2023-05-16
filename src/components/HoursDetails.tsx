@@ -41,7 +41,9 @@ export const HoursDetails = ({ apprenticeData }: HoursDetailsProps) => {
       <div className={s.collapsedView} onClick={handleExpandClick}>
         <div className={s.hours}>
           <h3 className={s.title}>Hours</h3>
-          <p className={s.totalHours}>{apprenticeData.totalHours}/4000</p>
+          <p className={s.totalHours}>
+            {apprenticeData.totalHours}/{REQUIRED_HOURS.totalHours}
+          </p>
           <div className={s.categoryContainer}>
             <HourCategory
               category="PV"
@@ -84,11 +86,12 @@ export const HoursDetails = ({ apprenticeData }: HoursDetailsProps) => {
               See more...
             </div>
           )}
-          {apprenticeData.mprs.length === numMprsToShow && (
-            <div className={s.mprQuantity} onClick={handleShowLessClick}>
-              Show Less
-            </div>
-          )}
+          {apprenticeData.mprs.length > 3 &&
+            apprenticeData.mprs.length === numMprsToShow && (
+              <div className={s.mprQuantity} onClick={handleShowLessClick}>
+                Show Less
+              </div>
+            )}
         </div>
       )}
     </div>

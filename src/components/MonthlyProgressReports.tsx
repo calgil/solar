@@ -20,8 +20,6 @@ export const MonthlyProgressReports = () => {
   const { staffData, fetchStaffByName, handleFilterChange, clear } =
     useUserData();
 
-  console.log({ staffData });
-
   const componentRef = useRef(null);
 
   const handleDateChange = (
@@ -48,7 +46,6 @@ export const MonthlyProgressReports = () => {
     }
     setRole(role);
     setStatus(status);
-    console.log({ approval });
 
     handleFilterChange(month, approval, status, role);
   };

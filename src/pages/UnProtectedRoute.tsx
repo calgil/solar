@@ -18,16 +18,12 @@ export const UnProtectedRoute = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    // console.log("use effect", user);
-
     if (user) {
-      // console.log("logged in dummy", user);
       return redirectToRoot(navigate);
     }
   }, [user]);
 
   useEffect(() => {
-    // console.log("ahhh!", user);
     if (user) {
       return redirectToRoot(navigate);
     }

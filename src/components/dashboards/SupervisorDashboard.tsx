@@ -10,6 +10,7 @@ import { AddHours } from "../AddHours";
 import { AddBtn } from "../AddBtn";
 import { fetchUserData } from "../../firebase/users/fetchUserById";
 import { AddUser } from "../AddUser";
+import { AddTraining } from "../AddTraining";
 
 type SupervisorDashboardProps = {
   supervisorId: string;
@@ -25,6 +26,7 @@ export const SupervisorDashboard = ({
   const [supervisor, setSupervisor] = useState<User | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTrainingOpen, setIsTrainingOpen] = useState(false);
   const [apprentices, setApprentices] = useState<User[]>([]);
 
   const openEditModal = (
@@ -41,7 +43,6 @@ export const SupervisorDashboard = ({
       return;
     }
     const apprentices = await fetchUsers("apprentice", supervisor.id);
-    console.log({ apprentices });
 
     setApprentices(apprentices);
   };
@@ -72,7 +73,15 @@ export const SupervisorDashboard = ({
               <AddBtn text="Edit Profile" onClick={openEditModal} />
             )}
             {user?.role === "supervisor" && (
-              <AddBtn text="Add Hours" onClick={() => setIsModalOpen(true)} />
+              <>
+                <button
+                  className={s.addTraining}
+                  onClick={() => setIsTrainingOpen(true)}
+                >
+                  Add Related Training
+                </button>
+                <AddBtn text="Add Hours" onClick={() => setIsModalOpen(true)} />
+              </>
             )}
           </div>
           <div className={s.apprenticeContainer}>
@@ -80,6 +89,16 @@ export const SupervisorDashboard = ({
               <StaffMember key={app.id} user={app} />
             ))}
           </div>
+          <Modal
+            isOpen={isTrainingOpen}
+            onClose={() => setIsTrainingOpen(false)}
+            title="Add Related Training"
+          >
+            <AddTraining
+              closeModal={() => setIsTrainingOpen(false)}
+              apprentices={apprentices}
+            />
+          </Modal>
           <Modal
             isOpen={isEditModalOpen}
             onClose={() => setIsEditModalOpen(false)}

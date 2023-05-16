@@ -144,7 +144,7 @@ export const AddHours = ({
     }
 
     if (!month || !year) {
-      console.log("no date");
+
       return setPhotoDateError(true);
     }
 
@@ -152,7 +152,7 @@ export const AddHours = ({
       new Date(year, month + 1) >
       new Date(new Date().getFullYear(), currentMonth)
     ) {
-      console.log("future mpr");
+
       return setPhotoDateError(true);
     }
 
@@ -187,13 +187,12 @@ export const AddHours = ({
 
     try {
       const photoUrl = await uploadMprPhoto(file);
-      console.log({ photoUrl });
+
 
       setUploadPhotoUrl(photoUrl);
     } catch (err) {
       console.error(err);
       setUploadPhotoUrl(null);
-      console.log("error! catch");
     }
   };
 
@@ -208,21 +207,17 @@ export const AddHours = ({
     setIsSubmitted(true);
 
     if (!+month || !uploadPhotoUrl || !totalHours) {
-      console.log("missing data");
       return;
     }
 
     if (!supervisor && !apprenticeSignature) {
-      console.log("apprentice post hours, missing signature");
       return;
     }
     if (supervisor && !supervisorSignature) {
-      console.log("supervisor post hours, missing sup signature");
       return;
     }
 
     if (!supervisor && !user.supervisorId) {
-      console.log("apprentices must be supervised");
       return;
     }
 
@@ -287,7 +282,7 @@ export const AddHours = ({
     }
 
     if (!user.supervisorId) {
-      return console.log("no supervisor");
+      return;
     }
 
     createMpr({

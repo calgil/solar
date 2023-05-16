@@ -1,0 +1,30 @@
+@use "../abstracts" as a;
+@use "../breakpoints" as bp;
+@use "../layouts";
+
+.training {
+  padding: 10px;
+  padding-right: 20px;
+  border: 1px dashed a.$secondaryText;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .left {
+    .date {
+      font-weight: 400;
+      font-family: a.$secondaryFontLight;
+    }
+  }
+
+  .right {
+    text-align: center;
+
+    .hours {
+      font-weight: 900;
+    }
+  }
+}

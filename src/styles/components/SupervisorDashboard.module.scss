@@ -6,8 +6,15 @@
 
   .action {
     display: flex;
-    align-items: center;
     justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    padding-bottom: 0;
+
+    .addTraining {
+      @extend .filterBtn;
+    }
   }
 
   .title {

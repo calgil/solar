@@ -15,6 +15,12 @@ import { Status } from "../Status";
 import { useUsers } from "../../hooks/useUsers";
 import { ApprenticeData } from "../../firebase/mpr/getApprenticeData";
 import { fetchUserData } from "../../firebase/users/fetchUserById";
+import {
+  TrainingData,
+  fetchApprenticeTrainingData,
+} from "../../firebase/courses/fetchApprenticeTrainingData";
+import { TrainingOverview } from "../TrainingOverview";
+import { TrainingDetails } from "../TrainingDetails";
 
 type ApprenticeDashboardProps = {
   apprenticeId: string;
@@ -32,6 +38,8 @@ export const ApprenticeDashboard = ({
   const [apprenticeData, setApprenticeData] = useState<ApprenticeData | null>(
     null
   );
+  const [apprenticeTrainingData, setApprenticeTrainingData] =
+    useState<TrainingData | null>(null);
   const [currentSupervisor, setCurrentSupervisor] = useState<User | null>(null);
 
   const { supervisors } = useUsers();
@@ -75,6 +83,16 @@ export const ApprenticeDashboard = ({
 
   useEffect(() => {
     if (apprenticeId) {
+      const unsubscribe = fetchApprenticeTrainingData(
+        apprenticeId,
+        setApprenticeTrainingData
+      );
+      return () => unsubscribe();
+    }
+  }, [apprenticeId]);
+
+  useEffect(() => {
+    if (apprenticeId) {
       const unsubscribe = fetchApprenticeData(apprenticeId, setApprenticeData);
       return () => unsubscribe();
     }
@@ -83,7 +101,7 @@ export const ApprenticeDashboard = ({
   return (
     <>
       {apprentice && (
-        <div>
+        <>
           <div className={s.overview}>
             <div className={s.userInfo}>
               <h2>{capitalizeName(apprentice.name)}&apos;s Dashboard</h2>
@@ -98,7 +116,11 @@ export const ApprenticeDashboard = ({
               {apprenticeData?.data && (
                 <HoursOverview hours={apprenticeData.data} />
               )}
-              {/* <div>Certs and Education</div> */}
+              {apprenticeTrainingData && (
+                <TrainingOverview
+                  totalHours={apprenticeTrainingData.totalHours}
+                />
+              )}
               {/* <div>Test</div> */}
             </div>
           </div>
@@ -114,18 +136,21 @@ export const ApprenticeDashboard = ({
             {apprenticeData?.data && (
               <HoursDetails apprenticeData={apprenticeData.data} />
             )}
-            <Modal
-              isOpen={isEditModalOpen}
-              onClose={closeEditModal}
-              title={`Edit ${apprentice.name}'s Profile`}
-            >
-              <AddUser closeModal={closeEditModal} userToEdit={apprentice} />
-            </Modal>
-            <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
-              {user && <AddHours user={user} closeModal={closeModal} />}
-            </Modal>
+            {apprenticeTrainingData && (
+              <TrainingDetails data={apprenticeTrainingData} />
+            )}
           </div>
-        </div>
+          <Modal
+            isOpen={isEditModalOpen}
+            onClose={closeEditModal}
+            title={`Edit ${apprentice.name}'s Profile`}
+          >
+            <AddUser closeModal={closeEditModal} userToEdit={apprentice} />
+          </Modal>
+          <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
+            {user && <AddHours user={user} closeModal={closeModal} />}
+          </Modal>
+        </>
       )}
     </>
   );

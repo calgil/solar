@@ -14,8 +14,8 @@ const cx = classNames.bind(s);
 type SignatureProps = {
   text: string;
   isSigned: boolean;
-  mpr: MprType;
-  supervisorId: string;
+  mpr?: MprType;
+  supervisorId?: string;
 };
 export const Signature = ({
   text,
@@ -52,20 +52,22 @@ export const Signature = ({
       <div className={iconClass}>
         <img src={isSigned ? success : alert} alt="signature" />
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        title={`Approve ${mpr.apprenticeName}'s MPR`}
-      >
-        {user && (
-          <AddHours
-            user={user}
-            closeModal={closeModal}
-            supervisor="supervisor"
-            mpr={mpr}
-          />
-        )}
-      </Modal>
+      {mpr && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          title={`Approve ${mpr.apprenticeName}'s MPR`}
+        >
+          {user && (
+            <AddHours
+              user={user}
+              closeModal={closeModal}
+              supervisor="supervisor"
+              mpr={mpr}
+            />
+          )}
+        </Modal>
+      )}
     </div>
   );
 };
