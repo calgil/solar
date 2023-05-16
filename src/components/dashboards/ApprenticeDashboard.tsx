@@ -44,8 +44,6 @@ export const ApprenticeDashboard = ({
 
   const { supervisors } = useUsers();
 
-  console.log({ apprenticeTrainings: apprenticeTrainingData });
-
   const closeModal = () => setIsModalOpen(false);
 
   const openModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

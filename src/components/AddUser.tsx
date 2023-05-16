@@ -45,8 +45,6 @@ export const AddUser = ({ closeModal, userToEdit }: AddUserProps) => {
     setIsSubmitted(true);
 
     if (!userToEdit && (!newUserRole || !newUserEmail || !newUserName)) {
-      console.log("no username, role, or email");
-
       return;
     }
 

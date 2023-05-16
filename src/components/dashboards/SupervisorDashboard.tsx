@@ -43,7 +43,6 @@ export const SupervisorDashboard = ({
       return;
     }
     const apprentices = await fetchUsers("apprentice", supervisor.id);
-    console.log({ apprentices });
 
     setApprentices(apprentices);
   };

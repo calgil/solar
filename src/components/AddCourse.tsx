@@ -57,7 +57,6 @@ export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
     e.preventDefault();
 
     if (!courseYear || !courseName || !courseHours) {
-      console.log("no data");
       return;
     }
 
