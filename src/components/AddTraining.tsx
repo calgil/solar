@@ -41,7 +41,6 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
       if (newApprentice) {
         setSelectedApprentice(newApprentice);
         const coursesCompleted = await getApprenticeCourses(newApprentice.id);
-        console.log({ coursesCompleted });
 
         const apprenticeCourses = coursesCompleted.map(
           (training) => training.courseId
@@ -55,7 +54,6 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
         const validCourses = courses.filter(
           (course) => !apprenticeCourses.includes(course.id)
         );
-        console.log({ validCourses });
 
         if (validCourses) {
           setCourses(validCourses);
