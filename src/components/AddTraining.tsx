@@ -6,6 +6,7 @@ import { getAllCourses } from "../firebase/courses/getAllCourses";
 import { months } from "../data/months";
 import {
   addTrainingToDB,
+  Training,
   UploadTraining,
 } from "../firebase/training/addTrainingToDB";
 import { useAuth } from "../providers/auth.provider";
@@ -15,7 +16,8 @@ import { getApprenticeCourses } from "../firebase/courses/fetchApprenticeTrainin
 
 type AddTrainingProps = {
   closeModal: () => void;
-  apprentices: User[];
+  apprentices?: User[];
+  trainingToEdit?: Training;
 };
 
 export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
@@ -35,7 +37,7 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     if (e.target.value) {
-      const newApprentice = apprentices.find(
+      const newApprentice = apprentices?.find(
         (app) => app.id === e.target.value
       );
       if (newApprentice) {
@@ -131,7 +133,7 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
           onChange={handleApprenticeChange}
         >
           <option value="">- Select Apprentice</option>
-          {apprentices.map((app) => (
+          {apprentices?.map((app) => (
             <option key={app.id} value={app.id}>
               {app.name}
             </option>

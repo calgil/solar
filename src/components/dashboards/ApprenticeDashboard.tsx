@@ -126,7 +126,7 @@ export const ApprenticeDashboard = ({
           </div>
           <div className={s.action}>
             {edit && user?.role === "admin" && (
-              <AddBtn text="Edit Profile" onClick={openEditModal} />
+              <AddBtn text="Edit Status" onClick={openEditModal} />
             )}
             {user?.role === "apprentice" && (
               <AddBtn text="Add Hours" onClick={openModal} />
