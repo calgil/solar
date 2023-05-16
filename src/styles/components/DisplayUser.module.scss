@@ -5,7 +5,6 @@
   position: relative;
   display: flex;
   align-items: center;
-  color: a.$primaryText;
 
   .greeting {
     margin-right: 16px;
@@ -13,7 +12,8 @@
     font-weight: 400;
     font-size: 14px;
     line-height: 19px;
-    color: #4a4a4a;
+
+    color: a.$solarMain;
   }
 
   .actionsDropdown {
@@ -32,6 +32,7 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      color: a.$primaryText;
 
       &:hover {
         background-color: a.$yellow;
