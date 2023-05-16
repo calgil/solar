@@ -134,6 +134,8 @@ export const AddHours = ({
     const selectedFile = e.target.files?.[0];
 
     if (!selectedFile) {
+      console.log("no file");
+
       return;
     }
 
@@ -142,6 +144,7 @@ export const AddHours = ({
     }
 
     if (!month || !year) {
+
       return setPhotoDateError(true);
     }
 
@@ -149,6 +152,7 @@ export const AddHours = ({
       new Date(year, month + 1) >
       new Date(new Date().getFullYear(), currentMonth)
     ) {
+
       return setPhotoDateError(true);
     }
 
@@ -183,6 +187,7 @@ export const AddHours = ({
 
     try {
       const photoUrl = await uploadMprPhoto(file);
+
 
       setUploadPhotoUrl(photoUrl);
     } catch (err) {
