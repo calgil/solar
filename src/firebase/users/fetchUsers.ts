@@ -10,8 +10,8 @@ export const fetchUsers = async (
 
   let usersQuery = query(
     usersCollection,
-    where("role", "==", role),
-    where("status", "==", "active")
+    where("role", "==", role)
+    // where("status", "==", "active")
   );
 
   if (supervisorId) {

@@ -61,7 +61,7 @@ export const AdminDashboard = () => {
         >
           <AddTraining
             closeModal={() => setIsTrainingOpen(false)}
-            apprentices={apprentices}
+            apprentices={apprentices.filter((app) => app.status === "active")}
           />
         </Modal>
       </div>

@@ -7,15 +7,11 @@ import { months } from "../data/months";
 import {
   addTrainingToDB,
   UploadTraining,
-} from "../firebase/training/addTraining";
+} from "../firebase/training/addTrainingToDB";
 import { useAuth } from "../providers/auth.provider";
 import { toast } from "react-toastify";
 import { User } from "../types/user.type";
-import {
-  TrainingData,
-  fetchApprenticeTrainingData,
-} from "../firebase/courses/fetchApprenticeTrainingData";
-import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
+import { getApprenticeCourses } from "../firebase/courses/fetchApprenticeTrainingData";
 
 type AddTrainingProps = {
   closeModal: () => void;
@@ -29,29 +25,38 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
   const [selectedApprentice, setSelectedApprentice] = useState<User | null>(
     null
   );
-  const [selectedApprenticeCourses, setSelectedApprenticeCourses] =
-    useState<TrainingData | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(+new Date().getFullYear());
 
   const { user } = useAuth();
 
-  console.log({ selectedApprenticeCourses });
-
-  const handleApprenticeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleApprenticeChange = async (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     if (e.target.value) {
       const newApprentice = apprentices.find(
         (app) => app.id === e.target.value
       );
       if (newApprentice) {
         setSelectedApprentice(newApprentice);
-        const apprenticeCourses = selectedApprenticeCourses?.trainings.map(
-          (training) => training.id
+        const coursesCompleted = await getApprenticeCourses(newApprentice.id);
+        console.log({ coursesCompleted });
+
+        const apprenticeCourses = coursesCompleted.map(
+          (training) => training.courseId
         );
-        const validCourses = courses?.filter(
-          (course) => !apprenticeCourses?.includes(course.id)
+        if (apprenticeCourses.length === 0) {
+          return;
+        }
+        if (!courses) {
+          return;
+        }
+        const validCourses = courses.filter(
+          (course) => !apprenticeCourses.includes(course.id)
         );
+        console.log({ validCourses });
+
         if (validCourses) {
           setCourses(validCourses);
         }
@@ -100,28 +105,16 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
       dateCompleted: new Date(year, month - 1),
     };
 
-    console.log({ newTraining });
-
-    // try {
-    //   await addTrainingToDB(newTraining);
-    //   toast.success("Instruction added successfully");
-    //   closeModal();
-    // } catch (error) {
-    //   console.error(error);
-    //   toast.error("Failed to add Instruction");
-    //   throw new Error("Could not add Training");
-    // }
-  };
-
-  useEffect(() => {
-    if (selectedApprentice) {
-      const unsubscribe = fetchApprenticeTrainingData(
-        selectedApprentice.id,
-        setSelectedApprenticeCourses
-      );
-      return () => unsubscribe();
+    try {
+      await addTrainingToDB(newTraining);
+      toast.success("Instruction added successfully");
+      closeModal();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to add Instruction");
+      throw new Error("Could not add Training");
     }
-  }, [selectedApprentice]);
+  };
 
   useEffect(() => {
     const unsubscribe = getAllCourses(setCourses);

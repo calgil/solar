@@ -5,13 +5,14 @@ export type TrainingData = {
 
 import {
   collection,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
   where,
 } from "firebase/firestore";
 import { db } from "../config";
-import { Training } from "../training/addTraining";
+import { Training } from "../training/addTrainingToDB";
 
 export const fetchApprenticeTrainingData = (
   apprenticeId: string,
@@ -45,4 +46,20 @@ export const fetchApprenticeTrainingData = (
     setApprenticeTrainings(apprenticeTrainingData);
   });
   return unsubscribe;
+};
+
+export const getApprenticeCourses = async (apprenticeId: string) => {
+  const trainingQuery = query(
+    collection(db, "trainings"),
+    where("apprenticeId", "==", apprenticeId)
+  );
+
+  const trainingsSnapshot = await getDocs(trainingQuery);
+
+  const trainings = trainingsSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Training[];
+
+  return trainings;
 };

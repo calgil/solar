@@ -19,7 +19,6 @@ import {
   TrainingData,
   fetchApprenticeTrainingData,
 } from "../../firebase/courses/fetchApprenticeTrainingData";
-import { ProgressDisplay } from "../ProgressDisplay";
 import { TrainingOverview } from "../TrainingOverview";
 import { TrainingDetails } from "../TrainingDetails";
 
