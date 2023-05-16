@@ -4,6 +4,7 @@ export type RequiredHours = {
   BOSHours: number;
   OtherREHours: number;
   otherHours: number;
+  trainingTotal: number;
 };
 
 export const REQUIRED_HOURS: RequiredHours = {
@@ -12,4 +13,5 @@ export const REQUIRED_HOURS: RequiredHours = {
   BOSHours: 1500,
   OtherREHours: 500,
   otherHours: 1000,
+  trainingTotal: 288,
 };

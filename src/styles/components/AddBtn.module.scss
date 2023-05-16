@@ -3,12 +3,18 @@
 .addBtn {
   cursor: pointer;
   background-color: a.$yellow;
+  color: a.$primaryText;
   border: 1px solid a.$accentDark;
   border-radius: 8px;
   padding: 8px;
   display: flex;
   align-items: center;
   gap: 10px;
+  transition: all 200ms ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 
   .plus {
     padding: 3px;

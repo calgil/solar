@@ -22,9 +22,14 @@
     display: flex;
     align-items: center;
     gap: 30px;
+    flex-wrap: wrap;
 
     .link {
       @extend .customLink;
+    }
+
+    .addTraining {
+      @extend .filterBtn;
     }
   }
 }

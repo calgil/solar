@@ -15,11 +15,11 @@ export const createPendingUser = async ({
   supervisor,
 }: pendingUser) => {
   if (!email || !role || !name) {
-    return console.log("Missing info");
+    return;
   }
 
   if (role === "apprentice" && !supervisor) {
-    return console.log("apprentices need supervision");
+    return;
   }
   const data: pendingUser = {
     name,

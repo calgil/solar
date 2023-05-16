@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 const storage = getStorage();
 
 export const deleteMprPhoto = (fileName: string) => {
-  console.log("delete function");
   const imgRef = ref(storage, `mprs/${fileName}`);
 
   deleteObject(imgRef)

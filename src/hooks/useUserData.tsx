@@ -167,12 +167,10 @@ export const useUserData = (): QueryResult => {
     }
     if (dateRange === -1) {
       const apprenticeIds = await getApprenticeIdFromMpr(approval);
-      console.log("all", { apprenticeIds, users });
 
       const desiredStaff = users.filter((user) =>
         apprenticeIds.includes(user.id)
       );
-      console.log({ desiredStaff });
 
       return setStaffData(desiredStaff);
     }

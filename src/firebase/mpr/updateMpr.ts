@@ -4,11 +4,8 @@ import { db } from "../config";
 import { toast } from "react-toastify";
 
 export const updateMpr = async (id: string, mpr: UploadMpr) => {
-  console.log("start update");
-
   try {
     await updateDoc(doc(db, "mprs", id), mpr);
-    console.log("success");
     toast.success("MPR updated successfully!");
   } catch (error) {
     console.error(error);

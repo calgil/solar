@@ -67,22 +67,3 @@ export const fetchApprenticeData = (
 
   return unsubscribe;
 };
-
-// export const fetchMprs = (
-//   apprenticeId: string,
-//   callback: (mprs: MprType[]) => void
-// ) => {
-//   const mprsQuery = query(
-//     collection(db, "mprs"),
-//     where("apprenticeId", "==", apprenticeId),
-//     orderBy("date", "desc")
-//   );
-//   const unsubscribe = onSnapshot(mprsQuery, (mprsSnapshot) => {
-//     const data = mprsSnapshot.docs.map((doc) => ({
-//       id: doc.id,
-//       ...doc.data(),
-//     })) as MprType[];
-//     callback(data);
-//   });
-//   return unsubscribe;
-// };

@@ -29,7 +29,6 @@ export default function ForgotPassword() {
     if (!emailInput) {
       return toast.error("Please add email");
     }
-    console.log("send reset email");
     forgotPassword(emailInput);
     setEmailInput("");
     navigate("/login");
