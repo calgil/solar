@@ -21,8 +21,13 @@
   }
 
   .right {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
+    .action {
+      @extend .filterBtn;
+    }
     .hours {
       font-weight: 900;
     }

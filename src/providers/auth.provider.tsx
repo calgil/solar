@@ -63,13 +63,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await setDoc(doc(db, "users", user.uid), data);
       await deleteDoc(doc(db, "pending users", pendingUser.id));
 
-      const currentUser = (await getUserById(user.uid)) as User;
-
-      if (!currentUser) {
-        throw new Error("Failed to get user by id.");
-      }
-
-      setUser(currentUser);
+      getUserById(user.uid, (currentUser) => {
+        if (!currentUser) {
+          throw new Error("Failed to get user by id.");
+        }
+        setUser(currentUser);
+      });
       toast.success("New account created");
     } catch (error) {
       console.error(error);
@@ -107,12 +106,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const currentUser = (await getUserById(user.uid)) as User;
-        if (!currentUser) {
-          return setUser(null);
-        }
-        setUser(currentUser);
+        const unsubscribeUserData = getUserById(user.uid, (currentUser) => {
+          setUser(currentUser);
+        });
+        return () => {
+          unsubscribeUserData();
+        };
       }
+      setUser(null);
     });
     return () => {
       unsubscribe();
