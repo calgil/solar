@@ -1,12 +1,20 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase/config";
+import { User } from "../../types/user.type";
 
-export const getUserById = async (id: string) => {
+export const getUserById = (
+  id: string,
+  callback: (userData: User | null) => void
+) => {
   const docRef = doc(db, "users", id);
-  const docSnap = await getDoc(docRef);
-  if (!docSnap.exists()) {
-    return null;
-  }
-  const userData = docSnap.data();
-  return { id: docSnap.id, ...userData };
+  const unsubscribe = onSnapshot(docRef, (docSnap) => {
+    if (!docSnap.exists()) {
+      callback(null);
+    }
+    if (docSnap.exists()) {
+      const userData = { id: docSnap.id, ...docSnap.data() } as User;
+      callback(userData);
+    }
+  });
+  return unsubscribe;
 };
