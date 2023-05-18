@@ -5,6 +5,7 @@ import s from "../styles/components/TrainingDisplay.module.scss";
 import { displayDate } from "../utils/displayDate";
 import { Modal } from "./Modal";
 import { AddTraining } from "./AddTraining";
+import { useAuth } from "../providers/auth.provider";
 
 type TrainingDisplayProps = {
   training: Training;
@@ -12,6 +13,7 @@ type TrainingDisplayProps = {
 
 export const TrainingDisplay = ({ training }: TrainingDisplayProps) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const { user } = useAuth();
 
   const editTraining = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -24,9 +26,11 @@ export const TrainingDisplay = ({ training }: TrainingDisplayProps) => {
         <p className={s.name}>{training.courseName}</p>
       </div>
       <div className={s.right}>
-        <button className={s.action} onClick={editTraining}>
-          Edit Training
-        </button>
+        {user?.role !== "apprentice" && (
+          <button className={s.action} onClick={editTraining}>
+            Edit Training
+          </button>
+        )}
         <p className={s.hours}>{training.hours} Hours</p>
       </div>
       <Modal
