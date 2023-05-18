@@ -45,12 +45,14 @@ export const TrainingDetails = ({ data }: TrainingDetailsProps) => {
           <p className={s.totalHours}>
             {data.totalHours}/{REQUIRED_HOURS.trainingTotal}
           </p>
-          <HourCategory
-            category="Education"
-            hoursEarned={data.totalHours}
-            totalHours={REQUIRED_HOURS.trainingTotal}
-            showPercentage
-          />
+          <div className={s.hourContainer}>
+            <HourCategory
+              category="Education"
+              hoursEarned={data.totalHours}
+              totalHours={REQUIRED_HOURS.trainingTotal}
+              showPercentage
+            />
+          </div>
         </div>
         <div className={s.actions}>
           <DownArrow expand={showDetails} />

@@ -7,6 +7,7 @@ import { capitalizeName } from "../utils/capitalizeName";
 import { DownArrow } from "./DownArrow";
 import { Modal } from "./Modal";
 import { AddUser } from "./AddUser";
+import { EditUser } from "./EditUser";
 
 // TODO: Fix dropdown styles
 
@@ -52,7 +53,7 @@ export const DisplayUser = () => {
         title="Edit Profile"
       >
         {user && (
-          <AddUser
+          <EditUser
             userToEdit={user}
             closeModal={() => setIsEditModalOpen(false)}
           />
