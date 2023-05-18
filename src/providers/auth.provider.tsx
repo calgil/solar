@@ -68,8 +68,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           throw new Error("Failed to get user by id.");
         }
         setUser(currentUser);
-        toast.success("New account created");
       });
+      toast.success("New account created");
     } catch (error) {
       console.error(error);
       throw new Error("Failed to create user.");

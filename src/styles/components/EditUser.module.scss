@@ -1,0 +1,26 @@
+@use "../abstracts" as a;
+@use "../breakpoints" as bp;
+@use "../layouts";
+
+.editUser {
+  padding-top: 15px;
+
+  .label {
+    @extend .label;
+
+    .input {
+      @extend .label;
+      margin-top: 5px;
+    }
+  }
+
+  .submitContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+
+    .submitBtn {
+      @extend .submitBtn;
+    }
+  }
+}
