@@ -12,14 +12,12 @@ import { AddHours } from "./AddHours";
 const cx = classNames.bind(s);
 
 type SignatureProps = {
-  text: string;
-  isSigned: boolean;
+  isApproved: boolean;
   mpr?: MprType;
   supervisorId?: string;
 };
 export const Signature = ({
-  text,
-  isSigned,
+  isApproved,
   mpr,
   supervisorId,
 }: SignatureProps) => {
@@ -30,8 +28,8 @@ export const Signature = ({
 
   const iconClass = cx({
     iconContainer: true,
-    success: isSigned,
-    alert: !isSigned,
+    success: isApproved,
+    alert: !isApproved,
   });
 
   const handleApproval = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -48,9 +46,9 @@ export const Signature = ({
   };
   return (
     <div className={s.signature} onClick={handleApproval}>
-      <p>{text}</p>
+      <p>{isApproved ? "Approved" : "Awaiting Approval"}</p>
       <div className={iconClass}>
-        <img src={isSigned ? success : alert} alt="signature" />
+        <img src={isApproved ? success : alert} alt="signature" />
       </div>
       {mpr && (
         <Modal

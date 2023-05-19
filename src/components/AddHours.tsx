@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { months } from "../data/months";
 import { createMpr } from "../firebase/mpr/createMpr";
 import s from "../styles/components/AddHours.module.scss";
@@ -9,6 +9,8 @@ import classNames from "classnames/bind";
 import { MprType } from "../types/mpr.type";
 import { updateMpr } from "../firebase/mpr/updateMpr";
 import { UploadFile } from "./UploadFile";
+import { getUserById } from "../fetch/auth/getUserById";
+import { displayDate } from "../utils/displayDate";
 
 const cx = classNames.bind(s);
 
@@ -61,6 +63,8 @@ export const AddHours = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [photoDateError, setPhotoDateError] = useState(false);
   const [photoApprenticeError, setPhotoApprenticeError] = useState(false);
+
+  const [supervisorData, setSupervisorData] = useState<User | null>(null);
 
   const hoursInputs: InputType[] = [
     {
@@ -154,29 +158,12 @@ export const AddHours = ({
       return;
     }
 
-    if (mpr && supervisor === "admin") {
-      updateMpr(mpr.id, {
-        apprenticeId: mpr.apprenticeId,
-        apprenticeName: mpr.apprenticeName,
-        date,
-        photoUrl: uploadPhotoUrl,
-        pvHours: pvHours,
-        otherREHours,
-        bosHours,
-        otherHours,
-        totalHours,
-        apprenticeSignature: mpr.apprenticeSignature,
-        supervisorSignature: mpr.supervisorSignature,
-        supervisorId: mpr.supervisorId,
-      });
-      return closeModal();
-    }
-
     if (mpr) {
       updateMpr(mpr.id, {
         apprenticeId: mpr.apprenticeId,
         apprenticeName: mpr.apprenticeName,
         date,
+        dateApproved: new Date(),
         photoUrl: uploadPhotoUrl,
         pvHours: pvHours,
         otherREHours,
@@ -185,7 +172,7 @@ export const AddHours = ({
         totalHours,
         apprenticeSignature: mpr.apprenticeSignature,
         supervisorSignature,
-        supervisorId: mpr.supervisorId,
+        supervisorId: user.id,
       });
       return closeModal();
     }
@@ -195,6 +182,7 @@ export const AddHours = ({
         apprenticeId: selectedApprentice.id,
         apprenticeName: selectedApprentice.name,
         date,
+        dateApproved: new Date(),
         photoUrl: uploadPhotoUrl,
         pvHours: pvHours,
         otherREHours,
@@ -216,6 +204,7 @@ export const AddHours = ({
       apprenticeId: user.id,
       apprenticeName: user.name,
       date,
+      dateApproved: null,
       photoUrl: uploadPhotoUrl,
       pvHours: pvHours,
       otherREHours: otherREHours,
@@ -229,6 +218,12 @@ export const AddHours = ({
 
     closeModal();
   };
+
+  useEffect(() => {
+    if (mpr && mpr.supervisorId) {
+      getUserById(mpr.supervisorId, setSupervisorData);
+    }
+  }, [mpr?.supervisorId]);
 
   const apprenticeClass = cx({
     label: true,
@@ -369,7 +364,7 @@ export const AddHours = ({
           )}
         </div>
       </div>
-      {supervisor && (
+      {supervisor && !mpr?.supervisorSignature && (
         <label className={supervisorSignatureClass}>
           <input
             type="checkbox"
@@ -381,6 +376,11 @@ export const AddHours = ({
             by the RE-JATC
           </span>
         </label>
+      )}
+      {mpr?.supervisorSignature && (
+        <div className={s.approvalInfo}>
+          Approved by {supervisorData?.name} {displayDate(mpr.dateApproved)}
+        </div>
       )}
       <div className={s.submitContainer}>
         <input className={s.submitBtn} type="submit" value="Upload" />
