@@ -32,7 +32,7 @@ export const ApprenticeSearch = ({
     getItemProps,
   } = useCombobox({
     items: apprenticeNames,
-    selectedItem: null,
+    selectedItem: inputValue,
     onSelectedItemChange: ({ selectedItem }) => {
       if (selectedItem) {
         onSelect(selectedItem);
@@ -74,21 +74,25 @@ export const ApprenticeSearch = ({
         {...getMenuProps()}
       >
         {isOpen &&
-          filteredOptions.map((item, index) => (
-            <li
-              className={cx({
-                option: true,
-                highlighted: highlightedIndex === index,
-              })}
-              key={`${item}${index}`}
-              {...getItemProps({
-                item,
-                index,
-              })}
-            >
-              {item}
-            </li>
-          ))}
+          filteredOptions.map((item, index) => {
+            const optionIndex = apprenticeNames.indexOf(item);
+
+            return (
+              <li
+                className={cx({
+                  option: true,
+                  highlighted: highlightedIndex === optionIndex,
+                })}
+                key={`${item}${index}`}
+                {...getItemProps({
+                  item,
+                  index: optionIndex,
+                })}
+              >
+                {item}
+              </li>
+            );
+          })}
       </ul>
     </div>
   );
