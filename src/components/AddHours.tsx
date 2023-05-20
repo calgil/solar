@@ -130,7 +130,9 @@ export const AddHours = ({
     }
   };
 
+
   const handlePhotoChange = (url: string | null) => setUploadPhotoUrl(url);
+
 
   const uploadMPR = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
