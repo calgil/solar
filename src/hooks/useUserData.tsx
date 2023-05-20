@@ -2,6 +2,7 @@ import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/config";
 import { User, UserRole, UserStatus } from "../types/user.type";
+import { MprType } from "../types/mpr.type";
 
 export type QueryResult = {
   staffData: User[];
@@ -156,6 +157,63 @@ export const useUserData = (): QueryResult => {
     return apprenticeIds;
   };
 
+  const getApprenticesMissingMPRs = async () => {
+    try {
+      const collectionRef = collection(db, "mprs");
+      const allMprs = await getDocs(collectionRef);
+
+      const apprenticesMap: { [key: string]: MprType[] } = {};
+
+      allMprs.forEach((mprDoc) => {
+        const mprData = { id: mprDoc.id, ...mprDoc.data() } as MprType;
+        const apprenticeId = mprData.apprenticeId;
+
+        if (!(apprenticeId in apprenticesMap)) {
+          apprenticesMap[apprenticeId] = [];
+        }
+
+        apprenticesMap[apprenticeId].push(mprData);
+      });
+      const apprenticesMissingMPRs: string[] = [];
+      for (const [apprenticeId, mprs] of Object.entries(apprenticesMap)) {
+        mprs.sort((a, b) => a.date.toMillis() - b.date.toMillis()); // Sort MPRs by date ascending
+
+        if (mprs.length > 0) {
+          const startDate = new Date(mprs[0].date.toMillis());
+          const currentDate = new Date();
+
+          const currentYear = currentDate.getFullYear();
+          const currentMonth = currentDate.getMonth() - 1;
+
+          let year = startDate.getFullYear();
+          let month = startDate.getMonth();
+
+          while (year <= currentYear && month <= currentMonth) {
+            const isMissing = !mprs.some((mpr) => {
+              const mprYear = mpr.date.toDate().getFullYear();
+              const mprMonth = mpr.date.toDate().getMonth();
+              return mprYear === year && mprMonth === month;
+            });
+
+            if (isMissing) {
+              apprenticesMissingMPRs.push(apprenticeId);
+            }
+
+            month++;
+            if (month > 11) {
+              month = 0;
+              year++;
+            }
+          }
+        }
+      }
+      return apprenticesMissingMPRs;
+    } catch (error) {
+      console.error(error);
+      throw new Error("could not get apprentices with missing mprs");
+    }
+  };
+
   const handleFilterChange = async (
     role: UserRole,
     status: UserStatus,
@@ -168,7 +226,13 @@ export const useUserData = (): QueryResult => {
       return setStaffData(users);
     }
     if (missingMPR) {
-      console.log("show missing mpr");
+      const missingApprenticeIds = await getApprenticesMissingMPRs();
+      const desiredStaff = users.filter((user) =>
+        missingApprenticeIds.includes(user.id)
+      );
+      console.log({ desiredStaff });
+
+      return setStaffData(desiredStaff);
     }
     if (dateRange === -1) {
       const apprenticeIds = await getApprenticeIdFromMpr(approval);
