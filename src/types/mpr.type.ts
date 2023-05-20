@@ -6,6 +6,7 @@ export type MprType = {
   apprenticeId: string;
   apprenticeName: string;
   date: firebase.firestore.Timestamp;
+  dateApproved: firebase.firestore.Timestamp;
   photoUrl: string;
   pvHours: number;
   otherREHours: number;

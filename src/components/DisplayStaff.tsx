@@ -17,9 +17,10 @@ export const DisplayStaff = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [dateRange, setDateRange] = useState(6);
-  const [status, setStatus] = useState<UserStatus>("active");
   const [role, setRole] = useState<UserRole>("apprentice");
+  const [status, setStatus] = useState<UserStatus>("active");
+  const [missingMPR, setMissingMPR] = useState(0);
+  const [dateRange, setDateRange] = useState(6);
   const [approval, setApproval] = useState(false);
 
   const { user } = useAuth();
@@ -38,10 +39,11 @@ export const DisplayStaff = () => {
   };
 
   const applyFilters = (
-    month: number,
-    approval: boolean,
+    role: UserRole,
     status: UserStatus,
-    role: UserRole
+    missingMPR: number,
+    month: number,
+    approval: boolean
   ) => {
     if (month) {
       setDateRange(month);
@@ -52,9 +54,10 @@ export const DisplayStaff = () => {
     } else {
       setApproval(false);
     }
+    setMissingMPR(missingMPR);
     setStatus(status);
     setRole(role);
-    handleFilterChange(month, approval, status, role);
+    handleFilterChange(role, status, missingMPR, month, approval);
   };
 
   const handleClearSearch = () => {
@@ -112,9 +115,10 @@ export const DisplayStaff = () => {
         <StaffFilter
           closeModal={() => setIsFilterModalOpen(false)}
           applyFilters={applyFilters}
-          date={dateRange}
-          status={status}
           role={role}
+          status={status}
+          missingMPR={missingMPR}
+          date={dateRange}
           approval={approval}
           clear={clear}
         />

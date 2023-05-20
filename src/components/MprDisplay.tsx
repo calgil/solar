@@ -58,8 +58,7 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
         </div>
         <div className={s.signatureContainer}>
           <Signature
-            text="Supervisor"
-            isSigned={mpr.supervisorSignature}
+            isApproved={mpr.supervisorSignature}
             supervisorId={mpr.supervisorId}
             mpr={mpr}
           />
