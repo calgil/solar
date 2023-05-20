@@ -13,20 +13,23 @@ import { UserRole, UserStatus } from "../types/user.type";
 
 export const MonthlyProgressReports = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [dateRange, setDateRange] = useState(6);
-  const [approval, setApproval] = useState(false);
   const [role, setRole] = useState<UserRole>("apprentice");
   const [status, setStatus] = useState<UserStatus>("active");
+  const [missingMPR, setMissingMPR] = useState(0);
+  const [dateRange, setDateRange] = useState(6);
+  const [approval, setApproval] = useState(false);
+
   const { staffData, fetchStaffByName, handleFilterChange, clear } =
     useUserData();
 
   const componentRef = useRef(null);
 
-  const handleDateChange = (
-    month: number,
-    approval: boolean,
+  const applyFilters = (
+    role: UserRole,
     status: UserStatus,
-    role: UserRole
+    missingMPR: number,
+    month: number,
+    approval: boolean
   ) => {
     if (month) {
       setDateRange(month);
@@ -44,10 +47,11 @@ export const MonthlyProgressReports = () => {
     if (!role) {
       return;
     }
+    setMissingMPR(missingMPR);
     setRole(role);
     setStatus(status);
 
-    handleFilterChange(month, approval, status, role);
+    handleFilterChange(role, status, missingMPR, month, approval);
   };
 
   const handlePrint = useReactToPrint({
@@ -107,10 +111,11 @@ export const MonthlyProgressReports = () => {
       >
         <StaffFilter
           closeModal={() => setIsFilterModalOpen(false)}
-          applyFilters={handleDateChange}
-          date={dateRange}
-          status={status}
+          applyFilters={applyFilters}
           role={role}
+          status={status}
+          missingMPR={missingMPR}
+          date={dateRange}
           approval={approval}
           clear={handleClearSearch}
         />
