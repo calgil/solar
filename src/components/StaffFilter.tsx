@@ -6,31 +6,36 @@ import { UserRole, UserStatus } from "../types/user.type";
 type StaffFilterProps = {
   closeModal: () => void;
   applyFilters: (
-    dateRange: number,
-    approval: boolean,
+    role: UserRole,
     status: UserStatus,
-    role: UserRole
+    missingMPR: number,
+    dateRange: number,
+    approval: boolean
   ) => void;
-  date: number;
-  status: UserStatus;
-  approval: boolean;
   role: UserRole;
+  status: UserStatus;
+  missingMPR: number;
+  date: number;
+  approval: boolean;
   clear: () => void;
 };
 
 export const StaffFilter = ({
   closeModal,
   applyFilters,
+  role,
+  status,
+  missingMPR,
   date,
   approval,
-  status,
-  role,
+
   clear,
 }: StaffFilterProps) => {
-  const [dateRange, setDateRange] = useState(date);
-  const [approved, setApproved] = useState(approval);
   const [selectedRole, setSelectedRole] = useState<UserRole>(role);
   const [selectedStatus, setSelectedStatus] = useState<UserStatus>(status);
+  const [showMissingMPR, setShowMissingMPR] = useState(missingMPR);
+  const [dateRange, setDateRange] = useState(date);
+  const [approved, setApproved] = useState(approval);
 
   const handleApprovalChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (+e.target.value < 0) {
@@ -53,6 +58,12 @@ export const StaffFilter = ({
     }
   };
 
+  const handleMissingMPRChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value) {
+      setShowMissingMPR(+e.target.value);
+    }
+  };
+
   const handleDateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value === "") {
       return;
@@ -63,7 +74,13 @@ export const StaffFilter = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    applyFilters(dateRange, approved, selectedStatus, selectedRole);
+    applyFilters(
+      selectedRole,
+      selectedStatus,
+      showMissingMPR,
+      dateRange,
+      approved
+    );
     closeModal();
   };
   // TODO: fix styles on labels when input is disabled
@@ -97,6 +114,19 @@ export const StaffFilter = ({
           <option value="active">Active</option>
           <option value="graduated">Graduated</option>
           <option value="archived">Archived</option>
+        </select>
+      </label>
+      <label className={s.label}>
+        Missing MPR
+        <select
+          className={s.input}
+          name="missing"
+          id="missing"
+          onChange={handleMissingMPRChange}
+          value={showMissingMPR}
+        >
+          <option value={0}>No</option>
+          <option value={1}>Yes</option>
         </select>
       </label>
       <label className={s.label}>

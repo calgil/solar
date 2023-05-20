@@ -1,10 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 import s from "../styles/components/ApprenticeSearch.module.scss";
 import search from "../assets/search.png";
+import close from "../assets/close.png";
 import classNames from "classnames/bind";
 import { useCombobox } from "downshift";
 import { useUsers } from "../hooks/useUsers";
-import close from "../assets/close.png";
 
 const cx = classNames.bind(s);
 

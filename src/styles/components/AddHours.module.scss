@@ -64,93 +64,6 @@
         margin-top: 5px;
       }
     }
-
-    .fileContainer {
-      margin-top: 30px;
-      background-color: a.$backgroundGrey;
-      border-radius: 8px;
-      filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.25));
-
-      .inputContainer {
-        display: block;
-        position: relative;
-        width: 100%;
-        min-height: 300px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .filePreview {
-          max-width: 300px;
-
-          img {
-            width: 100%;
-          }
-        }
-
-        .uploadText {
-          position: absolute;
-          bottom: 33px;
-          font-family: a.$secondaryFont;
-          font-weight: 400;
-          font-size: 14px;
-          line-height: 19px;
-
-          .green {
-            color: a.$success;
-          }
-        }
-
-        .fileInput {
-          height: 100%;
-          opacity: 0;
-          position: absolute;
-          width: 100%;
-        }
-      }
-
-      @include bp.media("md") {
-        .inputContainer {
-          min-height: 100px;
-
-          .filePreview {
-            max-width: 100px;
-          }
-
-          .uploadText {
-            bottom: 9px;
-          }
-        }
-      }
-    }
-    .fileContainer.invalid {
-      border: 1px solid a.$alert;
-    }
-
-    .uploadContainer {
-      max-width: 100px;
-      max-height: 100px;
-      overflow: hidden;
-    }
-  }
-
-  .deleteContainer {
-    padding-top: 10px;
-    text-align: center;
-
-    .deleteBtn {
-      @extend .customLink;
-      background-color: transparent;
-      border: none;
-    }
-    .photoLink {
-      @extend .customLink;
-      display: block;
-      text-decoration: none;
-      width: fit-content;
-      margin: 0 auto;
-      margin-top: 10px;
-    }
   }
 
   .rightCol {
@@ -203,6 +116,12 @@
 }
 .checkbox.invalid {
   color: a.$alert;
+}
+
+.approvalInfo {
+  text-align: right;
+  color: a.$solarMain;
+  font-family: a.$secondaryFont;
 }
 
 .submitContainer {

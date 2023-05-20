@@ -1,17 +1,16 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { months } from "../data/months";
 import { createMpr } from "../firebase/mpr/createMpr";
-import { uploadMprPhoto } from "../firebase/mpr/uploadMprPhoto";
 import s from "../styles/components/AddHours.module.scss";
 import { InputType } from "../types/input.type";
 import { User } from "../types/user.type";
-import fileSearch from "../assets/fileSearch.png";
-import { generateFileName } from "../utils/generateFileName";
 import classNames from "classnames/bind";
 import { MprType } from "../types/mpr.type";
 import { updateMpr } from "../firebase/mpr/updateMpr";
-import { deleteMprPhoto } from "../firebase/mpr/deleteMprPhoto";
+import { UploadFile } from "./UploadFile";
+import { getUserById } from "../fetch/auth/getUserById";
+import { displayDate } from "../utils/displayDate";
 
 const cx = classNames.bind(s);
 
@@ -52,7 +51,6 @@ export const AddHours = ({
     mpr?.apprenticeSignature || false
   );
 
-  const [fileName, setFileName] = useState("");
   const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | null>(
     mpr?.photoUrl || null
   );
@@ -65,6 +63,8 @@ export const AddHours = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [photoDateError, setPhotoDateError] = useState(false);
   const [photoApprenticeError, setPhotoApprenticeError] = useState(false);
+
+  const [supervisorData, setSupervisorData] = useState<User | null>(null);
 
   const hoursInputs: InputType[] = [
     {
@@ -130,76 +130,9 @@ export const AddHours = ({
     }
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
 
-    if (!selectedFile) {
-      console.log("no file");
+  const handlePhotoChange = (url: string | null) => setUploadPhotoUrl(url);
 
-      return;
-    }
-
-    if (supervisor && !selectedApprentice) {
-      return setPhotoApprenticeError(true);
-    }
-
-    if (!month || !year) {
-
-      return setPhotoDateError(true);
-    }
-
-    if (
-      new Date(year, month + 1) >
-      new Date(new Date().getFullYear(), currentMonth)
-    ) {
-
-      return setPhotoDateError(true);
-    }
-
-    setPhotoDateError(false);
-    const date = new Date(year, month - 1);
-
-    let file;
-
-    if (supervisor) {
-      if (selectedApprentice) {
-        setPhotoApprenticeError(false);
-        file = new File(
-          [selectedFile],
-          generateFileName(selectedApprentice.name, date, selectedFile.type),
-          { type: selectedFile.type }
-        );
-        setFileName(file.name);
-      }
-    }
-
-    if (!supervisor) {
-      file = new File(
-        [selectedFile],
-        generateFileName(user.name, date, selectedFile.type),
-        { type: selectedFile.type }
-      );
-    }
-
-    if (!file) {
-      return;
-    }
-
-    try {
-      const photoUrl = await uploadMprPhoto(file);
-
-
-      setUploadPhotoUrl(photoUrl);
-    } catch (err) {
-      console.error(err);
-      setUploadPhotoUrl(null);
-    }
-  };
-
-  const deletePhoto = () => {
-    setUploadPhotoUrl(null);
-    deleteMprPhoto(fileName);
-  };
 
   const uploadMPR = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -227,29 +160,12 @@ export const AddHours = ({
       return;
     }
 
-    if (mpr && supervisor === "admin") {
-      updateMpr(mpr.id, {
-        apprenticeId: mpr.apprenticeId,
-        apprenticeName: mpr.apprenticeName,
-        date,
-        photoUrl: uploadPhotoUrl,
-        pvHours: pvHours,
-        otherREHours,
-        bosHours,
-        otherHours,
-        totalHours,
-        apprenticeSignature: mpr.apprenticeSignature,
-        supervisorSignature: mpr.supervisorSignature,
-        supervisorId: mpr.supervisorId,
-      });
-      return closeModal();
-    }
-
     if (mpr) {
       updateMpr(mpr.id, {
         apprenticeId: mpr.apprenticeId,
         apprenticeName: mpr.apprenticeName,
         date,
+        dateApproved: new Date(),
         photoUrl: uploadPhotoUrl,
         pvHours: pvHours,
         otherREHours,
@@ -258,7 +174,7 @@ export const AddHours = ({
         totalHours,
         apprenticeSignature: mpr.apprenticeSignature,
         supervisorSignature,
-        supervisorId: mpr.supervisorId,
+        supervisorId: user.id,
       });
       return closeModal();
     }
@@ -268,6 +184,7 @@ export const AddHours = ({
         apprenticeId: selectedApprentice.id,
         apprenticeName: selectedApprentice.name,
         date,
+        dateApproved: new Date(),
         photoUrl: uploadPhotoUrl,
         pvHours: pvHours,
         otherREHours,
@@ -289,6 +206,7 @@ export const AddHours = ({
       apprenticeId: user.id,
       apprenticeName: user.name,
       date,
+      dateApproved: null,
       photoUrl: uploadPhotoUrl,
       pvHours: pvHours,
       otherREHours: otherREHours,
@@ -303,7 +221,11 @@ export const AddHours = ({
     closeModal();
   };
 
-  // TODO: clean up this class for error handling
+  useEffect(() => {
+    if (mpr && mpr.supervisorId) {
+      getUserById(mpr.supervisorId, setSupervisorData);
+    }
+  }, [mpr?.supervisorId]);
 
   const apprenticeClass = cx({
     label: true,
@@ -328,11 +250,6 @@ export const AddHours = ({
   const yearClass = cx({
     label: true,
     invalid: !year && isSubmitted,
-  });
-
-  const photoClass = cx({
-    fileContainer: true,
-    invalid: !uploadPhotoUrl && isSubmitted,
   });
 
   const hoursClass = cx({
@@ -411,63 +328,14 @@ export const AddHours = ({
             <span className={s.dateError}>Cannot submit future MPR </span>
           </div>
 
-          <div className={photoClass}>
-            <label className={s.inputContainer}>
-              <div className={s.filePreview}>
-                <img
-                  src={uploadPhotoUrl ? uploadPhotoUrl : fileSearch}
-                  alt="file upload"
-                />
-              </div>
-              <span className={s.uploadText}>
-                {!uploadPhotoUrl && (
-                  <span>
-                    Drag and drop or
-                    <span className={s.green}> upload file</span>
-                  </span>
-                )}
-              </span>
-              <input
-                className={s.fileInput}
-                type="file"
-                name="mprPhoto"
-                accept="image/*"
-                onChange={handleFileChange}
-                // disabled={!month}
-              />
-            </label>
-          </div>
-          {uploadPhotoUrl && (
-            <div className={s.deleteContainer}>
-              <button className={s.deleteBtn} onClick={deletePhoto}>
-                Delete Photo
-              </button>
-              <a
-                className={s.photoLink}
-                href={uploadPhotoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View Photo
-              </a>
-            </div>
-          )}
-          {!month ||
-            ((photoDateError || photoApprenticeError) && (
-              <p className={s.error}>
-                Please choose valid {selectedApprentice ? "" : "apprentice "}
-                {new Date(year, month + 1) >
-                new Date(new Date().getFullYear(), currentMonth)
-                  ? selectedApprentice
-                    ? "date "
-                    : "or date "
-                  : ""}
-                before uploading photo
-              </p>
-            ))}
-          {isSubmitted && !uploadPhotoUrl && (
-            <p className={s.error}>Please upload photo</p>
-          )}
+          <UploadFile
+            isSubmitted={isSubmitted}
+            photoUrl={mpr?.photoUrl}
+            apprenticeName={supervisor ? selectedApprentice?.name : user?.name}
+            month={month}
+            year={year}
+            onPhotoChange={handlePhotoChange}
+          />
         </div>
         <div className={s.rightCol}>
           <div className={hoursClass}>
@@ -498,7 +366,7 @@ export const AddHours = ({
           )}
         </div>
       </div>
-      {supervisor && (
+      {supervisor && !mpr?.supervisorSignature && (
         <label className={supervisorSignatureClass}>
           <input
             type="checkbox"
@@ -511,9 +379,16 @@ export const AddHours = ({
           </span>
         </label>
       )}
-      <div className={s.submitContainer}>
-        <input className={s.submitBtn} type="submit" value="Upload" />
-      </div>
+      {mpr?.supervisorSignature && (
+        <div className={s.approvalInfo}>
+          Approved by {supervisorData?.name} {displayDate(mpr.dateApproved)}
+        </div>
+      )}
+      {!mpr?.supervisorSignature && (
+        <div className={s.submitContainer}>
+          <input className={s.submitBtn} type="submit" value="Upload" />
+        </div>
+      )}
     </form>
   );
 };

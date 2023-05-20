@@ -8,18 +8,17 @@ import { Modal } from "./Modal";
 import { useAuth } from "../providers/auth.provider";
 import { MprType } from "../types/mpr.type";
 import { AddHours } from "./AddHours";
+import { displayDate } from "../utils/displayDate";
 
 const cx = classNames.bind(s);
 
 type SignatureProps = {
-  text: string;
-  isSigned: boolean;
+  isApproved: boolean;
   mpr?: MprType;
   supervisorId?: string;
 };
 export const Signature = ({
-  text,
-  isSigned,
+  isApproved,
   mpr,
   supervisorId,
 }: SignatureProps) => {
@@ -30,14 +29,17 @@ export const Signature = ({
 
   const iconClass = cx({
     iconContainer: true,
-    success: isSigned,
-    alert: !isSigned,
+    success: isApproved,
+    alert: !isApproved,
   });
 
   const handleApproval = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
 
     if (user?.role === "admin") {
+      return setIsModalOpen(true);
+    }
+    if (user?.id === mpr?.apprenticeId && isApproved) {
       return setIsModalOpen(true);
     }
 
@@ -48,15 +50,15 @@ export const Signature = ({
   };
   return (
     <div className={s.signature} onClick={handleApproval}>
-      <p>{text}</p>
+      <p>{isApproved ? "Approved" : "Awaiting Approval"}</p>
       <div className={iconClass}>
-        <img src={isSigned ? success : alert} alt="signature" />
+        <img src={isApproved ? success : alert} alt="signature" />
       </div>
       {mpr && (
         <Modal
           isOpen={isModalOpen}
           onClose={closeModal}
-          title={`Approve ${mpr.apprenticeName}'s MPR`}
+          title={`${mpr.apprenticeName}'s ${displayDate(mpr.date)} MPR`}
         >
           {user && (
             <AddHours
