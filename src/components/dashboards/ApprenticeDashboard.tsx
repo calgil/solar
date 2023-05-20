@@ -113,9 +113,20 @@ export const ApprenticeDashboard = ({
               )}
             </div>
             <div className={s.totals}>
-              {apprenticeData?.data && (
-                <HoursOverview hours={apprenticeData.data} />
+              {!apprenticeData && (
+                <HoursOverview
+                  hours={{
+                    totalHours: 0,
+                    pvHours: 0,
+                    otherREHours: 0,
+                    bosHours: 0,
+                    otherHours: 0,
+                    hasUnapprovedMpr: false,
+                    mprs: [],
+                  }}
+                />
               )}
+              {apprenticeData && <HoursOverview hours={apprenticeData.data} />}
               {apprenticeTrainingData && (
                 <TrainingOverview
                   totalHours={apprenticeTrainingData.totalHours}
@@ -133,7 +144,20 @@ export const ApprenticeDashboard = ({
             )}
           </div>
           <div className={s.details}>
-            {apprenticeData?.data && (
+            {!apprenticeData && (
+              <HoursDetails
+                apprenticeData={{
+                  totalHours: 0,
+                  pvHours: 0,
+                  otherREHours: 0,
+                  bosHours: 0,
+                  otherHours: 0,
+                  hasUnapprovedMpr: false,
+                  mprs: [],
+                }}
+              />
+            )}
+            {apprenticeData && (
               <HoursDetails apprenticeData={apprenticeData.data} />
             )}
             {apprenticeTrainingData && (

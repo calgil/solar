@@ -8,6 +8,7 @@ import { Modal } from "./Modal";
 import { useAuth } from "../providers/auth.provider";
 import { MprType } from "../types/mpr.type";
 import { AddHours } from "./AddHours";
+import { displayDate } from "../utils/displayDate";
 
 const cx = classNames.bind(s);
 
@@ -38,6 +39,9 @@ export const Signature = ({
     if (user?.role === "admin") {
       return setIsModalOpen(true);
     }
+    if (user?.id === mpr?.apprenticeId && isApproved) {
+      return setIsModalOpen(true);
+    }
 
     if (user?.id !== supervisorId) {
       return;
@@ -54,7 +58,7 @@ export const Signature = ({
         <Modal
           isOpen={isModalOpen}
           onClose={closeModal}
-          title={`Approve ${mpr.apprenticeName}'s MPR`}
+          title={`${mpr.apprenticeName}'s ${displayDate(mpr.date)} MPR`}
         >
           {user && (
             <AddHours

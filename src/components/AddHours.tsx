@@ -382,9 +382,11 @@ export const AddHours = ({
           Approved by {supervisorData?.name} {displayDate(mpr.dateApproved)}
         </div>
       )}
-      <div className={s.submitContainer}>
-        <input className={s.submitBtn} type="submit" value="Upload" />
-      </div>
+      {!mpr?.supervisorSignature && (
+        <div className={s.submitContainer}>
+          <input className={s.submitBtn} type="submit" value="Upload" />
+        </div>
+      )}
     </form>
   );
 };

@@ -6,10 +6,11 @@ import { User, UserRole, UserStatus } from "../types/user.type";
 export type QueryResult = {
   staffData: User[];
   handleFilterChange: (
-    dateRange: number,
-    approval: boolean,
+    role: UserRole,
     status: UserStatus,
-    role: UserRole
+    missingMPR: number,
+    dateRange: number,
+    approval: boolean
   ) => void;
   fetchStaffByName: (name: string) => void;
   clear: () => void;
@@ -156,14 +157,18 @@ export const useUserData = (): QueryResult => {
   };
 
   const handleFilterChange = async (
-    dateRange: number,
-    approval: boolean,
+    role: UserRole,
     status: UserStatus,
-    role: UserRole
+    missingMPR: number,
+    dateRange: number,
+    approval: boolean
   ) => {
     const users = await fetchUsers(status, role);
     if (role !== "apprentice") {
       return setStaffData(users);
+    }
+    if (missingMPR) {
+      console.log("show missing mpr");
     }
     if (dateRange === -1) {
       const apprenticeIds = await getApprenticeIdFromMpr(approval);
