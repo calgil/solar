@@ -40,14 +40,17 @@
     }
 
     .title {
-      font-size: 3rem;
+      font-size: 2rem;
       font-weight: 400;
       background-repeat: no-repeat;
       background-position: left center;
-      padding-left: 20px;
+      padding-left: 80px;
       display: flex;
       align-items: center;
       height: 75px;
+      font-family: a.$logoFont;
+      text-transform: uppercase;
+      color: a.$solarMain;
     }
   }
 
