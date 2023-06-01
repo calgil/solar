@@ -1,0 +1,6 @@
+@use "../abstracts" as a;
+@use "../layouts";
+
+.filterBtn {
+  @extend .filterBtn;
+}

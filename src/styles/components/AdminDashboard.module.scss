@@ -26,6 +26,10 @@
 
     .link {
       @extend .customLink;
+
+      &.active {
+        border-bottom: 1px solid a.$yellow;
+      }
     }
 
     .addTraining {

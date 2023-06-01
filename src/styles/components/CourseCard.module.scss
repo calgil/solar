@@ -7,28 +7,28 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border: 1px solid a.$solarMain;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  padding: 10px;
 
-  .courseInfo {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+  .text {
+    max-width: 80%;
+    .courseInfo {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
 
-    h4,
-    span {
-      margin: 0 10px;
-    }
-
-    .link {
-      text-decoration: none;
-      @extend .customLink;
-    }
-
-    .info {
-      max-width: 80%;
+      .link {
+        text-decoration: none;
+        margin-left: 10px;
+        @extend .customLink;
+      }
     }
   }
 
   .editBtn {
     @extend .filterBtn;
+    padding: 5px;
   }
 }

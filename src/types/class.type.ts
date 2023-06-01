@@ -8,4 +8,5 @@ export type Class = {
 export type NewClass = {
   name: string;
   hours: number;
+  courseIds: string[];
 };
