@@ -2,18 +2,21 @@
 @use "../breakpoints" as bp;
 @use "../layouts";
 
-.course {
-  font-family: a.$secondaryFont;
-  border: 1px solid a.$solarMain;
-  border-radius: 8px;
-  padding: 5px;
-  margin-bottom: 15px;
+.courseCard {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   .courseInfo {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
+    flex-wrap: wrap;
+
+    h4,
+    span {
+      margin: 0 10px;
+    }
 
     .link {
       text-decoration: none;
@@ -21,16 +24,11 @@
     }
 
     .info {
-      flex: 1;
-      padding-right: 20px;
-    }
-
-    .edit {
-      @extend .filterBtn;
+      max-width: 80%;
     }
   }
 
-  .courseInfo.settings {
-    margin-top: 10px;
+  .editBtn {
+    @extend .filterBtn;
   }
 }

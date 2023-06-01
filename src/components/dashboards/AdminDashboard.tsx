@@ -6,18 +6,18 @@ import { MonthlyProgressReports } from "../MonthlyProgressReports";
 import { AddBtn } from "../AddBtn";
 import { Modal } from "../Modal";
 import { AddUser } from "../AddUser";
-import { Education } from "../Education";
-import { AddTraining } from "../AddTraining";
-import { useUsers } from "../../hooks/useUsers";
+// import { Education } from "../Education";
+// import { AddTraining } from "../AddTraining";
+// import { useUsers } from "../../hooks/useUsers";
 
 type ActivePage = "staff" | "mprs" | "related training";
 
 export const AdminDashboard = () => {
   const [activePage, setActivePage] = useState<ActivePage>("staff");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isTrainingOpen, setIsTrainingOpen] = useState(false);
+  // const [isTrainingOpen, setIsTrainingOpen] = useState(false);
 
-  const { apprentices } = useUsers();
+  // const { apprentices } = useUsers();
 
   const handlePageChange = (page: ActivePage) => {
     setActivePage(page);
@@ -30,21 +30,21 @@ export const AdminDashboard = () => {
           Administrator Dashboard
         </h2>
         <div className={s.links}>
-          <a
+          {/* <a
             className={s.link}
             onClick={() => handlePageChange("related training")}
           >
             Related Trainings
-          </a>
+          </a> */}
           <a className={s.link} onClick={() => handlePageChange("mprs")}>
             Monthly Progress Reports
           </a>
-          <button
+          {/* <button
             className={s.addTraining}
             onClick={() => setIsTrainingOpen(true)}
           >
             Add Related Training
-          </button>
+          </button> */}
           <AddBtn text="Add User" onClick={() => setIsModalOpen(true)} />
         </div>
         <Modal
@@ -54,7 +54,7 @@ export const AdminDashboard = () => {
         >
           <AddUser closeModal={() => setIsModalOpen(false)} />
         </Modal>
-        <Modal
+        {/* <Modal
           isOpen={isTrainingOpen}
           onClose={() => setIsTrainingOpen(false)}
           title="Add Related Training"
@@ -63,11 +63,11 @@ export const AdminDashboard = () => {
             closeModal={() => setIsTrainingOpen(false)}
             apprentices={apprentices.filter((app) => app.status === "active")}
           />
-        </Modal>
+        </Modal> */}
       </div>
       {activePage === "staff" && <DisplayStaff />}
       {activePage === "mprs" && <MonthlyProgressReports />}
-      {activePage === "related training" && <Education />}
+      {/* {activePage === "related training" && <Education />} */}
     </div>
   );
 };

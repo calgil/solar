@@ -1,11 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
-import { Training } from "../firebase/training/addTrainingToDB";
 import s from "../styles/components/TrainingDisplay.module.scss";
 import { displayDate } from "../utils/displayDate";
 import { Modal } from "./Modal";
 import { AddTraining } from "./AddTraining";
 import { useAuth } from "../providers/auth.provider";
+import { Training } from "../types/training.type";
 
 type TrainingDisplayProps = {
   training: Training;
@@ -31,7 +31,7 @@ export const TrainingDisplay = ({ training }: TrainingDisplayProps) => {
             Edit Training
           </button>
         )}
-        <p className={s.hours}>{training.hours} Hours</p>
+        {/* <p className={s.hours}>{training.hours} Hours</p> */}
       </div>
       <Modal
         isOpen={isEditOpen}

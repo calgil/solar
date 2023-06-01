@@ -1,0 +1,65 @@
+@use "../abstracts" as a;
+@use "../breakpoints" as bp;
+@use "../layouts";
+
+.class {
+  font-family: a.$secondaryFont;
+  margin-bottom: 15px;
+
+  .classInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 20px;
+    border-bottom: 1px solid a.$solarMain;
+
+    .classDetails {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .btnContainer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .add {
+        @extend .filterBtn;
+        background-color: a.$yellow;
+        color: a.$primaryText;
+
+        .plus {
+          padding: 3px;
+          background-color: black;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .plusImg {
+            width: 12px;
+          }
+        }
+      }
+
+      .edit {
+        @extend .filterBtn;
+      }
+    }
+  }
+
+  .courseInfo.settings {
+    margin-top: 10px;
+  }
+
+  .courses {
+    padding: 0 30px;
+
+    .course {
+      list-style: none;
+    }
+  }
+}
