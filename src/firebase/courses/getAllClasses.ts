@@ -1,13 +1,13 @@
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../config";
-import { Class } from "./addClass";
+import { Class } from "../../types/class.type";
 
 export const getAllClasses = (
   setClassData: (classes: Class[] | null) => void
 ) => {
-  const coursesQuery = query(collection(db, "classes"), orderBy("name"));
+  const classesQuery = query(collection(db, "classes"), orderBy("name"));
 
-  const unsubscribe = onSnapshot(coursesQuery, (coursesSnapshot) => {
+  const unsubscribe = onSnapshot(classesQuery, (coursesSnapshot) => {
     const classes = coursesSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),

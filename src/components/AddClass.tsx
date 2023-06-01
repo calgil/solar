@@ -1,8 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
 import s from "../styles/components/AddClass.module.scss";
-import { Class, NewClass, addClass } from "../firebase/courses/addClass";
+import { addClass } from "../firebase/training/addClass";
 import { toast } from "react-toastify";
+import { Class, NewClass } from "../types/class.type";
 
 type AddClassProps = {
   closeModal: () => void;

@@ -1,16 +1,6 @@
 import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../config";
-
-export type Class = {
-  id: string;
-  name: string;
-  hours: number;
-};
-
-export type NewClass = {
-  name: string;
-  hours: number;
-};
+import { NewClass } from "../../types/class.type";
 
 export const addClass = async (newClass: NewClass) => {
   console.log({ newClass });

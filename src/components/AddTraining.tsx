@@ -1,18 +1,15 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useEffect, useState } from "react";
 import s from "../styles/components/AddInstruction.module.scss";
-import { Course } from "../firebase/courses/addCourse";
-import { getAllClasses } from "../firebase/courses/getAllClasses";
 import { months } from "../data/months";
-import {
-  addTrainingToDB,
-  Training,
-  UploadTraining,
-} from "../firebase/training/addTrainingToDB";
+import { addTrainingToDB } from "../firebase/training/addTrainingToDB";
 import { useAuth } from "../providers/auth.provider";
 import { toast } from "react-toastify";
 import { User } from "../types/user.type";
 import { getApprenticeCourses } from "../firebase/courses/fetchApprenticeTrainingData";
+import { Course } from "../types/course.type";
+import { getAllCourses } from "../firebase/training/getAllCourses";
+import { Training, UploadTraining } from "../types/training.type";
 
 type AddTrainingProps = {
   closeModal: () => void;
@@ -99,9 +96,9 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
 
     const newTraining: UploadTraining = {
       apprenticeId: selectedApprentice.id,
+      classId: selectedCourse.classId,
       courseId: selectedCourse.id,
       courseName: selectedCourse.name,
-      hours: selectedCourse.hours,
       dateCompleted: new Date(year, month - 1),
     };
 
@@ -117,7 +114,7 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
   };
 
   useEffect(() => {
-    const unsubscribe = getAllClasses(setCourses);
+    const unsubscribe = getAllCourses(setCourses);
     return () => unsubscribe();
   }, []);
 

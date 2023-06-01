@@ -4,7 +4,6 @@
 
 .class {
   font-family: a.$secondaryFont;
-  border-bottom: 1px solid a.$solarMain;
   margin-bottom: 15px;
 
   .classInfo {
@@ -12,6 +11,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 5px 20px;
+    border-bottom: 1px solid a.$solarMain;
 
     .classDetails {
       display: flex;
@@ -53,5 +53,13 @@
 
   .courseInfo.settings {
     margin-top: 10px;
+  }
+
+  .courses {
+    padding: 0 30px;
+
+    .course {
+      list-style: none;
+    }
   }
 }

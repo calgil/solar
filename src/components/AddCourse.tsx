@@ -1,21 +1,24 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
 import s from "../styles/components/AddCourse.module.scss";
-import { Course, NewCourse, addCourse } from "../firebase/courses/addCourse";
+import { addCourse } from "../firebase/courses/addCourse";
 import { toast } from "react-toastify";
 import { editCourse } from "../firebase/courses/editCourse";
+import { Course, NewCourse } from "../types/course.type";
 
 type AddCourseProps = {
+  classId: string;
   closeModal: () => void;
   courseToEdit?: Course;
 };
 
-export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
+export const AddCourse = ({
+  classId,
+  closeModal,
+  courseToEdit,
+}: AddCourseProps) => {
   const [courseName, setCourseName] = useState(
     courseToEdit?.name ? courseToEdit.name : ""
-  );
-  const [courseHours, setCourseHours] = useState(
-    courseToEdit?.hours ? courseToEdit.hours : 0
   );
   const [courseLink, setCourseLink] = useState(
     courseToEdit?.link ? courseToEdit.link : ""
@@ -26,12 +29,6 @@ export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCourseName(e.target.value);
-  };
-
-  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value) {
-      setCourseHours(+e.target.value);
-    }
   };
 
   const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,16 +46,16 @@ export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
   const createNewCourse = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!courseName || !courseHours) {
+    if (!courseName) {
       return;
     }
 
     if (courseToEdit) {
       const updates: NewCourse = {
+        classId: courseToEdit.classId,
         name: courseName,
         link: courseLink,
         info: courseInfo,
-        hours: courseHours,
       };
 
       try {
@@ -73,11 +70,13 @@ export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
     }
 
     const newCourse: NewCourse = {
+      classId,
       name: courseName,
       link: courseLink,
       info: courseInfo,
-      hours: courseHours,
     };
+    console.log({ newCourse, classId });
+
     try {
       await addCourse(newCourse);
       toast.success("Course added successfully");
@@ -123,15 +122,6 @@ export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
           onChange={handleInfoChange}
           value={courseInfo}
         ></textarea>
-      </label>
-      <label className={s.label} htmlFor="hours">
-        Hours
-        <input
-          className={`${s.input} ${s.hourInput}`}
-          type="number"
-          onChange={handleHourChange}
-          value={courseHours}
-        />
       </label>
       <input
         className={s.submitBtn}
