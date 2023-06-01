@@ -11,9 +11,6 @@ type AddCourseProps = {
 };
 
 export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
-  const [courseYear, setCourseYear] = useState(
-    courseToEdit?.year ? courseToEdit.year : 0
-  );
   const [courseName, setCourseName] = useState(
     courseToEdit?.name ? courseToEdit.name : ""
   );
@@ -26,10 +23,6 @@ export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
   const [courseInfo, setCourseInfo] = useState(
     courseToEdit?.info ? courseToEdit.info : ""
   );
-
-  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCourseYear(+e.target.value);
-  };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCourseName(e.target.value);
@@ -56,13 +49,12 @@ export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
   const createNewCourse = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!courseYear || !courseName || !courseHours) {
+    if (!courseName || !courseHours) {
       return;
     }
 
     if (courseToEdit) {
       const updates: NewCourse = {
-        year: courseYear,
         name: courseName,
         link: courseLink,
         info: courseInfo,
@@ -81,7 +73,6 @@ export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
     }
 
     const newCourse: NewCourse = {
-      year: courseYear,
       name: courseName,
       link: courseLink,
       info: courseInfo,
@@ -98,20 +89,6 @@ export const AddCourse = ({ closeModal, courseToEdit }: AddCourseProps) => {
   };
   return (
     <form onSubmit={createNewCourse}>
-      <label className={s.label} htmlFor="year">
-        Year
-        <select
-          className={s.input}
-          name="year"
-          id="year"
-          onChange={handleYearChange}
-          value={courseYear}
-        >
-          <option value={0}>- Select Year</option>
-          <option value={1}>1st Year</option>
-          <option value={2}>2nd Year</option>
-        </select>
-      </label>
       <label className={s.label} htmlFor="courseName">
         Course Name
         <input

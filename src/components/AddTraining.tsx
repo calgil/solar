@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import s from "../styles/components/AddInstruction.module.scss";
 import { Course } from "../firebase/courses/addCourse";
-import { getAllCourses } from "../firebase/courses/getAllCourses";
+import { getAllClasses } from "../firebase/courses/getAllClasses";
 import { months } from "../data/months";
 import {
   addTrainingToDB,
@@ -117,7 +117,7 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
   };
 
   useEffect(() => {
-    const unsubscribe = getAllCourses(setCourses);
+    const unsubscribe = getAllClasses(setCourses);
     return () => unsubscribe();
   }, []);
 

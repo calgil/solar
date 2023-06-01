@@ -3,7 +3,6 @@ import { db } from "../config";
 
 export type Course = {
   id: string;
-  year: number;
   name: string;
   hours: number;
   link?: string;
@@ -11,7 +10,6 @@ export type Course = {
 };
 
 export type NewCourse = {
-  year: number;
   name: string;
   hours: number;
   link?: string;
