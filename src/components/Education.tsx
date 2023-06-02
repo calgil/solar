@@ -1,38 +1,47 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import s from "../styles/components/Education.module.scss";
-import { Modal } from "./Modal";
-import { AddCourse } from "./AddCourse";
-import { Course } from "../firebase/courses/addCourse";
-import { getAllCourses } from "../firebase/courses/getAllCourses";
-import { CourseCard } from "./CourseCard";
+import { CoursePage } from "./CoursePage";
+import { RequirementsPage } from "./RequirementsPage";
+import classNames from "classnames/bind";
+const cx = classNames.bind(s);
+
+type ActivePage = "requirements" | "courses";
 
 export const Education = () => {
-  const [isAddCourseOpen, setIsAddCourseOpen] = useState(false);
-  const [allTrainings, setAllTrainings] = useState<Course[] | null>(null);
+  const [activePage, setActivePage] = useState<ActivePage>("requirements");
 
-  useEffect(() => {
-    const unsubscribe = getAllCourses(setAllTrainings);
-    return () => unsubscribe();
-  }, []);
+  const handlePageChange = (page: ActivePage) => {
+    setActivePage(page);
+  };
+
+  const requirementsClass = cx({
+    link: true,
+    active: activePage === "requirements",
+  });
+
+  const coursesClass = cx({
+    link: true,
+    active: activePage === "courses",
+  });
+
   return (
     <div>
-      <h3 className={s.courseTitle}>All Related Trainings</h3>
-      <button className={s.filterBtn} onClick={() => setIsAddCourseOpen(true)}>
-        Add Related Training Course
-      </button>
-      <Modal
-        isOpen={isAddCourseOpen}
-        onClose={() => setIsAddCourseOpen(false)}
-        title="Add Course"
-      >
-        <AddCourse closeModal={() => setIsAddCourseOpen(false)} />
-      </Modal>
-      <div className={s.courses}>
-        {allTrainings &&
-          allTrainings.map((course) => (
-            <CourseCard key={course.id} course={course} edit />
-          ))}
+      <div className={s.links}>
+        <a
+          className={requirementsClass}
+          onClick={() => handlePageChange("requirements")}
+        >
+          All Related Trainings
+        </a>
+        <a className={coursesClass} onClick={() => handlePageChange("courses")}>
+          All Courses
+        </a>
+      </div>
+
+      <div className={s.page}>
+        {activePage === "requirements" && <RequirementsPage />}
+        {activePage === "courses" && <CoursePage />}
       </div>
     </div>
   );

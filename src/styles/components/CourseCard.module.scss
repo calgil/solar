@@ -2,35 +2,33 @@
 @use "../breakpoints" as bp;
 @use "../layouts";
 
-.course {
-  font-family: a.$secondaryFont;
+.courseCard {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border: 1px solid a.$solarMain;
   border-radius: 8px;
-  padding: 5px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  padding: 10px;
 
-  .courseInfo {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
+  .text {
+    max-width: 80%;
+    .courseInfo {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
 
-    .link {
-      text-decoration: none;
-      @extend .customLink;
-    }
-
-    .info {
-      flex: 1;
-      padding-right: 20px;
-    }
-
-    .edit {
-      @extend .filterBtn;
+      .link {
+        text-decoration: none;
+        margin-left: 10px;
+        @extend .customLink;
+      }
     }
   }
 
-  .courseInfo.settings {
-    margin-top: 10px;
+  .editBtn {
+    @extend .filterBtn;
+    padding: 5px;
   }
 }

@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 
 export type NewUser = {
   name: string;
-  role: string;
+  role: "admin" | "supervisor" | "apprentice";
   supervisorId?: string;
   status: "active";
 };

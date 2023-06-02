@@ -9,8 +9,10 @@ import { AddUser } from "../AddUser";
 import { Education } from "../Education";
 import { AddTraining } from "../AddTraining";
 import { useUsers } from "../../hooks/useUsers";
+import classNames from "classnames/bind";
+const cx = classNames.bind(s);
 
-type ActivePage = "staff" | "mprs" | "related training";
+type ActivePage = "staff" | "mprs" | "training";
 
 export const AdminDashboard = () => {
   const [activePage, setActivePage] = useState<ActivePage>("staff");
@@ -23,6 +25,16 @@ export const AdminDashboard = () => {
     setActivePage(page);
   };
 
+  const trainingClass = cx({
+    link: true,
+    active: activePage === "training",
+  });
+
+  const reportsClass = cx({
+    link: true,
+    active: activePage === "mprs",
+  });
+
   return (
     <div className={s.container}>
       <div className={s.adminNav}>
@@ -31,12 +43,12 @@ export const AdminDashboard = () => {
         </h2>
         <div className={s.links}>
           <a
-            className={s.link}
-            onClick={() => handlePageChange("related training")}
+            className={trainingClass}
+            onClick={() => handlePageChange("training")}
           >
             Related Trainings
           </a>
-          <a className={s.link} onClick={() => handlePageChange("mprs")}>
+          <a className={reportsClass} onClick={() => handlePageChange("mprs")}>
             Monthly Progress Reports
           </a>
           <button
@@ -67,7 +79,7 @@ export const AdminDashboard = () => {
       </div>
       {activePage === "staff" && <DisplayStaff />}
       {activePage === "mprs" && <MonthlyProgressReports />}
-      {activePage === "related training" && <Education />}
+      {activePage === "training" && <Education />}
     </div>
   );
 };

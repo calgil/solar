@@ -5,6 +5,8 @@ export type TrainingData = {
 
 import {
   collection,
+  doc,
+  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
@@ -12,40 +14,56 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../config";
-import { Training } from "../training/addTrainingToDB";
+import { Training } from "../../types/training.type";
 
 export const fetchApprenticeTrainingData = (
   apprenticeId: string,
   setApprenticeTrainings: (data: TrainingData | null) => void
 ) => {
-  const trainingQuery = query(
-    collection(db, "trainings"),
-    where("apprenticeId", "==", apprenticeId),
-    orderBy("dateCompleted", "desc")
-  );
+  console.log("get apprentice training data");
 
-  const unsubscribe = onSnapshot(trainingQuery, (trainingSnapshot) => {
-    const trainings = trainingSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Training[];
-    if (trainings.length === 0) {
-      setApprenticeTrainings(null);
-    }
+  // const trainingQuery = query(
+  //   collection(db, "trainings"),
+  //   where("apprenticeId", "==", apprenticeId),
+  //   orderBy("dateCompleted", "desc")
+  // );
 
-    const totalHours = trainings.reduce(
-      (acc, training) => acc + training.hours,
-      0
-    );
+  // const unsubscribe = onSnapshot(trainingQuery, async (trainingSnapshot) => {
+  //   const trainings = trainingSnapshot.docs.map((doc) => ({
+  //     id: doc.id,
+  //     ...doc.data(),
+  //   })) as Training[];
+  //   if (trainings.length === 0) {
+  //     return setApprenticeTrainings(null);
+  //   }
+  //   const trainingsWithHoursPromises = trainings.map(async (training) => {
+  //     const classDoc = await getDoc(doc(db, "classes", training.classId));
+  //     const classData = classDoc.data();
+  //     const hours = classData ? classData.hours : 0;
 
-    const apprenticeTrainingData: TrainingData = {
-      totalHours,
-      trainings,
-    };
+  //     console.log({ training });
 
-    setApprenticeTrainings(apprenticeTrainingData);
-  });
-  return unsubscribe;
+  //     return {
+  //       ...training,
+  //       hours,
+  //     };
+  //   });
+
+  //   const trainingsWithHours = await Promise.all(trainingsWithHoursPromises);
+
+  //   const totalHours = trainingsWithHours.reduce(
+  //     (acc, training) => acc + training.hours,
+  //     0
+  //   );
+
+  //   const apprenticeTrainingData: TrainingData = {
+  //     totalHours,
+  //     trainings,
+  //   };
+
+  //   setApprenticeTrainings(apprenticeTrainingData);
+  // });
+  // return unsubscribe;
 };
 
 export const getApprenticeCourses = async (apprenticeId: string) => {

@@ -1,16 +1,21 @@
 @use "../abstracts" as a;
 @use "../layouts";
 
-.courseTitle {
-  margin-top: 20px;
+.links {
   margin-bottom: 20px;
-  font-family: a.$secondaryFont;
+
+  .link {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    @extend .customLink;
+
+    &.active {
+      border-bottom: 1px solid a.$yellow;
+    }
+  }
 }
 
-.filterBtn {
-  @extend .filterBtn;
-}
-
-.courses {
+.page {
   padding-top: 20px;
 }

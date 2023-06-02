@@ -1,30 +1,14 @@
-import { collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { db } from "../config";
-
-export type Course = {
-  id: string;
-  year: number;
-  name: string;
-  hours: number;
-  link?: string;
-  info?: string;
-};
-
-export type NewCourse = {
-  year: number;
-  name: string;
-  hours: number;
-  link?: string;
-  info?: string;
-};
+import { NewCourse } from "../../types/course.type";
 
 export const addCourse = async (newCourse: NewCourse) => {
   if (!newCourse) {
     return;
   }
-  const newCourseRef = doc(collection(db, "courses"));
+  const coursesRef = collection(db, "courses");
   try {
-    await setDoc(newCourseRef, newCourse);
+    await addDoc(coursesRef, newCourse);
   } catch (error) {
     console.error(error);
     throw new Error("could not create course");

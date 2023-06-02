@@ -8,11 +8,11 @@ import { Link } from "react-router-dom";
 import { ApprenticeData } from "../firebase/mpr/getApprenticeData";
 import { User } from "../types/user.type";
 import { fetchApprenticeData } from "../firebase/mpr/fetchApprenticeData";
-import {
-  TrainingData,
-  fetchApprenticeTrainingData,
-} from "../firebase/courses/fetchApprenticeTrainingData";
-import { TrainingDetails } from "./TrainingDetails";
+// import {
+//   TrainingData,
+//   fetchApprenticeTrainingData,
+// } from "../firebase/courses/fetchApprenticeTrainingData";
+// import { TrainingDetails } from "./TrainingDetails";
 
 type StaffMemberProps = {
   user: User;
@@ -23,8 +23,8 @@ export const StaffMember = ({ user }: StaffMemberProps) => {
   const [apprenticeData, setApprenticeData] = useState<ApprenticeData | null>(
     null
   );
-  const [apprenticeTrainingData, setApprenticeTrainingData] =
-    useState<TrainingData | null>(null);
+  // const [apprenticeTrainingData, setApprenticeTrainingData] =
+  //   useState<TrainingData | null>(null);
 
   const handleExpandClick = async () => {
     if (showDetails) {
@@ -33,15 +33,15 @@ export const StaffMember = ({ user }: StaffMemberProps) => {
     setShowDetails(true);
   };
 
-  useEffect(() => {
-    if (user) {
-      const unsubscribe = fetchApprenticeTrainingData(
-        user.id,
-        setApprenticeTrainingData
-      );
-      return () => unsubscribe();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user) {
+  //     const unsubscribe = fetchApprenticeTrainingData(
+  //       user.id,
+  //       setApprenticeTrainingData
+  //     );
+  //     return () => unsubscribe();
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (user) {
@@ -63,12 +63,12 @@ export const StaffMember = ({ user }: StaffMemberProps) => {
       </div>
       {showDetails && user.role === "apprentice" && (
         <div className={s.detailsContainer}>
-          {apprenticeData && apprenticeTrainingData && (
-            <>
-              <HoursDetails apprenticeData={apprenticeData.data} />
-              <TrainingDetails data={apprenticeTrainingData} />
-            </>
+          {apprenticeData && (
+            <HoursDetails apprenticeData={apprenticeData.data} />
           )}
+          {/* {apprenticeTrainingData && (
+            <TrainingDetails data={apprenticeTrainingData} />
+          )} */}
         </div>
       )}
     </div>
