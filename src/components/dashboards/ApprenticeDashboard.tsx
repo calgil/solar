@@ -82,13 +82,15 @@ export const ApprenticeDashboard = ({
   }, [apprenticeId]);
 
   useEffect(() => {
-    if (apprenticeId) {
-      const unsubscribe = fetchApprenticeTrainingData(
-        apprenticeId,
-        setApprenticeTrainingData
-      );
-      return () => unsubscribe();
-    }
+    console.log("get apprentice training data");
+
+    // if (apprenticeId) {
+    //   const unsubscribe = fetchApprenticeTrainingData(
+    //     apprenticeId,
+    //     setApprenticeTrainingData
+    //   );
+    //   return () => unsubscribe();
+    // }
   }, [apprenticeId]);
 
   useEffect(() => {
