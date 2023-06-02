@@ -20,48 +20,50 @@ export const fetchApprenticeTrainingData = (
   apprenticeId: string,
   setApprenticeTrainings: (data: TrainingData | null) => void
 ) => {
-  const trainingQuery = query(
-    collection(db, "trainings"),
-    where("apprenticeId", "==", apprenticeId),
-    orderBy("dateCompleted", "desc")
-  );
+  console.log("get apprentice training data");
 
-  const unsubscribe = onSnapshot(trainingQuery, async (trainingSnapshot) => {
-    const trainings = trainingSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Training[];
-    if (trainings.length === 0) {
-      return setApprenticeTrainings(null);
-    }
-    const trainingsWithHoursPromises = trainings.map(async (training) => {
-      const classDoc = await getDoc(doc(db, "classes", training.classId));
-      const classData = classDoc.data();
-      const hours = classData ? classData.hours : 0;
+  // const trainingQuery = query(
+  //   collection(db, "trainings"),
+  //   where("apprenticeId", "==", apprenticeId),
+  //   orderBy("dateCompleted", "desc")
+  // );
 
-      console.log({ training });
+  // const unsubscribe = onSnapshot(trainingQuery, async (trainingSnapshot) => {
+  //   const trainings = trainingSnapshot.docs.map((doc) => ({
+  //     id: doc.id,
+  //     ...doc.data(),
+  //   })) as Training[];
+  //   if (trainings.length === 0) {
+  //     return setApprenticeTrainings(null);
+  //   }
+  //   const trainingsWithHoursPromises = trainings.map(async (training) => {
+  //     const classDoc = await getDoc(doc(db, "classes", training.classId));
+  //     const classData = classDoc.data();
+  //     const hours = classData ? classData.hours : 0;
 
-      return {
-        ...training,
-        hours,
-      };
-    });
+  //     console.log({ training });
 
-    const trainingsWithHours = await Promise.all(trainingsWithHoursPromises);
+  //     return {
+  //       ...training,
+  //       hours,
+  //     };
+  //   });
 
-    const totalHours = trainingsWithHours.reduce(
-      (acc, training) => acc + training.hours,
-      0
-    );
+  //   const trainingsWithHours = await Promise.all(trainingsWithHoursPromises);
 
-    const apprenticeTrainingData: TrainingData = {
-      totalHours,
-      trainings,
-    };
+  //   const totalHours = trainingsWithHours.reduce(
+  //     (acc, training) => acc + training.hours,
+  //     0
+  //   );
 
-    setApprenticeTrainings(apprenticeTrainingData);
-  });
-  return unsubscribe;
+  //   const apprenticeTrainingData: TrainingData = {
+  //     totalHours,
+  //     trainings,
+  //   };
+
+  //   setApprenticeTrainings(apprenticeTrainingData);
+  // });
+  // return unsubscribe;
 };
 
 export const getApprenticeCourses = async (apprenticeId: string) => {

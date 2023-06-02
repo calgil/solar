@@ -96,7 +96,6 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
 
     const newTraining: UploadTraining = {
       apprenticeId: selectedApprentice.id,
-      classId: selectedCourse.classId,
       courseId: selectedCourse.id,
       courseName: selectedCourse.name,
       dateCompleted: new Date(year, month - 1),
