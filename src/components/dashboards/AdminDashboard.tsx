@@ -27,7 +27,7 @@ export const AdminDashboard = () => {
     <div className={s.container}>
       <div className={s.adminNav}>
         <h2 className={s.title} onClick={() => handlePageChange("staff")}>
-          Administrator Dashboard
+          Administrator Dashboard Portfolio
         </h2>
         <div className={s.links}>
           {/* <a
