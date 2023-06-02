@@ -6,10 +6,16 @@ import { toast } from "react-toastify";
 import { Class, NewClass } from "../types/class.type";
 import { getAllCourses } from "../firebase/training/getAllCourses";
 import { Course } from "../types/course.type";
+import { MultiSelect } from "react-multi-select-component";
 
 type AddClassProps = {
   closeModal: () => void;
   classToEdit?: Class;
+};
+
+export type Option = {
+  label: string;
+  value: string;
 };
 
 export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
@@ -20,37 +26,20 @@ export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
     classToEdit?.hours ? classToEdit.hours : 0
   );
 
+  const [allCourses, setAllCourses] = useState<Course[] | null>(null);
+
+  const [selectedCourses, setSelectedCourses] = useState<Option[]>([]);
+
+  const options: Option[] = allCourses
+    ? allCourses?.map((course) => ({ label: course.name, value: course.id }))
+    : [];
+
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setClassName(e.target.value);
   };
 
   const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setClassHours(+e.target.value);
-  };
-
-  const [allCourses, setAllCourses] = useState<Course[] | null>(null);
-
-  const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
-
-  const handleOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValues = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
-
-    setSelectedCourses((prevSelectedCourses) => {
-      const updatedSelectedCourses = prevSelectedCourses.filter(
-        (course) => !selectedValues.includes(course)
-      );
-
-      selectedValues.forEach((value) => {
-        if (!updatedSelectedCourses.includes(value)) {
-          updatedSelectedCourses.push(value);
-        }
-      });
-
-      return updatedSelectedCourses;
-    });
   };
 
   const createNewClass = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -61,7 +50,8 @@ export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
     const newClass: NewClass = {
       name: className,
       hours: classHours,
-      courseIds: selectedCourses,
+      options: selectedCourses,
+      classRequirements: selectedCourses.map((course) => course.value),
     };
 
     console.log({ newClass });
@@ -108,21 +98,14 @@ export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
         />
       </label>
       <label className={s.label}>
-        Acceptable Courses
-        <select
-          className={s.input}
-          multiple
-          value={selectedCourses}
-          onChange={handleOptionChange}
-        >
-          {allCourses?.map((course) => (
-            <option key={course.id} value={course.id}>
-              {course.name}
-            </option>
-          ))}
-        </select>
-        {selectedCourses && (
-          <p> Selected Courses: {selectedCourses.join(", ")}</p>
+        Course Option
+        {allCourses && (
+          <MultiSelect
+            options={options}
+            value={selectedCourses}
+            onChange={setSelectedCourses}
+            labelledBy="Select"
+          />
         )}
       </label>
       <input

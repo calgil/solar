@@ -28,7 +28,7 @@
   }
 
   .editBtn {
-    @extend .filterBtn;
-    padding: 5px;
+    @extend .customLink;
+    color: a.$primaryText;
   }
 }

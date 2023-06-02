@@ -46,7 +46,8 @@
       }
 
       .edit {
-        @extend .filterBtn;
+        @extend .customLink;
+        color: a.$primaryText;
       }
     }
   }
@@ -58,8 +59,13 @@
   .courses {
     padding: 0 30px;
 
+    .required {
+      font-size: 1rem;
+      margin-top: 5px;
+    }
+
     .course {
-      list-style: none;
+      margin-left: 10px;
     }
   }
 }

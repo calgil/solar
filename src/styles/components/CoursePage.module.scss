@@ -1,27 +1,6 @@
 @use "../abstracts" as a;
 @use "../layouts";
 
-.filterBtn {
-  @extend .filterBtn;
-  background-color: a.$yellow;
-  padding: 5px;
-
-  .plus {
-    padding: 3px;
-    background-color: black;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .plusImg {
-      width: 12px;
-    }
-  }
-}
-
 .courses {
   padding: 10px;
 }

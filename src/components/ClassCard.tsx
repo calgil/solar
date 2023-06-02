@@ -1,12 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import s from "../styles/components/ClassCard.module.scss";
 import { Modal } from "./Modal";
 import { AddClass } from "./AddClass";
 import { Class } from "../types/class.type";
-import { getCoursesByClassId } from "../firebase/training/getCoursesByClassId";
-import { Course } from "../types/course.type";
-import { CourseCard } from "./CourseCard";
 
 type ClassCardProps = {
   training: Class;
@@ -14,16 +11,9 @@ type ClassCardProps = {
 };
 
 export const ClassCard = ({ training }: ClassCardProps) => {
-  const { id: classId, name, hours } = training;
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const [courses, setCourses] = useState<Course[] | null>(null);
+  const { name, hours, options } = training;
 
-  useEffect(() => {
-    if (classId) {
-      const unsubscribe = getCoursesByClassId(classId, setCourses);
-      return () => unsubscribe();
-    }
-  }, [classId]);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   return (
     <div className={s.class}>
@@ -33,16 +23,19 @@ export const ClassCard = ({ training }: ClassCardProps) => {
           <p className={s.hours}>{hours} Hours</p>
         </div>
         <div className={s.btnContainer}>
-          <button className={s.edit} onClick={() => setIsEditOpen(true)}>
+          <a className={s.edit} onClick={() => setIsEditOpen(true)}>
             {"\u270E"} Edit
-          </button>
+          </a>
         </div>
       </div>
       <div className={s.courses}>
-        {courses &&
-          courses.map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
+        <h5 className={s.required}>One of the following is required:</h5>
+        {options.map((course) => (
+          <div className={s.course} key={course.value}>
+            {" "}
+            {course.label}{" "}
+          </div>
+        ))}
       </div>
       <Modal
         isOpen={isEditOpen}
