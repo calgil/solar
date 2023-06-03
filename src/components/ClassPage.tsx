@@ -19,8 +19,10 @@ export const ClassPage = () => {
 
   return (
     <div>
-      <AddBtn text="Add Class" onClick={() => setIsAddClassOpen(true)} />
-      <div>
+      <div className={s.action}>
+        <AddBtn text="Add Class" onClick={() => setIsAddClassOpen(true)} />
+      </div>
+      <div className={s.classes}>
         {allClasses &&
           allClasses.map((training) => (
             <ClassCard key={training.id} training={training} />

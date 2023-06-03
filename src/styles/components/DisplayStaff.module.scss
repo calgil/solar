@@ -47,6 +47,17 @@
   }
 }
 
+.staffActions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  .trainingBtn {
+    @extend .filterBtn;
+    margin-left: 10px;
+  }
+}
+
 .staffContainer {
   padding-top: 30px;
 }
