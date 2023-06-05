@@ -1,16 +1,27 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { useState } from "react";
 import { REQUIRED_HOURS } from "../data/hourRequirements";
 import s from "../styles/components/MprDisplay.module.scss";
 import { MprType } from "../types/mpr.type";
 import { displayDate } from "../utils/displayDate";
 import { HourCategory } from "./HourCategory";
 import { Signature } from "./Signature";
+import { useAuth } from "../providers/auth.provider";
+import { AddHours } from "./AddHours";
+import { Modal } from "./Modal";
 
 type MprDetailsProps = {
   mpr: MprType;
 };
 
 export const MprDisplay = ({ mpr }: MprDetailsProps) => {
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const { user } = useAuth();
+
+  const openModal = () => {
+    setIsEditOpen(true);
+  };
   return (
     <div
       className={s.mprDetails}
@@ -59,9 +70,23 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
         <div className={s.signatureContainer}>
           <Signature
             isApproved={mpr.supervisorSignature}
+            openModal={openModal}
+            apprenticeId={mpr.apprenticeId}
             supervisorId={mpr.supervisorId}
-            mpr={mpr}
           />
+          <Modal
+            isOpen={isEditOpen}
+            onClose={() => setIsEditOpen(false)}
+            title="Edit Training"
+          >
+            {user && (
+              <AddHours
+                user={user}
+                closeModal={() => setIsEditOpen(false)}
+                mpr={mpr}
+              />
+            )}
+          </Modal>
         </div>
       </div>
     </div>

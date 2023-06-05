@@ -1,6 +1,23 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 
+export type UploadMpr = {
+  id?: string;
+  apprenticeId: string;
+  apprenticeName: string;
+  date: Date;
+  dateApproved: Date | null;
+  photoUrl: string;
+  pvHours: number;
+  otherREHours: number;
+  bosHours: number;
+  otherHours: number;
+  totalHours: number;
+  apprenticeSignature: boolean;
+  supervisorSignature: boolean;
+  supervisorId: string;
+};
+
 export type MprType = {
   id: string;
   apprenticeId: string;

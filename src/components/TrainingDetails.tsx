@@ -13,10 +13,6 @@ type TrainingDetailsProps = {
 };
 
 export const TrainingDetails = ({ data }: TrainingDetailsProps) => {
-  const isApproved = data.trainings.map((training) => training.id);
-
-  console.log({ isApproved });
-
   const [showDetails, setShowDetails] = useState(false);
   const [numCoursesToShow, setNumCoursesToShow] = useState(3);
 

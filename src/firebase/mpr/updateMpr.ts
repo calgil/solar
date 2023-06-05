@@ -1,7 +1,7 @@
 import { doc, updateDoc } from "firebase/firestore";
-import { UploadMpr } from "./createMpr";
 import { db } from "../config";
 import { toast } from "react-toastify";
+import { UploadMpr } from "../../types/mpr.type";
 
 export const updateMpr = async (id: string, mpr: UploadMpr) => {
   try {

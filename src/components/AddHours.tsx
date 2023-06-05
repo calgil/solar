@@ -11,6 +11,7 @@ import { updateMpr } from "../firebase/mpr/updateMpr";
 import { UploadFile } from "./UploadFile";
 import { getUserById } from "../fetch/auth/getUserById";
 import { displayDate } from "../utils/displayDate";
+import { capitalizeName } from "../utils/capitalizeName";
 
 const cx = classNames.bind(s);
 
@@ -130,9 +131,7 @@ export const AddHours = ({
     }
   };
 
-
   const handlePhotoChange = (url: string | null) => setUploadPhotoUrl(url);
-
 
   const uploadMPR = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -361,7 +360,10 @@ export const AddHours = ({
                 type="checkbox"
                 onChange={() => setApprenticeSignature(!apprenticeSignature)}
               />
-              <span>Apprentice has signed</span>
+              <span>
+                I hereby certify, to the best of my knowledge, that the hours
+                submitted are accurate and complete
+              </span>
             </label>
           )}
         </div>
@@ -373,15 +375,16 @@ export const AddHours = ({
             onChange={() => setSupervisorSignature(!supervisorSignature)}
           />
           <span className={s.supervisorApproval}>
-            I signed this MPR because it is correct best of my knowledge as a
-            member Training Agent of the LRT Apprenticeship Program administered
-            by the RE-JATC
+            As a member Training Agent of the LRT Apprenticeship Program, I
+            hereby certify, to the best of my knowledge, that the hours
+            submitted are accurate and complete
           </span>
         </label>
       )}
       {mpr?.supervisorSignature && (
         <div className={s.approvalInfo}>
-          Approved by {supervisorData?.name} {displayDate(mpr.dateApproved)}
+          Approved by {capitalizeName(supervisorData?.name)}{" "}
+          {displayDate(mpr.dateApproved)}
         </div>
       )}
       {!mpr?.supervisorSignature && (

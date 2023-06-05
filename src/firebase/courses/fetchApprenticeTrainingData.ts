@@ -5,8 +5,6 @@ export type TrainingData = {
 
 import {
   collection,
-  doc,
-  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
@@ -21,8 +19,6 @@ export const fetchApprenticeTrainingData = (
   apprenticeId: string,
   setApprenticeTrainings: (data: TrainingData | null) => void
 ) => {
-  console.log("get apprentice training data");
-
   const trainingQuery = query(
     collection(db, "trainings"),
     where("apprenticeId", "==", apprenticeId),
@@ -37,29 +33,40 @@ export const fetchApprenticeTrainingData = (
     if (trainings.length === 0) {
       return setApprenticeTrainings(null);
     }
-    const trainingsWithHoursPromises = trainings.map(async (training) => {
-      const classQuery = query(
-        collection(db, "classes")
-        // where("courseIds", "array-contains", training.courseId)
-      );
-      const classSnapshot = await getDocs(classQuery);
-      const classes = classSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Class[];
 
-      const hours = classes.reduce(
-        (totalHours, classData) => totalHours + classData.hours,
-        0
-      );
+    const approvedTrainings = trainings.filter(
+      (training) => training.supervisorSignature
+    );
 
-      console.log({ training });
+    const trainingsWithHoursPromises = approvedTrainings.map(
+      async (training) => {
+        const classQuery = query(
+          collection(db, "classes"),
+          where(
+            "classRequirements",
+            "array-contains",
+            training.courseCompleted.id
+          )
+        );
+        const classSnapshot = await getDocs(classQuery);
+        const classes = classSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Class[];
 
-      return {
-        ...training,
-        hours,
-      };
-    });
+        console.log({ classes });
+
+        const hours = classes.reduce(
+          (totalHours, classData) => totalHours + classData.hours,
+          0
+        );
+
+        return {
+          ...training,
+          hours,
+        };
+      }
+    );
 
     const trainingsWithHours = await Promise.all(trainingsWithHoursPromises);
 

@@ -10,25 +10,68 @@ import { getApprenticeCourses } from "../firebase/courses/fetchApprenticeTrainin
 import { Course } from "../types/course.type";
 import { getAllCourses } from "../firebase/training/getAllCourses";
 import { Training, UploadTraining } from "../types/training.type";
+import { displayDate } from "../utils/displayDate";
+import { getUserById } from "../fetch/auth/getUserById";
+import { capitalizeName } from "../utils/capitalizeName";
 
 type AddTrainingProps = {
   closeModal: () => void;
+  supervisor: boolean;
   apprentices?: User[];
-  trainingToEdit?: Training;
+  training?: Training;
+  apprentice?: User;
 };
 
-export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
+export const AddTraining = ({
+  closeModal,
+  supervisor,
+  apprentices,
+  training,
+  apprentice,
+}: AddTrainingProps) => {
+  const { user } = useAuth();
   const currentMonth = new Date().getMonth();
   const [courses, setCourses] = useState<Course[] | null>(null);
 
   const [selectedApprentice, setSelectedApprentice] = useState<User | null>(
     null
   );
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const [month, setMonth] = useState(currentMonth);
-  const [year, setYear] = useState(+new Date().getFullYear());
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(
+    training ? training.courseCompleted : null
+  );
+  const [month, setMonth] = useState(
+    training ? training.dateCompleted.toDate().getMonth() + 1 : currentMonth
+  );
+  const [year, setYear] = useState(
+    training?.dateCompleted.toDate().getFullYear() || +new Date().getFullYear()
+  );
 
-  const { user } = useAuth();
+  const [supervisorData, setSupervisorData] = useState<User | null>(null);
+
+  const getUncompletedCourses = async (apprenticeId: string) => {
+    const coursesCompleted = await getApprenticeCourses(apprenticeId);
+    if (!coursesCompleted) {
+      return;
+    }
+    const apprenticeCourseIds = coursesCompleted.map(
+      (training) => training.courseCompleted.id
+    );
+    if (!courses) {
+      return;
+    }
+
+    const validCourses = courses.filter(
+      (course) => !apprenticeCourseIds.includes(course.id)
+    );
+
+    if (validCourses) {
+      setCourses(validCourses);
+    }
+  };
+
+  if (apprentice) {
+    getUncompletedCourses(apprentice.id);
+  }
 
   const handleApprenticeChange = async (
     e: React.ChangeEvent<HTMLSelectElement>
@@ -39,24 +82,7 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
       );
       if (newApprentice) {
         setSelectedApprentice(newApprentice);
-        const coursesCompleted = await getApprenticeCourses(newApprentice.id);
-
-        const apprenticeCourses = coursesCompleted.map(
-          (training) => training.courseId
-        );
-        if (apprenticeCourses.length === 0) {
-          return;
-        }
-        if (!courses) {
-          return;
-        }
-        const validCourses = courses.filter(
-          (course) => !apprenticeCourses.includes(course.id)
-        );
-
-        if (validCourses) {
-          setCourses(validCourses);
-        }
+        getUncompletedCourses(newApprentice.id);
       }
     }
   };
@@ -76,34 +102,60 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
     }
   };
 
-  const handleAddInstruction = async (e: React.FormEvent<HTMLFormElement>) => {
+  const uploadTraining = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user) {
+      console.log("no user");
+
       return;
     }
 
     if (!selectedApprentice) {
+      console.log("no apprentice");
       return;
     }
 
     if (!selectedCourse) {
+      console.log("no course");
       return;
     }
 
-    if (!month || !year) {
+    if (!month || !year || !selectedApprentice.supervisorId) {
+      console.log("no date");
       return;
     }
+
+    if (training) {
+      const newTraining: UploadTraining = {
+        apprenticeId: selectedApprentice.id,
+        courseCompleted: selectedCourse,
+        dateCompleted: new Date(year, month - 1),
+        dateApproved: new Date(),
+        supervisorSignature: supervisor,
+        supervisorId: selectedApprentice.supervisorId,
+      };
+
+      await addTrainingToDB(newTraining);
+      toast.success("Related Training added successfully");
+      return closeModal();
+    }
+
+    // if (supervisor && selectedApprentice) {
+
+    // }
 
     const newTraining: UploadTraining = {
       apprenticeId: selectedApprentice.id,
-      courseId: selectedCourse.id,
-      courseName: selectedCourse.name,
+      courseCompleted: selectedCourse,
+      dateApproved: null,
       dateCompleted: new Date(year, month - 1),
+      supervisorSignature: supervisor,
+      supervisorId: selectedApprentice.supervisorId,
     };
 
     try {
       await addTrainingToDB(newTraining);
-      toast.success("Instruction added successfully");
+      toast.success("Related Training added successfully");
       closeModal();
     } catch (error) {
       console.error(error);
@@ -117,25 +169,39 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (user && !supervisor) {
+      setSelectedApprentice(user);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (training && training.supervisorId) {
+      getUserById(training.supervisorId, setSupervisorData);
+    }
+  }, [training?.supervisorId]);
+
   return (
-    <form className={s.addInstruction} onSubmit={handleAddInstruction}>
-      <label className={s.label} htmlFor="apprentice">
-        Apprentice
-        <select
-          name="apprentice"
-          id="apprentice"
-          className={s.input}
-          value={selectedApprentice?.id}
-          onChange={handleApprenticeChange}
-        >
-          <option value="">- Select Apprentice</option>
-          {apprentices?.map((app) => (
-            <option key={app.id} value={app.id}>
-              {app.name}
-            </option>
-          ))}
-        </select>
-      </label>
+    <form className={s.addInstruction} onSubmit={uploadTraining}>
+      {supervisor && (
+        <label className={s.label} htmlFor="apprentice">
+          Apprentice
+          <select
+            name="apprentice"
+            id="apprentice"
+            className={s.input}
+            value={selectedApprentice?.id}
+            onChange={handleApprenticeChange}
+          >
+            <option value="">- Select Apprentice</option>
+            {apprentices?.map((app) => (
+              <option key={app.id} value={app.id}>
+                {app.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       <label className={s.label} htmlFor="course">
         Training
         <select
@@ -185,9 +251,21 @@ export const AddTraining = ({ closeModal, apprentices }: AddTrainingProps) => {
           />
         </label>
       </div>
-      <div className={s.submitContainer}>
-        <input className={s.submitBtn} type="submit" value="Add Instruction" />
-      </div>
+      {training?.supervisorSignature && (
+        <div className={s.approvalInfo}>
+          Approved by {capitalizeName(supervisorData?.name)}
+          {displayDate(training.dateCompleted)}
+        </div>
+      )}
+      {!training?.supervisorSignature && (
+        <div className={s.submitContainer}>
+          <input
+            className={s.submitBtn}
+            type="submit"
+            value="Add Instruction"
+          />
+        </div>
+      )}
     </form>
   );
 };

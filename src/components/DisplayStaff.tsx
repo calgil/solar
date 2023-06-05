@@ -115,6 +115,7 @@ export const DisplayStaff = () => {
           >
             <AddTraining
               closeModal={() => setIsTrainingOpen(false)}
+              supervisor
               apprentices={apprentices.filter((app) => app.status === "active")}
             />
           </Modal>

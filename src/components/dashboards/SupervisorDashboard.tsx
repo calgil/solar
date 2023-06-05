@@ -11,6 +11,7 @@ import { AddBtn } from "../AddBtn";
 import { fetchUserData } from "../../firebase/users/fetchUserById";
 import { AddUser } from "../AddUser";
 import { AddTraining } from "../AddTraining";
+import { capitalizeName } from "../../utils/capitalizeName";
 
 type SupervisorDashboardProps = {
   supervisorId: string;
@@ -66,7 +67,7 @@ export const SupervisorDashboard = ({
       {supervisor && (
         <div className={s.apprenticeSummary}>
           <h2 className={s.title}>
-            {supervisor.name}&apos;s Apprentice Summary
+            {capitalizeName(supervisor.name)}&apos;s Apprentice Summary
           </h2>
           <div className={s.action}>
             {edit && user?.role === "admin" && (
@@ -97,6 +98,7 @@ export const SupervisorDashboard = ({
             <AddTraining
               closeModal={() => setIsTrainingOpen(false)}
               apprentices={apprentices}
+              supervisor
             />
           </Modal>
           <Modal
