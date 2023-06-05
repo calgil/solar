@@ -140,10 +140,6 @@ export const AddTraining = ({
       return closeModal();
     }
 
-    // if (supervisor && selectedApprentice) {
-
-    // }
-
     const newTraining: UploadTraining = {
       apprenticeId: selectedApprentice.id,
       courseCompleted: selectedCourse,

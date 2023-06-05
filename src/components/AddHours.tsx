@@ -334,6 +334,7 @@ export const AddHours = ({
             month={month}
             year={year}
             onPhotoChange={handlePhotoChange}
+            folder="mprs"
           />
         </div>
         <div className={s.rightCol}>

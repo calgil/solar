@@ -4,7 +4,7 @@ import s from "../styles/components/UploadFile.module.scss";
 import classNames from "classnames/bind";
 import fileSearch from "../assets/fileSearch.png";
 import { generateFileName } from "../utils/generateFileName";
-import { uploadMprPhoto } from "../firebase/mpr/uploadMprPhoto";
+import { uploadPhoto } from "../firebase/mpr/uploadPhoto";
 import { deleteMprPhoto } from "../firebase/mpr/deleteMprPhoto";
 
 const cx = classNames.bind(s);
@@ -16,6 +16,7 @@ type UploadFileProps = {
   month: number;
   year: number;
   onPhotoChange: (url: string | null) => void;
+  folder: string;
 };
 
 export const UploadFile = ({
@@ -25,6 +26,7 @@ export const UploadFile = ({
   month,
   year,
   onPhotoChange,
+  folder,
 }: UploadFileProps) => {
   const currentMonth = new Date().getMonth() + 1;
   const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | undefined>(
@@ -64,7 +66,7 @@ export const UploadFile = ({
     }
 
     try {
-      const photoUrl = await uploadMprPhoto(file);
+      const photoUrl = await uploadPhoto(file, folder);
       setUploadPhotoUrl(photoUrl);
       onPhotoChange(photoUrl);
     } catch (error) {
