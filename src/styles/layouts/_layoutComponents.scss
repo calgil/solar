@@ -49,8 +49,7 @@
 }
 
 .checkbox {
-  display: flex;
-  align-items: center;
+  display: block;
   cursor: pointer;
   position: relative;
   margin-top: 16px;
@@ -58,6 +57,7 @@
   font-size: 15px;
   font-weight: 400;
   line-height: 18px;
+  max-width: 450px;
 
   > span {
     padding: 0.5rem 0.25rem;

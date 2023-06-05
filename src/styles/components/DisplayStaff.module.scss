@@ -52,9 +52,12 @@
   justify-content: flex-end;
   align-items: center;
 
+  button {
+    margin: 0 5px;
+  }
+
   .trainingBtn {
     @extend .filterBtn;
-    margin-left: 10px;
   }
 }
 

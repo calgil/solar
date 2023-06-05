@@ -18,7 +18,7 @@ const cx = classNames.bind(s);
 type AddHoursProps = {
   user: User;
   closeModal: () => void;
-  supervisor?: "supervisor" | "admin";
+  supervisor?: boolean;
   apprentices?: User[];
   mpr?: MprType;
 };
@@ -143,9 +143,13 @@ export const AddHours = ({
     }
 
     if (!supervisor && !apprenticeSignature) {
+      console.log("no apprentice signature");
+
       return;
     }
     if (supervisor && !supervisorSignature) {
+      console.log("no supervisor signature");
+
       return;
     }
 

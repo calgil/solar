@@ -13,6 +13,7 @@ import { Training, UploadTraining } from "../types/training.type";
 import { displayDate } from "../utils/displayDate";
 import { getUserById } from "../fetch/auth/getUserById";
 import { capitalizeName } from "../utils/capitalizeName";
+import { UploadFile } from "./UploadFile";
 
 type AddTrainingProps = {
   closeModal: () => void;
@@ -47,6 +48,11 @@ export const AddTraining = ({
   );
 
   const [supervisorData, setSupervisorData] = useState<User | null>(null);
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(
+    training?.photoUrl || null
+  );
 
   const getUncompletedCourses = async (apprenticeId: string) => {
     const coursesCompleted = await getApprenticeCourses(apprenticeId);
@@ -102,8 +108,11 @@ export const AddTraining = ({
     }
   };
 
+  const handlePhotoChange = (url: string | null) => setPhotoUrl(url);
+
   const uploadTraining = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitted(true);
     if (!user) {
       console.log("no user");
 
@@ -115,7 +124,7 @@ export const AddTraining = ({
       return;
     }
 
-    if (!selectedCourse) {
+    if (!selectedCourse || !photoUrl) {
       console.log("no course");
       return;
     }
@@ -130,6 +139,7 @@ export const AddTraining = ({
         apprenticeId: selectedApprentice.id,
         courseCompleted: selectedCourse,
         dateCompleted: new Date(year, month - 1),
+        photoUrl: photoUrl,
         dateApproved: new Date(),
         supervisorSignature: supervisor,
         supervisorId: selectedApprentice.supervisorId,
@@ -143,8 +153,9 @@ export const AddTraining = ({
     const newTraining: UploadTraining = {
       apprenticeId: selectedApprentice.id,
       courseCompleted: selectedCourse,
-      dateApproved: null,
       dateCompleted: new Date(year, month - 1),
+      photoUrl: photoUrl,
+      dateApproved: null,
       supervisorSignature: supervisor,
       supervisorId: selectedApprentice.supervisorId,
     };
@@ -152,7 +163,8 @@ export const AddTraining = ({
     try {
       await addTrainingToDB(newTraining);
       toast.success("Related Training added successfully");
-      closeModal();
+
+      return closeModal();
     } catch (error) {
       console.error(error);
       toast.error("Failed to add Instruction");
@@ -247,6 +259,15 @@ export const AddTraining = ({
           />
         </label>
       </div>
+      <UploadFile
+        isSubmitted={isSubmitted}
+        photoUrl={training?.photoUrl}
+        apprenticeName={supervisor ? selectedApprentice?.name : user?.name}
+        month={month}
+        year={year}
+        onPhotoChange={handlePhotoChange}
+        folder="trainings"
+      />
       {training?.supervisorSignature && (
         <div className={s.approvalInfo}>
           Approved by {capitalizeName(supervisorData?.name)}

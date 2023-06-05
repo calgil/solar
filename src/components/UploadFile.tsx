@@ -56,7 +56,7 @@ export const UploadFile = ({
 
     const file = new File(
       [selectedFile],
-      generateFileName(apprenticeName, date, selectedFile.type),
+      generateFileName(apprenticeName, date, selectedFile.type, folder),
       { type: selectedFile.type }
     );
     setFileName(file.name);

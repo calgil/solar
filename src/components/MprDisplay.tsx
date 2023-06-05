@@ -84,6 +84,7 @@ export const MprDisplay = ({ mpr }: MprDetailsProps) => {
                 user={user}
                 closeModal={() => setIsEditOpen(false)}
                 mpr={mpr}
+                supervisor={user?.role !== "apprentice"}
               />
             )}
           </Modal>

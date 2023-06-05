@@ -5,6 +5,8 @@
 .class {
   font-family: a.$secondaryFont;
   margin-bottom: 15px;
+  border: 2px solid;
+  border-radius: 8px;
 
   .classInfo {
     display: flex;

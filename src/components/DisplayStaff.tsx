@@ -89,18 +89,22 @@ export const DisplayStaff = () => {
             inputValue={searchQuery}
             clearSearch={handleClearSearch}
           />
-          <button className={s.addHours} onClick={() => setIsHoursOpen(true)}>
-            Add Hours
-          </button>
         </div>
         <div className={s.staffActions}>
-          <AddBtn text="Add User" onClick={() => setIsUserOpen(true)} />
+          <AddBtn text="Add Hours" onClick={() => setIsHoursOpen(true)} />
           <Modal
-            isOpen={isUserOpen}
-            onClose={() => setIsUserOpen(false)}
-            title="Add User"
+            isOpen={isHoursOpen}
+            onClose={() => setIsHoursOpen(false)}
+            title="Add Hours"
           >
-            <AddUser closeModal={() => setIsUserOpen(false)} />
+            {user && (
+              <AddHours
+                user={user}
+                closeModal={() => setIsHoursOpen(false)}
+                supervisor={true}
+                apprentices={apprentices}
+              />
+            )}
           </Modal>
           <button
             className={s.trainingBtn}
@@ -119,6 +123,14 @@ export const DisplayStaff = () => {
               apprentices={apprentices.filter((app) => app.status === "active")}
             />
           </Modal>
+          <AddBtn text="Add User" onClick={() => setIsUserOpen(true)} />
+          <Modal
+            isOpen={isUserOpen}
+            onClose={() => setIsUserOpen(false)}
+            title="Add User"
+          >
+            <AddUser closeModal={() => setIsUserOpen(false)} />
+          </Modal>
         </div>
       </div>
       <div className={s.staffContainer}>
@@ -126,20 +138,7 @@ export const DisplayStaff = () => {
           <StaffMember key={staff.id} user={staff} />
         ))}
       </div>
-      <Modal
-        isOpen={isHoursOpen}
-        onClose={() => setIsHoursOpen(false)}
-        title="Add Hours"
-      >
-        {user && (
-          <AddHours
-            user={user}
-            closeModal={() => setIsHoursOpen(false)}
-            supervisor="admin"
-            apprentices={apprentices}
-          />
-        )}
-      </Modal>
+
       <Modal
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}

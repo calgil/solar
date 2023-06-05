@@ -5,6 +5,7 @@ export type UploadTraining = {
   apprenticeId: string;
   courseCompleted: Course;
   dateCompleted: Date;
+  photoUrl: string;
   supervisorSignature: boolean;
   supervisorId: string;
   dateApproved: Date | null;
@@ -15,6 +16,7 @@ export type Training = {
   apprenticeId: string;
   courseCompleted: Course;
   dateCompleted: firebase.firestore.Timestamp;
+  photoUrl: string;
   supervisorSignature: boolean;
   supervisorId: string;
   dateApproved: firebase.firestore.Timestamp;
