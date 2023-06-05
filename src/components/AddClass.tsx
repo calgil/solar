@@ -7,6 +7,7 @@ import { Class, NewClass } from "../types/class.type";
 import { getAllCourses } from "../firebase/training/getAllCourses";
 import { Course } from "../types/course.type";
 import { MultiSelect } from "react-multi-select-component";
+import { updateClass } from "../firebase/classes/updateClass";
 
 type AddClassProps = {
   closeModal: () => void;
@@ -28,7 +29,9 @@ export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
 
   const [allCourses, setAllCourses] = useState<Course[] | null>(null);
 
-  const [selectedCourses, setSelectedCourses] = useState<Option[]>([]);
+  const [selectedCourses, setSelectedCourses] = useState<Option[]>(
+    classToEdit?.options ? classToEdit.options : []
+  );
 
   const options: Option[] = allCourses
     ? allCourses?.map((course) => ({ label: course.name, value: course.id }))
@@ -54,7 +57,16 @@ export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
       classRequirements: selectedCourses.map((course) => course.value),
     };
 
-    console.log({ newClass });
+    if (classToEdit) {
+      try {
+        await updateClass(classToEdit.id, newClass);
+        closeModal();
+      } catch (error) {
+        console.error(error);
+        toast.error("Could not update class");
+      }
+      return;
+    }
 
     try {
       await addClass(newClass);
@@ -70,11 +82,8 @@ export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    console.log({ selectedCourses });
-  }, [selectedCourses]);
   return (
-    <form onSubmit={createNewClass}>
+    <form className={s.addClass} onSubmit={createNewClass}>
       <label className={s.label}>
         Class Name
         <input
@@ -97,10 +106,11 @@ export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
           autoComplete="off"
         />
       </label>
-      <label className={s.label}>
+      <label className={`${s.label} ${s.options}`}>
         Course Option
         {allCourses && (
           <MultiSelect
+            className={s.optionSelect}
             options={options}
             value={selectedCourses}
             onChange={setSelectedCourses}

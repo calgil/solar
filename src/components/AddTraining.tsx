@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useEffect, useState } from "react";
-import s from "../styles/components/AddInstruction.module.scss";
+import s from "../styles/components/AddTraining.module.scss";
 import { months } from "../data/months";
 import { addTrainingToDB } from "../firebase/training/addTrainingToDB";
 import { useAuth } from "../providers/auth.provider";
@@ -190,7 +190,7 @@ export const AddTraining = ({
   }, [training?.supervisorId]);
 
   return (
-    <form className={s.addInstruction} onSubmit={uploadTraining}>
+    <form className={s.addTraining} onSubmit={uploadTraining}>
       {supervisor && (
         <label className={s.label} htmlFor="apprentice">
           Apprentice
