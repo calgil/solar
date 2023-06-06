@@ -30,6 +30,8 @@ export const AddTraining = ({
   training,
   apprentice,
 }: AddTrainingProps) => {
+  console.log({ training });
+
   const { user } = useAuth();
   const currentMonth = new Date().getMonth();
   const [courses, setCourses] = useState<Course[] | null>(null);
@@ -82,6 +84,7 @@ export const AddTraining = ({
   const handleApprenticeChange = async (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
+    e.stopPropagation();
     if (e.target.value) {
       const newApprentice = apprentices?.find(
         (app) => app.id === e.target.value
@@ -94,6 +97,7 @@ export const AddTraining = ({
   };
 
   const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    e.stopPropagation();
     if (e.target.value) {
       const newCourse = courses?.find((course) => course.id === e.target.value);
       if (newCourse) {
@@ -103,6 +107,7 @@ export const AddTraining = ({
   };
 
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    e.stopPropagation();
     if (e.target.value) {
       setMonth(+e.target.value);
     }
@@ -191,7 +196,7 @@ export const AddTraining = ({
 
   return (
     <form className={s.addTraining} onSubmit={uploadTraining}>
-      {supervisor && (
+      {supervisor && !training && (
         <label className={s.label} htmlFor="apprentice">
           Apprentice
           <select
@@ -270,7 +275,7 @@ export const AddTraining = ({
       />
       {training?.supervisorSignature && (
         <div className={s.approvalInfo}>
-          Approved by {capitalizeName(supervisorData?.name)}
+          Approved by {capitalizeName(supervisorData?.name)}{" "}
           {displayDate(training.dateCompleted)}
         </div>
       )}

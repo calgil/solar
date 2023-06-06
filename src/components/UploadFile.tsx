@@ -5,7 +5,7 @@ import classNames from "classnames/bind";
 import fileSearch from "../assets/fileSearch.png";
 import { generateFileName } from "../utils/generateFileName";
 import { uploadPhoto } from "../firebase/mpr/uploadPhoto";
-import { deleteMprPhoto } from "../firebase/mpr/deleteMprPhoto";
+import { deleteFile } from "../firebase/mpr/deleteMprPhoto";
 
 const cx = classNames.bind(s);
 
@@ -78,7 +78,7 @@ export const UploadFile = ({
 
   const deletePhoto = () => {
     setUploadPhotoUrl(undefined);
-    deleteMprPhoto(fileName);
+    deleteFile(fileName, folder);
   };
 
   const photoClass = cx({

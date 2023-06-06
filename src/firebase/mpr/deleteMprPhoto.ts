@@ -3,8 +3,8 @@ import { toast } from "react-toastify";
 
 const storage = getStorage();
 
-export const deleteMprPhoto = (fileName: string) => {
-  const imgRef = ref(storage, `mprs/${fileName}`);
+export const deleteFile = (fileName: string, folder: string) => {
+  const imgRef = ref(storage, `${folder}/${fileName}`);
 
   deleteObject(imgRef)
     .then(() => {
