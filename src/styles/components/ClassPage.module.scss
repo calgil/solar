@@ -1,0 +1,11 @@
+@use "../abstracts" as a;
+@use "../layouts";
+
+.action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.classes {
+  padding: 10px;
+}

@@ -2,7 +2,7 @@
 @use "../breakpoints" as bp;
 @use "../layouts";
 
-.addInstruction {
+.addTraining {
   font-family: a.$secondaryFont;
 
   .label {
@@ -24,15 +24,30 @@
     gap: 15px;
   }
 
+  .checkbox {
+    @extend .checkbox;
+  }
+
+  .approvalInfo {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
   .submitContainer {
+    margin-top: 40px;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
+
+    .deleteBtn {
+      @extend .deleteBtn;
+    }
 
     .submitBtn {
       @extend .submitBtn;
       width: fit-content;
-      margin-top: 10px;
     }
   }
 }

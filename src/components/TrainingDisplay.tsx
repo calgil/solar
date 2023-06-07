@@ -6,6 +6,7 @@ import { Modal } from "./Modal";
 import { AddTraining } from "./AddTraining";
 import { useAuth } from "../providers/auth.provider";
 import { Training } from "../types/training.type";
+import { Signature } from "./Signature";
 
 type TrainingDisplayProps = {
   training: Training;
@@ -15,30 +16,40 @@ export const TrainingDisplay = ({ training }: TrainingDisplayProps) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const { user } = useAuth();
 
-  const editTraining = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
+  const openModal = () => {
     setIsEditOpen(true);
   };
   return (
-    <div className={s.training}>
+    <div
+      className={s.training}
+      onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+        e.stopPropagation()
+      }
+    >
       <div className={s.left}>
         <p className={s.date}>{displayDate(training.dateCompleted)}</p>
-        <p className={s.name}>{training.courseName}</p>
+        <p className={s.name}>{training.courseCompleted.name}</p>
       </div>
       <div className={s.right}>
-        {user?.role !== "apprentice" && (
-          <button className={s.action} onClick={editTraining}>
-            Edit Training
-          </button>
-        )}
-        {/* <p className={s.hours}>{training.hours} Hours</p> */}
+        <Signature
+          isApproved={training.supervisorSignature}
+          openModal={openModal}
+          apprenticeId={training.apprenticeId}
+          supervisorId={training.supervisorId}
+        />
       </div>
       <Modal
         isOpen={isEditOpen}
         onClose={() => setIsEditOpen(false)}
         title="Edit Training"
       >
-        <AddTraining closeModal={() => setIsEditOpen(false)} />
+        {user && (
+          <AddTraining
+            closeModal={() => setIsEditOpen(false)}
+            supervisor={user?.role !== "apprentice"}
+            training={training}
+          />
+        )}
       </Modal>
     </div>
   );

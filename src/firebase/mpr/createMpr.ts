@@ -1,23 +1,7 @@
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../config";
 import { toast } from "react-toastify";
-
-export type UploadMpr = {
-  id?: string;
-  apprenticeId: string;
-  apprenticeName: string;
-  date: Date;
-  dateApproved: Date | null;
-  photoUrl: string;
-  pvHours: number;
-  otherREHours: number;
-  bosHours: number;
-  otherHours: number;
-  totalHours: number;
-  apprenticeSignature: boolean;
-  supervisorSignature: boolean;
-  supervisorId: string;
-};
+import { UploadMpr } from "../../types/mpr.type";
 
 export const createMpr = async ({
   apprenticeId,

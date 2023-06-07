@@ -5,8 +5,6 @@ export type TrainingData = {
 
 import {
   collection,
-  doc,
-  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
@@ -15,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../config";
 import { Training } from "../../types/training.type";
+import { Class } from "../../types/class.type";
 
 export const fetchApprenticeTrainingData = (
   apprenticeId: string,
@@ -34,18 +33,40 @@ export const fetchApprenticeTrainingData = (
     if (trainings.length === 0) {
       return setApprenticeTrainings(null);
     }
-    const trainingsWithHoursPromises = trainings.map(async (training) => {
-      const classDoc = await getDoc(doc(db, "classes", training.classId));
-      const classData = classDoc.data();
-      const hours = classData ? classData.hours : 0;
 
-      console.log({ training });
+    const approvedTrainings = trainings.filter(
+      (training) => training.supervisorSignature
+    );
 
-      return {
-        ...training,
-        hours,
-      };
-    });
+    const trainingsWithHoursPromises = approvedTrainings.map(
+      async (training) => {
+        const classQuery = query(
+          collection(db, "classes"),
+          where(
+            "classRequirements",
+            "array-contains",
+            training.courseCompleted.id
+          )
+        );
+        const classSnapshot = await getDocs(classQuery);
+        const classes = classSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Class[];
+
+        console.log({ classes });
+
+        const hours = classes.reduce(
+          (totalHours, classData) => totalHours + classData.hours,
+          0
+        );
+
+        return {
+          ...training,
+          hours,
+        };
+      }
+    );
 
     const trainingsWithHours = await Promise.all(trainingsWithHoursPromises);
 

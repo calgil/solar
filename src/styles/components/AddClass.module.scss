@@ -2,23 +2,44 @@
 @use "../layouts";
 @use "../breakpoints" as bp;
 
-.label {
-  display: block;
-  font-family: a.$secondaryFont;
-  margin-top: 15px;
-  margin-bottom: 5px;
-}
+.addClass {
+  max-height: 400px;
+  overflow-y: auto;
 
-.input {
-  display: block;
-  @extend .input;
-}
+  .label {
+    display: block;
+    font-family: a.$secondaryFont;
+    margin-top: 15px;
+    margin-bottom: 5px;
+  }
 
-.hourInput {
-  max-width: 100px;
-}
+  .optionSelect {
+    max-width: 400px;
+    max-height: 200px;
+    margin-bottom: 30px;
 
-.submitBtn {
-  margin-top: 20px;
-  @extend .submitBtn;
+    // .react-multi-select-component {
+    //   .dropdown-container {
+    //     margin-bottom: 100px;
+    //     .dropdown-content {
+    //       max-height: 400px;
+    //       overflow-y: auto;
+    //     }
+    //   }
+    // }
+  }
+
+  .input {
+    display: block;
+    @extend .input;
+  }
+
+  .hourInput {
+    max-width: 100px;
+  }
+
+  .submitBtn {
+    margin-top: 20px;
+    @extend .submitBtn;
+  }
 }
