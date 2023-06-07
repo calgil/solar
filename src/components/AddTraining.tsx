@@ -16,7 +16,8 @@ import { capitalizeName } from "../utils/capitalizeName";
 import { UploadFile } from "./UploadFile";
 import { updateTraining } from "../firebase/training/updateTraining";
 import classNames from "classnames/bind";
-import { deleteTraining } from "../firebase/training/deleteTraining";
+import { deleteRecord } from "../firebase/training/deleteRecord";
+import { deleteFile } from "../firebase/mpr/deleteFile";
 
 const cx = classNames.bind(s);
 
@@ -61,6 +62,7 @@ export const AddTraining = ({
   const [photoUrl, setPhotoUrl] = useState<string | null>(
     training?.photoUrl || null
   );
+  const [photoPath, setPhotoPath] = useState("");
 
   const getUncompletedCourses = async (apprenticeId: string) => {
     const coursesCompleted = await getApprenticeCourses(apprenticeId);
@@ -115,7 +117,14 @@ export const AddTraining = ({
     }
   };
 
-  const handlePhotoChange = (url: string | null) => setPhotoUrl(url);
+  const handlePhotoChange = (
+    url: string | null,
+    folder: string,
+    fileName: string
+  ) => {
+    setPhotoUrl(url);
+    setPhotoPath(`${folder}/${fileName}`);
+  };
 
   const handleDeleteTraining = () => {
     window.confirm(
@@ -124,7 +133,8 @@ export const AddTraining = ({
     if (!training) {
       return;
     }
-    deleteTraining(training.id);
+    deleteRecord("trainings", training.id);
+    deleteFile(training.photoPath);
   };
 
   const uploadTraining = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -149,9 +159,11 @@ export const AddTraining = ({
     if (training) {
       const updatedTraining: UploadTraining = {
         apprenticeId: training.apprenticeId,
+        apprenticeName: training.apprenticeName,
         courseCompleted: selectedCourse,
         dateCompleted: new Date(year, month - 1),
         photoUrl: photoUrl,
+        photoPath,
         dateApproved: new Date(),
         supervisorSignature: supervisorSignature,
         supervisorId: training.supervisorId,
@@ -173,9 +185,11 @@ export const AddTraining = ({
       }
       const newTraining: UploadTraining = {
         apprenticeId: selectedApprentice.id,
+        apprenticeName: selectedApprentice.name,
         courseCompleted: selectedCourse,
         dateCompleted: new Date(year, month - 1),
         photoUrl: photoUrl,
+        photoPath,
         dateApproved: null,
         supervisorSignature: supervisorSignature,
         supervisorId: selectedApprentice.supervisorId,
@@ -200,9 +214,11 @@ export const AddTraining = ({
 
     const newTraining: UploadTraining = {
       apprenticeId: user.id,
+      apprenticeName: user.name,
       courseCompleted: selectedCourse,
       dateCompleted: new Date(year, month - 1),
       photoUrl: photoUrl,
+      photoPath,
       dateApproved: null,
       supervisorSignature: false,
       supervisorId: user.supervisorId,
@@ -231,6 +247,8 @@ export const AddTraining = ({
   }, []);
 
   useEffect(() => {
+    console.log({ apprentice });
+
     if (apprentice) {
       getUncompletedCourses(apprentice.id);
     }
@@ -325,21 +343,23 @@ export const AddTraining = ({
       <UploadFile
         isSubmitted={isSubmitted}
         photoUrl={training?.photoUrl}
-        apprenticeName={supervisor ? selectedApprentice?.name : user?.name}
+        photoPath={training?.photoPath}
+        apprenticeName={training?.apprenticeName || selectedApprentice?.name}
         month={month}
         year={year}
         onPhotoChange={handlePhotoChange}
         folder="trainings"
+        showDelete={!training?.supervisorSignature}
       />
-      {!supervisor && (
+      {!supervisor && !training?.supervisorSignature && (
         <label className={signatureClass}>
           <input
             type="checkbox"
             onChange={() => setApprenticeSignature(!apprenticeSignature)}
           />
           <span>
-            I hereby certify, to the best of my knowledge, that the hours
-            submitted are accurate and complete
+            I hereby certify, to the best of my knowledge, that the training
+            submitted is accurate and complete
           </span>
         </label>
       )}
@@ -369,11 +389,14 @@ export const AddTraining = ({
           </div>
         )}
         {!training?.supervisorSignature && (
-          <input
-            className={s.submitBtn}
-            type="submit"
-            value="Add Instruction"
-          />
+          <>
+            <div></div>
+            <input
+              className={s.submitBtn}
+              type="submit"
+              value="Add Instruction"
+            />
+          </>
         )}
       </div>
     </form>

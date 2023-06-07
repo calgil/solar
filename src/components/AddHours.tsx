@@ -12,6 +12,8 @@ import { UploadFile } from "./UploadFile";
 import { getUserById } from "../fetch/auth/getUserById";
 import { displayDate } from "../utils/displayDate";
 import { capitalizeName } from "../utils/capitalizeName";
+import { deleteRecord } from "../firebase/training/deleteRecord";
+import { deleteFile } from "../firebase/mpr/deleteFile";
 
 const cx = classNames.bind(s);
 
@@ -49,14 +51,13 @@ export const AddHours = ({
     (acc, val) => acc + val,
     0
   );
-
   const [apprenticeSignature, setApprenticeSignature] = useState(
     mpr?.apprenticeSignature || false
   );
-
   const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | null>(
     mpr?.photoUrl || null
   );
+  const [photoPath, setPhotoPath] = useState("");
 
   const [selectedApprentice, setSelectedApprentice] = useState<User | null>(
     null
@@ -133,7 +134,25 @@ export const AddHours = ({
     }
   };
 
-  const handlePhotoChange = (url: string | null) => setUploadPhotoUrl(url);
+  const handlePhotoChange = (
+    url: string | null,
+    folder: string,
+    fileName: string
+  ) => {
+    setUploadPhotoUrl(url);
+    setPhotoPath(`${folder}/${fileName}`);
+  };
+
+  const handleDeleteMpr = () => {
+    window.confirm(
+      "Are you sure you want to delete the MPR? This action is irreversible"
+    );
+    if (!mpr) {
+      return;
+    }
+    deleteRecord("mprs", mpr.id);
+    deleteFile(mpr.photoPath);
+  };
 
   const uploadMPR = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -172,6 +191,7 @@ export const AddHours = ({
         date,
         dateApproved: new Date(),
         photoUrl: uploadPhotoUrl,
+        photoPath,
         pvHours: pvHours,
         otherREHours,
         bosHours,
@@ -191,6 +211,7 @@ export const AddHours = ({
         date,
         dateApproved: new Date(),
         photoUrl: uploadPhotoUrl,
+        photoPath,
         pvHours: pvHours,
         otherREHours,
         bosHours,
@@ -213,6 +234,7 @@ export const AddHours = ({
       date,
       dateApproved: null,
       photoUrl: uploadPhotoUrl,
+      photoPath,
       pvHours: pvHours,
       otherREHours: otherREHours,
       bosHours,
@@ -336,6 +358,7 @@ export const AddHours = ({
           <UploadFile
             isSubmitted={isSubmitted}
             photoUrl={mpr?.photoUrl}
+            photoPath={mpr?.photoPath}
             apprenticeName={supervisor ? selectedApprentice?.name : user?.name}
             month={month}
             year={year}
@@ -394,11 +417,16 @@ export const AddHours = ({
           {displayDate(mpr.dateApproved)}
         </div>
       )}
-      {!mpr?.supervisorSignature && (
-        <div className={s.submitContainer}>
+      <div className={s.submitContainer}>
+        {user?.role === "admin" && (
+          <div className={s.deleteBtn} onClick={handleDeleteMpr}>
+            Delete
+          </div>
+        )}
+        {!mpr?.supervisorSignature && (
           <input className={s.submitBtn} type="submit" value="Upload" />
-        </div>
-      )}
+        )}
+      </div>
     </form>
   );
 };

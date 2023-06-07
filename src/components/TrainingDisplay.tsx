@@ -43,11 +43,13 @@ export const TrainingDisplay = ({ training }: TrainingDisplayProps) => {
         onClose={() => setIsEditOpen(false)}
         title="Edit Training"
       >
-        <AddTraining
-          closeModal={() => setIsEditOpen(false)}
-          supervisor={user?.role !== "apprentice"}
-          training={training}
-        />
+        {user && (
+          <AddTraining
+            closeModal={() => setIsEditOpen(false)}
+            supervisor={user?.role !== "apprentice"}
+            training={training}
+          />
+        )}
       </Modal>
     </div>
   );

@@ -8,6 +8,7 @@ export type UploadMpr = {
   date: Date;
   dateApproved: Date | null;
   photoUrl: string;
+  photoPath: string;
   pvHours: number;
   otherREHours: number;
   bosHours: number;
@@ -25,6 +26,7 @@ export type MprType = {
   date: firebase.firestore.Timestamp;
   dateApproved: firebase.firestore.Timestamp;
   photoUrl: string;
+  photoPath: string;
   pvHours: number;
   otherREHours: number;
   bosHours: number;
