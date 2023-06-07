@@ -37,8 +37,8 @@ export const Signature = ({
       return openModal();
     }
 
-    if (user?.id !== supervisorId) {
-      return;
+    if (user?.id === supervisorId) {
+      return openModal();
     }
   };
   return (
