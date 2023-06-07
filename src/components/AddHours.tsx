@@ -424,7 +424,10 @@ export const AddHours = ({
           </div>
         )}
         {!mpr?.supervisorSignature && (
-          <input className={s.submitBtn} type="submit" value="Upload" />
+          <>
+            <div></div>
+            <input className={s.submitBtn} type="submit" value="Upload" />
+          </>
         )}
       </div>
     </form>

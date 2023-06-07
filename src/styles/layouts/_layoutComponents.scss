@@ -22,6 +22,8 @@
 .submitBtn {
   background-color: a.$success;
   color: a.$whiteText;
+  font-size: 0.85rem;
+  font-family: a.$secondaryFont;
   border: 1px solid a.$solarMain;
   border-radius: 8px;
   padding: 10px;
@@ -39,7 +41,7 @@
 .deleteBtn {
   @extend .submitBtn;
   background-color: a.$alert;
-  width: auto;
+  text-align: center;
 }
 
 .customLink {

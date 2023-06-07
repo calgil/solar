@@ -36,14 +36,13 @@
   }
 
   .submitContainer {
-    margin-top: 20px;
+    margin-top: 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     .deleteBtn {
       @extend .deleteBtn;
-      padding: 5px 10px;
     }
 
     .submitBtn {
