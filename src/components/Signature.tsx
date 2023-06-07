@@ -40,7 +40,6 @@ export const Signature = ({
     if (user?.id !== supervisorId) {
       return;
     }
-    return openModal();
   };
   return (
     <div className={s.signature} onClick={handleApproval}>

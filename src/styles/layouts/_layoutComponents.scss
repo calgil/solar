@@ -36,6 +36,12 @@
   }
 }
 
+.deleteBtn {
+  @extend .submitBtn;
+  background-color: a.$alert;
+  width: auto;
+}
+
 .customLink {
   font-family: a.$secondaryFont;
   font-size: 0.875rem;

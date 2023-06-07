@@ -48,6 +48,8 @@ export const ApprenticeDashboard = ({
 
   const closeModal = () => setIsAddHoursOpen(false);
 
+  const closeTrainingModal = () => setIsTrainingOpen(false);
+
   const openHoursModal = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -160,14 +162,16 @@ export const ApprenticeDashboard = ({
                 </button>
                 <Modal
                   isOpen={isTrainingOpen}
-                  onClose={() => setIsTrainingOpen(false)}
+                  onClose={closeTrainingModal}
                   title="Add Related Training"
                 >
-                  <AddTraining
-                    closeModal={() => setIsTrainingOpen(false)}
-                    supervisor={false}
-                    apprentice={user}
-                  />
+                  {user && (
+                    <AddTraining
+                      closeModal={closeTrainingModal}
+                      supervisor={false}
+                      apprentice={user}
+                    />
+                  )}
                 </Modal>
               </>
             )}

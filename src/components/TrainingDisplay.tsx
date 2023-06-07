@@ -20,7 +20,12 @@ export const TrainingDisplay = ({ training }: TrainingDisplayProps) => {
     setIsEditOpen(true);
   };
   return (
-    <div className={s.training}>
+    <div
+      className={s.training}
+      onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+        e.stopPropagation()
+      }
+    >
       <div className={s.left}>
         <p className={s.date}>{displayDate(training.dateCompleted)}</p>
         <p className={s.name}>{training.courseCompleted.name}</p>
