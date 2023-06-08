@@ -70,10 +70,6 @@
       padding: 0 42px;
       padding-bottom: 20px;
     }
-
-    @include bp.media("md") {
-      overflow-y: scroll;
-    }
   }
 }
 .modalOverlay.filter {
