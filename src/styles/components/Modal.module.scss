@@ -17,6 +17,10 @@
     background-color: #fff;
     min-width: 500px;
 
+    @include bp.media("sm") {
+      min-width: none;
+    }
+
     .modalHeader {
       display: flex;
       align-items: center;
@@ -64,7 +68,7 @@
     }
 
     @include bp.media("md") {
-      height: 100vh;
+      // height: 100vh;
       overflow-y: scroll;
     }
   }

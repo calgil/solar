@@ -130,9 +130,7 @@ export const AddHours = ({
     }
   };
 
-
   const handlePhotoChange = (url: string | null) => setUploadPhotoUrl(url);
-
 
   const uploadMPR = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -364,21 +362,22 @@ export const AddHours = ({
               <span>Apprentice has signed</span>
             </label>
           )}
+          {supervisor && !mpr?.supervisorSignature && (
+            <label className={supervisorSignatureClass}>
+              <input
+                type="checkbox"
+                onChange={() => setSupervisorSignature(!supervisorSignature)}
+              />
+              <span className={s.supervisorApproval}>
+                I signed this MPR because it is correct best of my knowledge as
+                a member Training Agent of the LRT Apprenticeship Program
+                administered by the RE-JATC
+              </span>
+            </label>
+          )}
         </div>
       </div>
-      {supervisor && !mpr?.supervisorSignature && (
-        <label className={supervisorSignatureClass}>
-          <input
-            type="checkbox"
-            onChange={() => setSupervisorSignature(!supervisorSignature)}
-          />
-          <span className={s.supervisorApproval}>
-            I signed this MPR because it is correct best of my knowledge as a
-            member Training Agent of the LRT Apprenticeship Program administered
-            by the RE-JATC
-          </span>
-        </label>
-      )}
+
       {mpr?.supervisorSignature && (
         <div className={s.approvalInfo}>
           Approved by {supervisorData?.name} {displayDate(mpr.dateApproved)}
