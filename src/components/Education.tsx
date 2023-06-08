@@ -2,7 +2,7 @@
 import { useState } from "react";
 import s from "../styles/components/Education.module.scss";
 import { CoursePage } from "./CoursePage";
-import { RequirementsPage } from "./RequirementsPage";
+import { ClassPage } from "./ClassPage";
 import classNames from "classnames/bind";
 const cx = classNames.bind(s);
 
@@ -40,7 +40,7 @@ export const Education = () => {
       </div>
 
       <div className={s.page}>
-        {activePage === "requirements" && <RequirementsPage />}
+        {activePage === "requirements" && <ClassPage />}
         {activePage === "courses" && <CoursePage />}
       </div>
     </div>

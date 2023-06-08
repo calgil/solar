@@ -22,6 +22,8 @@
 .submitBtn {
   background-color: a.$success;
   color: a.$whiteText;
+  font-size: 0.85rem;
+  font-family: a.$secondaryFont;
   border: 1px solid a.$solarMain;
   border-radius: 8px;
   padding: 10px;
@@ -36,9 +38,15 @@
   }
 }
 
+.deleteBtn {
+  @extend .submitBtn;
+  background-color: a.$alert;
+  text-align: center;
+}
+
 .customLink {
   font-family: a.$secondaryFont;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 19px;
   color: a.$solarMain;
   cursor: pointer;
@@ -52,6 +60,7 @@
   display: flex;
   display: block;
   align-items: center;
+  display: block;
   cursor: pointer;
   position: relative;
   margin-top: 16px;
@@ -59,6 +68,7 @@
   font-size: 15px;
   font-weight: 400;
   line-height: 18px;
+  max-width: 450px;
 
   > span {
     padding: 0.5rem 0.25rem;

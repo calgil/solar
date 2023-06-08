@@ -21,6 +21,7 @@ import {
 } from "../../firebase/courses/fetchApprenticeTrainingData";
 import { TrainingOverview } from "../TrainingOverview";
 import { TrainingDetails } from "../TrainingDetails";
+import { AddTraining } from "../AddTraining";
 
 type ApprenticeDashboardProps = {
   apprenticeId: string;
@@ -32,7 +33,8 @@ export const ApprenticeDashboard = ({
   edit,
 }: ApprenticeDashboardProps) => {
   const { user } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddHoursOpen, setIsAddHoursOpen] = useState(false);
+  const [isTrainingOpen, setIsTrainingOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [apprentice, setApprentice] = useState<User | null>(null);
   const [apprenticeData, setApprenticeData] = useState<ApprenticeData | null>(
@@ -44,11 +46,15 @@ export const ApprenticeDashboard = ({
 
   const { supervisors } = useUsers();
 
-  const closeModal = () => setIsModalOpen(false);
+  const closeModal = () => setIsAddHoursOpen(false);
 
-  const openModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const closeTrainingModal = () => setIsTrainingOpen(false);
+
+  const openHoursModal = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.stopPropagation();
-    setIsModalOpen(true);
+    setIsAddHoursOpen(true);
   };
 
   const closeEditModal = () => setIsEditModalOpen(false);
@@ -82,15 +88,13 @@ export const ApprenticeDashboard = ({
   }, [apprenticeId]);
 
   useEffect(() => {
-    console.log("get apprentice training data");
-
-    // if (apprenticeId) {
-    //   const unsubscribe = fetchApprenticeTrainingData(
-    //     apprenticeId,
-    //     setApprenticeTrainingData
-    //   );
-    //   return () => unsubscribe();
-    // }
+    if (apprenticeId) {
+      const unsubscribe = fetchApprenticeTrainingData(
+        apprenticeId,
+        setApprenticeTrainingData
+      );
+      return () => unsubscribe();
+    }
   }, [apprenticeId]);
 
   useEffect(() => {
@@ -134,7 +138,6 @@ export const ApprenticeDashboard = ({
                   totalHours={apprenticeTrainingData.totalHours}
                 />
               )}
-              {/* <div>Test</div> */}
             </div>
           </div>
           <div className={s.action}>
@@ -142,7 +145,35 @@ export const ApprenticeDashboard = ({
               <AddBtn text="Edit Status" onClick={openEditModal} />
             )}
             {user?.role === "apprentice" && (
-              <AddBtn text="Add Hours" onClick={openModal} />
+              <>
+                <AddBtn text="Add Hours" onClick={openHoursModal} />
+                <Modal
+                  isOpen={isAddHoursOpen}
+                  onClose={closeModal}
+                  title="Add Hours"
+                >
+                  {user && <AddHours user={user} closeModal={closeModal} />}
+                </Modal>
+                <button
+                  className={s.trainingBtn}
+                  onClick={() => setIsTrainingOpen(true)}
+                >
+                  Add Training
+                </button>
+                <Modal
+                  isOpen={isTrainingOpen}
+                  onClose={closeTrainingModal}
+                  title="Add Related Training"
+                >
+                  {user && (
+                    <AddTraining
+                      closeModal={closeTrainingModal}
+                      supervisor={false}
+                      apprentice={user}
+                    />
+                  )}
+                </Modal>
+              </>
             )}
           </div>
           <div className={s.details}>
@@ -172,9 +203,6 @@ export const ApprenticeDashboard = ({
             title={`Edit ${apprentice.name}'s Profile`}
           >
             <AddUser closeModal={closeEditModal} userToEdit={apprentice} />
-          </Modal>
-          <Modal isOpen={isModalOpen} onClose={closeModal} title="Add Hours">
-            {user && <AddHours user={user} closeModal={closeModal} />}
           </Modal>
         </>
       )}

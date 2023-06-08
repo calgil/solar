@@ -29,9 +29,9 @@ export const CourseCard = ({ course }: CourseCardProps) => {
         {info && <div className={s.info}>{info} </div>}
       </div>
 
-      <button className={s.editBtn} onClick={() => setIsEditOpen(true)}>
+      <a className={s.editBtn} onClick={() => setIsEditOpen(true)}>
         {"\u270E"} Edit
-      </button>
+      </a>
       <Modal
         isOpen={isEditOpen}
         onClose={() => setIsEditOpen(false)}
