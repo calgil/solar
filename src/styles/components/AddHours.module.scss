@@ -110,6 +110,9 @@
 
 .checkbox {
   @extend .checkbox;
+  @include bp.media("md") {
+    margin-top: 15px;
+  }
 }
 .checkbox.invalid {
   color: a.$alert;
