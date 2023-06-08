@@ -17,6 +17,12 @@
     background-color: #fff;
     min-width: 500px;
 
+    @include bp.media("md") {
+      min-width: auto;
+      height: 100vh;
+      overflow-y: scroll;
+    }
+
     .modalHeader {
       display: flex;
       align-items: center;
@@ -61,11 +67,6 @@
     .modalBody {
       padding: 0 42px;
       padding-bottom: 20px;
-    }
-
-    @include bp.media("md") {
-      height: 100vh;
-      overflow-y: scroll;
     }
   }
 }
