@@ -26,14 +26,16 @@
 
     .link {
       @extend .customLink;
+      font-size: 0.9rem;
+      transition: all 100ms ease-in-out;
+      font-weight: 900;
+      color: a.$primaryText;
+      padding: 0 5px;
 
       &.active {
         border-bottom: 1px solid a.$yellow;
+        transform: scale(1.05);
       }
-    }
-
-    .addTraining {
-      @extend .filterBtn;
     }
   }
 }

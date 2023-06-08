@@ -11,10 +11,15 @@ import { useAuth } from "../providers/auth.provider";
 import { StaffFilter } from "./StaffFilter";
 import { useUserData } from "../hooks/useUserData";
 import { UserRole, UserStatus } from "../types/user.type";
+import { AddBtn } from "./AddBtn";
+import { AddUser } from "./AddUser";
+import { AddTraining } from "./AddTraining";
 
 export const DisplayStaff = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [isHoursOpen, setIsHoursOpen] = useState(false);
+  const [isUserOpen, setIsUserOpen] = useState(false);
+  const [isTrainingOpen, setIsTrainingOpen] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [role, setRole] = useState<UserRole>("apprentice");
@@ -67,45 +72,73 @@ export const DisplayStaff = () => {
 
   return (
     <div className={s.staff}>
-      <div className={s.adminActions}>
-        <button
-          onClick={() => setIsFilterModalOpen(true)}
-          className={s.filterBtn}
-        >
-          <div className={s.filterImg}>
-            <img src={filter} alt="filter" />
-          </div>
-          Filters
-        </button>
-        <ApprenticeSearch
-          onSelect={handleSearch}
-          onInputChange={handleNameChange}
-          inputValue={searchQuery}
-          clearSearch={handleClearSearch}
-        />
-        <button className={s.addHours} onClick={() => setIsModalOpen(true)}>
-          Add Hours
-        </button>
+      <div>
+        <div className={s.adminActions}>
+          <button
+            onClick={() => setIsFilterModalOpen(true)}
+            className={s.filterBtn}
+          >
+            <div className={s.filterImg}>
+              <img src={filter} alt="filter" />
+            </div>
+            Filters
+          </button>
+          <ApprenticeSearch
+            onSelect={handleSearch}
+            onInputChange={handleNameChange}
+            inputValue={searchQuery}
+            clearSearch={handleClearSearch}
+          />
+        </div>
+        <div className={s.staffActions}>
+          <AddBtn text="Add Hours" onClick={() => setIsHoursOpen(true)} />
+          <Modal
+            isOpen={isHoursOpen}
+            onClose={() => setIsHoursOpen(false)}
+            title="Add Hours"
+          >
+            {user && (
+              <AddHours
+                user={user}
+                closeModal={() => setIsHoursOpen(false)}
+                supervisor={true}
+                apprentices={apprentices}
+              />
+            )}
+          </Modal>
+          <button
+            className={s.trainingBtn}
+            onClick={() => setIsTrainingOpen(true)}
+          >
+            Add Related Training
+          </button>
+          <Modal
+            isOpen={isTrainingOpen}
+            onClose={() => setIsTrainingOpen(false)}
+            title="Add Related Training"
+          >
+            <AddTraining
+              closeModal={() => setIsTrainingOpen(false)}
+              supervisor
+              apprentices={apprentices.filter((app) => app.status === "active")}
+            />
+          </Modal>
+          <AddBtn text="Add User" onClick={() => setIsUserOpen(true)} />
+          <Modal
+            isOpen={isUserOpen}
+            onClose={() => setIsUserOpen(false)}
+            title="Add User"
+          >
+            <AddUser closeModal={() => setIsUserOpen(false)} />
+          </Modal>
+        </div>
       </div>
       <div className={s.staffContainer}>
         {staffData.map((staff) => (
           <StaffMember key={staff.id} user={staff} />
         ))}
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Add Hours"
-      >
-        {user && (
-          <AddHours
-            user={user}
-            closeModal={() => setIsModalOpen(false)}
-            supervisor="admin"
-            apprentices={apprentices}
-          />
-        )}
-      </Modal>
+
       <Modal
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}

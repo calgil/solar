@@ -2,11 +2,9 @@
 @use "../layouts";
 
 .links {
+  margin-top: 50px;
   margin-bottom: 20px;
-
   .link {
-    margin-top: 20px;
-    margin-bottom: 20px;
     margin-right: 20px;
     @extend .customLink;
 
