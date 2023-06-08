@@ -17,8 +17,10 @@
     background-color: #fff;
     min-width: 500px;
 
-    @include bp.media("sm") {
-      min-width: none;
+    @include bp.media("md") {
+      min-width: auto;
+      height: 100vh;
+      overflow-y: scroll;
     }
 
     .modalHeader {
@@ -68,7 +70,6 @@
     }
 
     @include bp.media("md") {
-      // height: 100vh;
       overflow-y: scroll;
     }
   }
