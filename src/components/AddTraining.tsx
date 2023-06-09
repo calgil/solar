@@ -122,8 +122,6 @@ export const AddTraining = ({
     folder: string,
     fileName: string
   ) => {
-    console.log("change Photo", { url });
-
     setPhotoUrl(url);
     setPhotoPath(`${folder}/${fileName}`);
   };
