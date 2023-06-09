@@ -32,12 +32,7 @@ export const AuthForm = ({
           <div className={s.titleImg}>
             <img src={titleBg} alt="sun" />
           </div>
-          <h2
-            className={s.title}
-            // style={{ backgroundImage: `url(${titleBg})` }}
-          >
-            {title}
-          </h2>
+          <h2 className={s.title}>{title}</h2>
         </div>
         {inputData.map((input) => (
           <InputBase key={input.id} input={input} />
