@@ -47,6 +47,8 @@
     padding: 20px;
     margin-bottom: 10px;
     border-radius: 4px;
+    display: flex;
+    align-items: center;
 
     @include bp.media("sm") {
       padding: 10px;
@@ -68,8 +70,6 @@
     .title {
       font-size: 2rem;
       font-weight: 400;
-      background-repeat: no-repeat;
-      background-position: left center;
       display: flex;
       align-items: center;
       font-family: a.$logoFont;
