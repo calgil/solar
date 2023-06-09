@@ -414,7 +414,7 @@ export const AddHours = ({
       </div>
 
       <div className={s.submitContainer}>
-        {user?.role === "admin" && (
+        {user?.role === "admin" && mpr && (
           <div className={s.deleteBtn} onClick={handleDeleteMpr}>
             Delete
           </div>
