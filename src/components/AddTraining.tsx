@@ -377,7 +377,7 @@ export const AddTraining = ({
         </div>
       )}
       <div className={s.submitContainer}>
-        {user?.role === "admin" && (
+        {user?.role === "admin" && training && (
           <div className={s.deleteBtn} onClick={handleDeleteTraining}>
             Delete
           </div>
