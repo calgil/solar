@@ -3,6 +3,7 @@
 @use "../layouts";
 
 .courseCard {
+  font-family: a.$secondaryFont;
   padding: 10px 0;
   display: flex;
   justify-content: space-between;
