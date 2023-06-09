@@ -19,7 +19,8 @@
     min-width: 500px;
 
     @include bp.media("md") {
-      height: fit-content;
+      min-width: 100%;
+      width: auto;
       overflow-y: scroll;
       border-radius: 8px;
       width: 100%;
