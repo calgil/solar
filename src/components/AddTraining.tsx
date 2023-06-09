@@ -66,7 +66,6 @@ export const AddTraining = ({
 
   const getUncompletedCourses = async (apprenticeId: string) => {
     const coursesCompleted = await getApprenticeCourses(apprenticeId);
-    console.log({ coursesCompleted });
 
     if (!coursesCompleted) {
       return;
@@ -83,8 +82,6 @@ export const AddTraining = ({
     );
 
     if (validCourses) {
-      console.log({ validCourses });
-
       setCourses(validCourses);
     }
   };
@@ -142,17 +139,14 @@ export const AddTraining = ({
     e.stopPropagation();
     setIsSubmitted(true);
     if (!user) {
-      console.log("no user");
       return;
     }
 
     if (!selectedCourse || !photoUrl) {
-      console.log("no course");
       return;
     }
 
     if (!month || !year) {
-      console.log("no date");
       return;
     }
 
@@ -211,8 +205,6 @@ export const AddTraining = ({
     }
 
     if (!user.supervisorId) {
-      console.log("no supervisor");
-
       return;
     }
 
@@ -251,8 +243,6 @@ export const AddTraining = ({
   }, []);
 
   useEffect(() => {
-    console.log({ apprentice });
-
     if (apprentice) {
       getUncompletedCourses(apprentice.id);
     }

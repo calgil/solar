@@ -8,8 +8,6 @@ export const deleteFile = (filePath: string | undefined) => {
     return;
   }
   const imgRef = ref(storage, filePath);
-  console.log({ filePath });
-
   deleteObject(imgRef)
     .then(() => {
       toast.success("Photo Deleted");

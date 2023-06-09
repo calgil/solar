@@ -3,7 +3,6 @@ import { db } from "../config";
 import { NewClass } from "../../types/class.type";
 
 export const addClass = async (newClass: NewClass) => {
-  console.log({ newClass });
   if (!newClass) {
     return;
   }

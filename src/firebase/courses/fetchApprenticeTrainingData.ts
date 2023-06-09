@@ -54,8 +54,6 @@ export const fetchApprenticeTrainingData = (
           ...doc.data(),
         })) as Class[];
 
-        console.log({ classes });
-
         const hours = classes.reduce(
           (totalHours, classData) => totalHours + classData.hours,
           0
