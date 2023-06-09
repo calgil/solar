@@ -1,10 +1,10 @@
+/* eslint-disable react/react-in-jsx-scope */
 import s from "../styles/components/AuthForm.module.scss";
 import { Link } from "react-router-dom";
 import { InputType } from "../types/input.type";
 import { InputBase } from "./InputBase";
 import titleBg from "../assets/REJATC-1.png";
 
-/* eslint-disable react/react-in-jsx-scope */
 type AuthFormProps = {
   inputData: InputType[];
   title: string;
