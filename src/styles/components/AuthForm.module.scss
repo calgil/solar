@@ -44,6 +44,10 @@
     margin-bottom: 10px;
     border-radius: 4px;
 
+    @include bp.media("sm") {
+      padding: 10px;
+    }
+
     .portal {
       font-weight: 400;
       margin-bottom: 10px;
