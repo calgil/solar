@@ -122,6 +122,8 @@ export const AddTraining = ({
     folder: string,
     fileName: string
   ) => {
+    console.log("change Photo", { url });
+
     setPhotoUrl(url);
     setPhotoPath(`${folder}/${fileName}`);
   };
@@ -153,6 +155,10 @@ export const AddTraining = ({
 
     if (!month || !year) {
       console.log("no date");
+      return;
+    }
+
+    if (!photoUrl) {
       return;
     }
 
