@@ -9,16 +9,15 @@
   filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.25));
 
   .inputContainer {
-    display: block;
     position: relative;
     width: 100%;
-    min-height: 300px;
+    padding: 10px 0;
     display: flex;
     align-items: center;
     justify-content: center;
 
     .filePreview {
-      max-width: 300px;
+      max-width: 200px;
 
       img {
         width: 100%;
@@ -48,7 +47,7 @@
 
   @include bp.media("md") {
     .inputContainer {
-      min-height: 100px;
+      max-height: 100px;
 
       .filePreview {
         max-width: 100px;
@@ -74,6 +73,10 @@
 .deleteContainer {
   padding-top: 10px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 
   .deleteBtn {
     @extend .customLink;
@@ -84,8 +87,6 @@
     @extend .customLink;
     display: block;
     text-decoration: none;
-    width: fit-content;
-    margin: 0 auto;
     margin-top: 10px;
   }
 }

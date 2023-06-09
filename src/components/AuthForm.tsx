@@ -1,10 +1,10 @@
+/* eslint-disable react/react-in-jsx-scope */
 import s from "../styles/components/AuthForm.module.scss";
 import { Link } from "react-router-dom";
 import { InputType } from "../types/input.type";
 import { InputBase } from "./InputBase";
 import titleBg from "../assets/REJATC-1.png";
 
-/* eslint-disable react/react-in-jsx-scope */
 type AuthFormProps = {
   inputData: InputType[];
   title: string;
@@ -29,12 +29,10 @@ export const AuthForm = ({
       <form className={s.form} onSubmit={onSubmit}>
         <h2 className={s.portal}>LRT Apprenticeship Program Portal</h2>
         <div className={s.titleBg}>
-          <h2
-            className={s.title}
-            style={{ backgroundImage: `url(${titleBg})` }}
-          >
-            {title}
-          </h2>
+          <div className={s.titleImg}>
+            <img src={titleBg} alt="sun" />
+          </div>
+          <h2 className={s.title}>{title}</h2>
         </div>
         {inputData.map((input) => (
           <InputBase key={input.id} input={input} />
