@@ -65,12 +65,10 @@ export const AddCourse = ({
     }
 
     const newCourse: NewCourse = {
-      // classId,
       name: courseName,
       link: courseLink,
       info: courseInfo,
     };
-    console.log({ newCourse });
 
     try {
       await addCourse(newCourse);

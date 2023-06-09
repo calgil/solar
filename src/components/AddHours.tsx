@@ -32,8 +32,6 @@ export const AddHours = ({
   apprentices,
   mpr,
 }: AddHoursProps) => {
-  console.log("render");
-
   const currentMonth = new Date().getMonth() + 1;
   const [month, setMonth] = useState(
     mpr ? mpr.date.toDate().getMonth() + 1 : currentMonth - 1
@@ -164,13 +162,9 @@ export const AddHours = ({
     }
 
     if (!supervisor && !apprenticeSignature) {
-      console.log("no apprentice signature");
-
       return;
     }
     if (supervisor && !supervisorSignature) {
-      console.log("no supervisor signature");
-
       return;
     }
 
