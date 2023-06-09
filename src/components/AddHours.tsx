@@ -11,13 +11,16 @@ import { updateMpr } from "../firebase/mpr/updateMpr";
 import { UploadFile } from "./UploadFile";
 import { getUserById } from "../fetch/auth/getUserById";
 import { displayDate } from "../utils/displayDate";
+import { capitalizeName } from "../utils/capitalizeName";
+import { deleteRecord } from "../firebase/training/deleteRecord";
+import { deleteFile } from "../firebase/mpr/deleteFile";
 
 const cx = classNames.bind(s);
 
 type AddHoursProps = {
   user: User;
   closeModal: () => void;
-  supervisor?: "supervisor" | "admin";
+  supervisor?: boolean;
   apprentices?: User[];
   mpr?: MprType;
 };
@@ -46,14 +49,13 @@ export const AddHours = ({
     (acc, val) => acc + val,
     0
   );
-
   const [apprenticeSignature, setApprenticeSignature] = useState(
     mpr?.apprenticeSignature || false
   );
-
   const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | null>(
     mpr?.photoUrl || null
   );
+  const [photoPath, setPhotoPath] = useState("");
 
   const [selectedApprentice, setSelectedApprentice] = useState<User | null>(
     null
@@ -130,9 +132,25 @@ export const AddHours = ({
     }
   };
 
+  const handlePhotoChange = (
+    url: string | null,
+    folder: string,
+    fileName: string
+  ) => {
+    setUploadPhotoUrl(url);
+    setPhotoPath(`${folder}/${fileName}`);
+  };
 
-  const handlePhotoChange = (url: string | null) => setUploadPhotoUrl(url);
-
+  const handleDeleteMpr = () => {
+    window.confirm(
+      "Are you sure you want to delete the MPR? This action is irreversible"
+    );
+    if (!mpr) {
+      return;
+    }
+    deleteRecord("mprs", mpr.id);
+    deleteFile(mpr.photoPath);
+  };
 
   const uploadMPR = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -167,6 +185,7 @@ export const AddHours = ({
         date,
         dateApproved: new Date(),
         photoUrl: uploadPhotoUrl,
+        photoPath,
         pvHours: pvHours,
         otherREHours,
         bosHours,
@@ -186,6 +205,7 @@ export const AddHours = ({
         date,
         dateApproved: new Date(),
         photoUrl: uploadPhotoUrl,
+        photoPath,
         pvHours: pvHours,
         otherREHours,
         bosHours,
@@ -208,6 +228,7 @@ export const AddHours = ({
       date,
       dateApproved: null,
       photoUrl: uploadPhotoUrl,
+      photoPath,
       pvHours: pvHours,
       otherREHours: otherREHours,
       bosHours,
@@ -331,10 +352,13 @@ export const AddHours = ({
           <UploadFile
             isSubmitted={isSubmitted}
             photoUrl={mpr?.photoUrl}
+            photoPath={mpr?.photoPath}
             apprenticeName={supervisor ? selectedApprentice?.name : user?.name}
             month={month}
             year={year}
             onPhotoChange={handlePhotoChange}
+            folder="mprs"
+            showDelete
           />
         </div>
         <div className={s.rightCol}>
@@ -361,34 +385,47 @@ export const AddHours = ({
                 type="checkbox"
                 onChange={() => setApprenticeSignature(!apprenticeSignature)}
               />
-              <span>Apprentice has signed</span>
+              <span>
+                I hereby certify, to the best of my knowledge, that the hours
+                submitted are accurate and complete
+              </span>
             </label>
+          )}
+          {supervisor && !mpr?.supervisorSignature && (
+            <label className={supervisorSignatureClass}>
+              <input
+                type="checkbox"
+                onChange={() => setSupervisorSignature(!supervisorSignature)}
+              />
+              <span className={s.supervisorApproval}>
+                As a member Training Agent of the LRT Apprenticeship Program, I
+                hereby certify, to the best of my knowledge, that the hours
+                submitted are accurate and complete
+              </span>
+            </label>
+          )}
+          {mpr?.supervisorSignature && (
+            <div className={s.approvalInfo}>
+              Approved by {capitalizeName(supervisorData?.name)}{" "}
+              {displayDate(mpr.dateApproved)}
+            </div>
           )}
         </div>
       </div>
-      {supervisor && !mpr?.supervisorSignature && (
-        <label className={supervisorSignatureClass}>
-          <input
-            type="checkbox"
-            onChange={() => setSupervisorSignature(!supervisorSignature)}
-          />
-          <span className={s.supervisorApproval}>
-            I signed this MPR because it is correct best of my knowledge as a
-            member Training Agent of the LRT Apprenticeship Program administered
-            by the RE-JATC
-          </span>
-        </label>
-      )}
-      {mpr?.supervisorSignature && (
-        <div className={s.approvalInfo}>
-          Approved by {supervisorData?.name} {displayDate(mpr.dateApproved)}
-        </div>
-      )}
-      {!mpr?.supervisorSignature && (
-        <div className={s.submitContainer}>
-          <input className={s.submitBtn} type="submit" value="Upload" />
-        </div>
-      )}
+
+      <div className={s.submitContainer}>
+        {user?.role === "admin" && mpr && (
+          <div className={s.deleteBtn} onClick={handleDeleteMpr}>
+            Delete
+          </div>
+        )}
+        {!mpr?.supervisorSignature && (
+          <>
+            <div></div>
+            <input className={s.submitBtn} type="submit" value="Upload" />
+          </>
+        )}
+      </div>
     </form>
   );
 };

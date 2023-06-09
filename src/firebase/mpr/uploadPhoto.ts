@@ -1,8 +1,8 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../config";
 
-export const uploadMprPhoto = (file: File) => {
-  const mprRef = ref(storage, "mprs/" + file.name);
+export const uploadPhoto = (file: File, folder: string) => {
+  const mprRef = ref(storage, `${folder}/${file.name}`);
 
   return uploadBytes(mprRef, file)
     .then(async () => {

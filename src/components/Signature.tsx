@@ -3,29 +3,23 @@ import s from "../styles/components/Signature.module.scss";
 import success from "../assets/success.png";
 import alert from "../assets/alert.png";
 import classNames from "classnames/bind";
-import { useState } from "react";
-import { Modal } from "./Modal";
 import { useAuth } from "../providers/auth.provider";
-import { MprType } from "../types/mpr.type";
-import { AddHours } from "./AddHours";
-import { displayDate } from "../utils/displayDate";
 
 const cx = classNames.bind(s);
 
 type SignatureProps = {
   isApproved: boolean;
-  mpr?: MprType;
-  supervisorId?: string;
+  openModal: () => void;
+  apprenticeId: string;
+  supervisorId: string;
 };
 export const Signature = ({
   isApproved,
-  mpr,
+  apprenticeId,
   supervisorId,
+  openModal,
 }: SignatureProps) => {
   const { user } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const closeModal = () => setIsModalOpen(false);
 
   const iconClass = cx({
     iconContainer: true,
@@ -37,16 +31,15 @@ export const Signature = ({
     e.stopPropagation();
 
     if (user?.role === "admin") {
-      return setIsModalOpen(true);
+      return openModal();
     }
-    if (user?.id === mpr?.apprenticeId && isApproved) {
-      return setIsModalOpen(true);
+    if (user?.id === apprenticeId && isApproved) {
+      return openModal();
     }
 
-    if (user?.id !== supervisorId) {
-      return;
+    if (user?.id === supervisorId) {
+      return openModal();
     }
-    setIsModalOpen(true);
   };
   return (
     <div className={s.signature} onClick={handleApproval}>
@@ -54,22 +47,6 @@ export const Signature = ({
       <div className={iconClass}>
         <img src={isApproved ? success : alert} alt="signature" />
       </div>
-      {mpr && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          title={`${mpr.apprenticeName}'s ${displayDate(mpr.date)} MPR`}
-        >
-          {user && (
-            <AddHours
-              user={user}
-              closeModal={closeModal}
-              supervisor="supervisor"
-              mpr={mpr}
-            />
-          )}
-        </Modal>
-      )}
     </div>
   );
 };

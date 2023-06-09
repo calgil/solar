@@ -7,13 +7,13 @@ import { editCourse } from "../firebase/courses/editCourse";
 import { Course, NewCourse } from "../types/course.type";
 
 type AddCourseProps = {
-  classId: string;
+  // classId: string;
   closeModal: () => void;
   courseToEdit?: Course;
 };
 
 export const AddCourse = ({
-  classId,
+  // classId,
   closeModal,
   courseToEdit,
 }: AddCourseProps) => {
@@ -32,15 +32,11 @@ export const AddCourse = ({
   };
 
   const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value) {
-      setCourseLink(e.target.value);
-    }
+    setCourseLink(e.target.value);
   };
 
   const handleInfoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value) {
-      setCourseInfo(e.target.value);
-    }
+    setCourseInfo(e.target.value);
   };
 
   const createNewCourse = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -52,7 +48,6 @@ export const AddCourse = ({
 
     if (courseToEdit) {
       const updates: NewCourse = {
-        classId: courseToEdit.classId,
         name: courseName,
         link: courseLink,
         info: courseInfo,
@@ -70,12 +65,10 @@ export const AddCourse = ({
     }
 
     const newCourse: NewCourse = {
-      classId,
       name: courseName,
       link: courseLink,
       info: courseInfo,
     };
-    console.log({ newCourse, classId });
 
     try {
       await addCourse(newCourse);

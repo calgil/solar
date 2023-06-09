@@ -1,13 +1,22 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import s from "../styles/components/AddClass.module.scss";
 import { addClass } from "../firebase/training/addClass";
 import { toast } from "react-toastify";
 import { Class, NewClass } from "../types/class.type";
+import { getAllCourses } from "../firebase/training/getAllCourses";
+import { Course } from "../types/course.type";
+import { MultiSelect } from "react-multi-select-component";
+import { updateClass } from "../firebase/classes/updateClass";
 
 type AddClassProps = {
   closeModal: () => void;
   classToEdit?: Class;
+};
+
+export type Option = {
+  label: string;
+  value: string;
 };
 
 export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
@@ -17,6 +26,16 @@ export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
   const [classHours, setClassHours] = useState(
     classToEdit?.hours ? classToEdit.hours : 0
   );
+
+  const [allCourses, setAllCourses] = useState<Course[] | null>(null);
+
+  const [selectedCourses, setSelectedCourses] = useState<Option[]>(
+    classToEdit?.options ? classToEdit.options : []
+  );
+
+  const options: Option[] = allCourses
+    ? allCourses?.map((course) => ({ label: course.name, value: course.id }))
+    : [];
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setClassName(e.target.value);
@@ -28,13 +47,26 @@ export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
 
   const createNewClass = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!className || !classHours) {
+    if (!className || !classHours || !selectedCourses) {
       return;
     }
     const newClass: NewClass = {
       name: className,
       hours: classHours,
+      options: selectedCourses,
+      classRequirements: selectedCourses.map((course) => course.value),
     };
+
+    if (classToEdit) {
+      try {
+        await updateClass(classToEdit.id, newClass);
+        closeModal();
+      } catch (error) {
+        console.error(error);
+        toast.error("Could not update class");
+      }
+      return;
+    }
 
     try {
       await addClass(newClass);
@@ -45,8 +77,13 @@ export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
       toast.error("Could not create class");
     }
   };
+  useEffect(() => {
+    const unsubscribe = getAllCourses(setAllCourses);
+    return () => unsubscribe();
+  }, []);
+
   return (
-    <form onSubmit={createNewClass}>
+    <form className={s.addClass} onSubmit={createNewClass}>
       <label className={s.label}>
         Class Name
         <input
@@ -68,6 +105,18 @@ export const AddClass = ({ closeModal, classToEdit }: AddClassProps) => {
           value={classHours}
           autoComplete="off"
         />
+      </label>
+      <label className={`${s.label} ${s.options}`}>
+        Course Option
+        {allCourses && (
+          <MultiSelect
+            className={s.optionSelect}
+            options={options}
+            value={selectedCourses}
+            onChange={setSelectedCourses}
+            labelledBy="Select"
+          />
+        )}
       </label>
       <input
         className={s.submitBtn}

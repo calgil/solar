@@ -111,7 +111,7 @@
 .checkbox {
   @extend .checkbox;
   @include bp.media("md") {
-    margin-top: 0;
+    margin-top: 15px;
   }
 }
 .checkbox.invalid {
@@ -127,13 +127,14 @@
 .submitContainer {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding-top: 20px;
+  justify-content: space-between;
+  margin-top: 40px;
+
+  .deleteBtn {
+    @extend .deleteBtn;
+  }
 
   .submitBtn {
-    display: block;
     @extend .submitBtn;
-    width: 70px;
-    margin-left: auto;
   }
 }

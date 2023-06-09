@@ -10,30 +10,34 @@ type CourseCardProps = {
 };
 
 export const CourseCard = ({ course }: CourseCardProps) => {
-  const { name, link, info, classId } = course;
+  const { name, link, info } = course;
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   return (
     <div className={s.courseCard}>
-      <div className={s.courseInfo}>
-        <h4 className={s.courseName}>{name}</h4>
-        {link && (
-          <a className={s.link} href={link}>
-            Learn more
-          </a>
-        )}
-        {info && <span className={s.info}>{info} </span>}
+      <div className={s.text}>
+        <div className={s.courseInfo}>
+          <h4 className={s.courseName}>{name}</h4>
+          {link && (
+            <div>
+              <a className={s.link} href={link}>
+                Learn more
+              </a>
+            </div>
+          )}
+        </div>
+        {info && <div className={s.info}>{info} </div>}
       </div>
-      <button className={s.editBtn} onClick={() => setIsEditOpen(true)}>
-        {"\u270E"}
-      </button>
+
+      <a className={s.editBtn} onClick={() => setIsEditOpen(true)}>
+        {"\u270E"} Edit
+      </a>
       <Modal
         isOpen={isEditOpen}
         onClose={() => setIsEditOpen(false)}
         title={`Edit ${name}`}
       >
         <AddCourse
-          classId={classId}
           closeModal={() => setIsEditOpen(false)}
           courseToEdit={course}
         />

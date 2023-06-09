@@ -230,7 +230,6 @@ export const useUserData = (): QueryResult => {
       const desiredStaff = users.filter((user) =>
         missingApprenticeIds.includes(user.id)
       );
-      console.log({ desiredStaff });
 
       return setStaffData(desiredStaff);
     }
