@@ -32,8 +32,6 @@ export const UploadFile = ({
   folder,
   showDelete,
 }: UploadFileProps) => {
-  console.log({ apprenticeName });
-
   const currentMonth = new Date().getMonth() + 1;
   const [uploadPhotoUrl, setUploadPhotoUrl] = useState<string | undefined>(
     photoUrl
@@ -41,6 +39,9 @@ export const UploadFile = ({
   const [apprenticeError, setApprenticeError] = useState(false);
   const [dateError, setDateError] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [fileInputRef, setFileInputRef] = useState<HTMLInputElement | null>(
+    null
+  );
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -68,6 +69,9 @@ export const UploadFile = ({
     setFileName(file.name);
 
     if (!file) {
+      if (fileInputRef) {
+        fileInputRef.value = "";
+      }
       return;
     }
 
@@ -84,6 +88,14 @@ export const UploadFile = ({
 
   const deletePhoto = () => {
     setUploadPhotoUrl(undefined);
+    onPhotoChange(null, "", "");
+    if (fileInputRef) {
+      fileInputRef.value = "";
+    }
+    if (!photoPath) {
+      return deleteFile(`${folder}/${fileName}`);
+    }
+
     deleteFile(photoPath);
   };
 
@@ -115,6 +127,7 @@ export const UploadFile = ({
             name="mprPhoto"
             accept="image/*"
             onChange={handleFileChange}
+            ref={(ref) => setFileInputRef(ref)}
           />
         </label>
       </div>

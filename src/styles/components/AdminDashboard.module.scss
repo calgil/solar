@@ -1,5 +1,6 @@
 @use "../layouts";
 @use "../abstracts" as a;
+@use "../breakpoints" as bp;
 
 .container {
   @extend .container;
@@ -23,6 +24,7 @@
     align-items: center;
     gap: 30px;
     flex-wrap: wrap;
+    justify-content: flex-end;
 
     .link {
       @extend .customLink;

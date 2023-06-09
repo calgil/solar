@@ -57,6 +57,9 @@
 }
 
 .checkbox {
+  display: flex;
+  display: block;
+  align-items: center;
   display: block;
   cursor: pointer;
   position: relative;

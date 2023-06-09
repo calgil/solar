@@ -156,6 +156,10 @@ export const AddTraining = ({
       return;
     }
 
+    if (!photoUrl) {
+      return;
+    }
+
     if (training) {
       const updatedTraining: UploadTraining = {
         apprenticeId: training.apprenticeId,

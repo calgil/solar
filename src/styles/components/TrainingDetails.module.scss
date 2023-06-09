@@ -22,6 +22,11 @@
       align-items: center;
       gap: 20px;
 
+      @include bp.media("sm") {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
       .totalHours {
         width: 124px;
         font-weight: 900;

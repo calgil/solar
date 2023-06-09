@@ -32,8 +32,6 @@ export const AddHours = ({
   apprentices,
   mpr,
 }: AddHoursProps) => {
-  console.log("render");
-
   const currentMonth = new Date().getMonth() + 1;
   const [month, setMonth] = useState(
     mpr ? mpr.date.toDate().getMonth() + 1 : currentMonth - 1
@@ -364,6 +362,7 @@ export const AddHours = ({
             year={year}
             onPhotoChange={handlePhotoChange}
             folder="mprs"
+            showDelete
           />
         </div>
         <div className={s.rightCol}>
@@ -396,27 +395,28 @@ export const AddHours = ({
               </span>
             </label>
           )}
+          {supervisor && !mpr?.supervisorSignature && (
+            <label className={supervisorSignatureClass}>
+              <input
+                type="checkbox"
+                onChange={() => setSupervisorSignature(!supervisorSignature)}
+              />
+              <span className={s.supervisorApproval}>
+                As a member Training Agent of the LRT Apprenticeship Program, I
+                hereby certify, to the best of my knowledge, that the hours
+                submitted are accurate and complete
+              </span>
+            </label>
+          )}
+          {mpr?.supervisorSignature && (
+            <div className={s.approvalInfo}>
+              Approved by {capitalizeName(supervisorData?.name)}{" "}
+              {displayDate(mpr.dateApproved)}
+            </div>
+          )}
         </div>
       </div>
-      {supervisor && !mpr?.supervisorSignature && (
-        <label className={supervisorSignatureClass}>
-          <input
-            type="checkbox"
-            onChange={() => setSupervisorSignature(!supervisorSignature)}
-          />
-          <span className={s.supervisorApproval}>
-            As a member Training Agent of the LRT Apprenticeship Program, I
-            hereby certify, to the best of my knowledge, that the hours
-            submitted are accurate and complete
-          </span>
-        </label>
-      )}
-      {mpr?.supervisorSignature && (
-        <div className={s.approvalInfo}>
-          Approved by {capitalizeName(supervisorData?.name)}{" "}
-          {displayDate(mpr.dateApproved)}
-        </div>
-      )}
+
       <div className={s.submitContainer}>
         {user?.role === "admin" && (
           <div className={s.deleteBtn} onClick={handleDeleteMpr}>
