@@ -27,6 +27,10 @@
     border: 1px solid a.$accentDark;
     border-radius: 8px;
     padding: 40px;
+
+    @include bp.media("sm") {
+      padding-top: 10px;
+    }
   }
 
   .portal {
@@ -44,9 +48,21 @@
     margin-bottom: 10px;
     border-radius: 4px;
 
-    .portal {
-      font-weight: 400;
-      margin-bottom: 10px;
+    @include bp.media("sm") {
+      padding: 10px;
+    }
+
+    .titleImg {
+      max-width: 75px;
+      margin-right: 15px;
+
+      @include bp.media("sm") {
+        max-width: 35px;
+      }
+
+      img {
+        width: 100%;
+      }
     }
 
     .title {
@@ -54,10 +70,8 @@
       font-weight: 400;
       background-repeat: no-repeat;
       background-position: left center;
-      padding-left: 80px;
       display: flex;
       align-items: center;
-      height: 75px;
       font-family: a.$logoFont;
       text-transform: uppercase;
       color: a.$solarMain;
