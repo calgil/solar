@@ -17,6 +17,8 @@
   .modal {
     background-color: #fff;
     min-width: 500px;
+    // height: 100vh;
+    overflow-y: scroll;
 
     @include bp.media("md") {
       min-width: 100%;
